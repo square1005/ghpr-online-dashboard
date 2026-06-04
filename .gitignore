@@ -1,0 +1,45 @@
+# Python cache and local environments
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Local editor and OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.log
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets
+.env
+.env.*
+.streamlit/secrets.toml
+
+# Large/raw source data
+*.zip
+data/raw/**
+!data/raw/**/
+!data/raw/**/.gitkeep
+
+# Keep deployable research outputs tracked
+!data/processed/
+!data/processed/ghpr_master_weekly.csv
+!outputs/
+!outputs/reports/
+!outputs/reports/*.md
+!outputs/reports/*.csv
+!outputs/charts/
+!outputs/charts/*.png

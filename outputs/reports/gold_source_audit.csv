@@ -1,0 +1,15 @@
+section,item,value,row_count,first_date,last_date,notes
+gold_close_stats,row_count,874,874,2009-09-01,2026-05-26,Rows with non-null gold_close in ghpr_master_weekly.csv
+gold_close_stats,min,954.700012,874,,,Minimum gold_close
+gold_close_stats,max,5229.700195,874,,,Maximum gold_close
+gold_close_stats,mean,1727.037755,874,,,Average gold_close
+gold_price_source_count,FRED,0,0,,,Classified from gold_price_source text in ghpr_master_weekly.csv
+gold_price_source_count,Yahoo GC=F,874,874,2009-09-01,2026-05-26,Classified from gold_price_source text in ghpr_master_weekly.csv
+gold_price_source_count,Stooq,0,0,,,Classified from gold_price_source text in ghpr_master_weekly.csv
+gold_price_source_count,Other,0,0,,,Classified from gold_price_source text in ghpr_master_weekly.csv
+gold_price_source_count,Missing,0,0,,,Classified from gold_price_source text in ghpr_master_weekly.csv
+gold_price_source_detail,Yahoo GC=F,874,874,,,COMEX GC futures proxy via Yahoo Finance GC=F
+benchmark_note,xauusd_spot_benchmark,External XAUUSD spot benchmark,,,,External benchmark for comparison only; see xauusd_spot_comparison rows for the benchmark source used in this run.
+xauusd_spot_comparison,comparison_rows,73,73,2025-01-07,2026-05-26,Dukascopy XAUUSD BID daily candles; 2026 daily values are aggregated from hourly candles where the annual daily file is not available. GHPR weekly gold_close matched to nearest prior benchmark close.
+xauusd_spot_comparison,mean_pct_diff,-0.784738,73,,,Percent difference: GHPR gold_close / XAUUSD spot close - 1.
+xauusd_spot_comparison,max_abs_pct_diff,6.505055,73,,,Largest absolute percent difference in the comparison window.

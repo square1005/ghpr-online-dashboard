@@ -1,0 +1,48 @@
+date,gold_close,gold_anomaly_2025_2026,gold_anomaly_reason,gold_price_source
+2025-02-11,2912.5,True,level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-02-18,2931.60009765625,True,level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-03-18,3035.10009765625,True,level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-03-25,3023.699951171875,True,level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-04-01,3118.89990234375,True,level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-04-08,2968.39990234375,True,abs_return_zscore_52w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-04-15,3218.699951171875,True,abs_1w_return>=5pct; abs_return_zscore_52w>=2.5; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-04-22,3400.800048828125,True,abs_1w_return>=5pct; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-04-29,3318.800048828125,True,level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-05-06,3411.39990234375,True,level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-05-13,3240.300048828125,True,abs_1w_return>=5pct,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-05-20,3280.300048828125,True,level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-06-03,3350.199951171875,True,level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-09-23,3780.60009765625,True,level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-09-30,3840.800048828125,True,level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-10-07,3976.60009765625,True,level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-10-14,4138.7001953125,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-10-21,4087.699951171875,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-11-10,4111.7998046875,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-11-18,4061.300048828125,True,level>=4000,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-11-25,4139.2001953125,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-12-02,4186.60009765625,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-12-09,4206.7001953125,True,level>=4000,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-12-16,4304.5,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-12-23,4482.7998046875,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2025-12-30,4370.10009765625,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-01-06,4482.2001953125,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-01-13,4589.2001953125,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-01-20,4759.60009765625,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-01-27,5079.89990234375,True,level>=4000; level>=5000; abs_1w_return>=5pct; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-02-03,4903.7001953125,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-02-10,5003.7998046875,True,level>=4000; level>=5000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-02-17,4882.89990234375,True,level>=4000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-02-24,5155.7998046875,True,level>=4000; level>=5000; abs_1w_return>=5pct; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-03-03,5107.39990234375,True,level>=4000; level>=5000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-03-10,5229.7001953125,True,level>=4000; level>=5000; level_zscore_156w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-03-17,5001.0,True,level>=4000; level>=5000,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-03-24,4399.2998046875,True,level>=4000; abs_1w_return>=5pct; abs_return_zscore_52w>=2.5,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-03-31,4647.60009765625,True,level>=4000; abs_1w_return>=5pct,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-04-07,4657.10009765625,True,level>=4000,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-04-14,4825.0,True,level>=4000,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-04-21,4698.39990234375,True,level>=4000,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-04-28,4591.5,True,level>=4000,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-05-05,4555.7998046875,True,level>=4000,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-05-12,4677.60009765625,True,level>=4000,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-05-19,4506.2998046875,True,level>=4000,COMEX GC futures proxy via Yahoo Finance GC=F
+2026-05-26,4500.39990234375,True,level>=4000,COMEX GC futures proxy via Yahoo Finance GC=F

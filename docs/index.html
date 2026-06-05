@@ -35,12 +35,55 @@
     <div class="summary-badge">GHPR 判讀摘要：黃燈偏紅 / Risk-off Caution</div>
     <h1>GHPR 判讀摘要 / Trader Summary</h1>
     <p><strong>GHPR 是大型資金籌碼結構的風險濾網，不是交易訊號。</strong></p>
+    <p class="muted">Historical statistics only. Not a trading signal. Not financial advice.</p>
     <p>目前歷史相似案例偏向後續弱勢，追多風險較高，尚不宜視為直接放空訊號。</p>
     <div class="grid">
       <div class="box"><h3>追多風險判讀</h3><p>目前不適合高槓桿追多，因為歷史樣本後續表現偏弱。</p></div>
       <div class="box"><h3>放空條件判讀</h3><p>尚不可直接視為 GHPR 放空訊號。GHPR 只提供歷史定位，仍需價格結構或其他確認。</p></div>
       <div class="box"><h3>等待確認條件</h3><p>等待價格結構、OGR / MMP、OI 回升或跌破支撐後，再作進一步判斷。</p></div>
     </div>
+  </section>
+
+  <section>
+    <h2>How to Read This Dashboard</h2>
+    <ol>
+      <li><strong>Step 1：</strong>先看 Current Market Snapshot，確認目前 MM、Producer、OI 的歷史位置。</li>
+      <li><strong>Step 2：</strong>看 Historical Positioning Explanation，理解目前是資金擁擠、低參與、還是弱部位狀態。</li>
+      <li><strong>Step 3：</strong>看 Top 20 Similar Cases 的 median return 與 win rate，理解歷史相似案例後續分布。</li>
+      <li><strong>Step 4：</strong>打開 Event Study，查看單一歷史案例前後走勢。</li>
+      <li><strong>Step 5：</strong>所有結果只能作為盤前背景與風險提醒，不可單獨作為交易決策。</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Executive Summary / 首頁快讀</h2>
+    <div class="table-wrap">
+      <table><thead><tr><th>Question</th><th>Reading</th></tr></thead><tbody><tr><td>目前市場歷史定位</td><td>Accumulation / Weak Positioning</td></tr><tr><td>GHPR 判讀</td><td>黃燈偏紅 / Risk-off Caution</td></tr><tr><td>MM 位置</td><td>30.13%，偏低</td></tr><tr><td>Producer 位置</td><td>94.87%，極高</td></tr><tr><td>OI 位置</td><td>0.64%，極低</td></tr><tr><td>Top20 後續統計</td><td>1W -0.83%, 2W -0.91%, 4W -0.62%, 8W -1.11%, 8W win rate 40.00%</td></tr></tbody></table>
+    </div>
+    <p class="muted">GHPR 只描述大型資金籌碼與歷史相似案例，不提供進出場點。</p>
+  </section>
+
+  <section>
+    <h2>MM / Producer / OI 指標怎麼讀</h2>
+    <div class="table-wrap">
+      <table><thead><tr><th>Indicator</th><th>Current</th><th>Historical Position</th><th>How to read</th></tr></thead><tbody><tr><td>MM Percentile</td><td>30.13%</td><td>偏低</td><td>MM 代表 Managed Money 淨部位在近 156 週的位置。30.13% 表示目前約高於 30.1% 的近 156 週樣本，低於 69.9% 的樣本，投機資金位置偏低，尚未呈現擁擠追價結構。</td></tr><tr><td>Producer Percentile</td><td>94.87%</td><td>極高</td><td>Producer / Merchant 代表商業避險端淨部位在近 156 週的位置。94.87% 表示目前約高於 94.9% 的近 156 週樣本，低於 5.1% 的樣本，商業端結構處於偏高區，需要搭配價格與 OI 一起解讀。</td></tr><tr><td>OI Percentile</td><td>0.64%</td><td>極低</td><td>OI 代表期貨總未平倉量在近 156 週的位置。0.64% 表示目前約高於 0.6% 的近 156 週樣本，低於 99.4% 的樣本，市場參與度極低，歷史相似案例需要等待 OI 或價格結構確認。</td></tr></tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Top 20 Similar Cases 後續統計代表什麼</h2>
+    <p>Top 20 Similar Cases 是用目前的 MM / Producer / OI percentile 去找過去最相近的 20 個歷史週。表格中的 1W / 2W / 4W / 8W 是那些歷史案例發生後的後續表現統計，不是對現在行情的保證。</p>
+    <p>目前 Top20 平均後續表現為：1W -0.83%, 2W -0.91%, 4W -0.62%, 8W -1.11%；8W win rate 為 40.00%。這代表歷史樣本傾向偏弱，但仍只是歷史統計研究參考。</p>
+  </section>
+
+  <section>
+    <h2>為什麼這不是交易訊號</h2>
+    <ol>
+      <li>Percentile 只代表相對歷史位置，不代表方向預測。</li>
+      <li>Top 20 Similar Cases 是歷史樣本統計，不保證當前市場會重複。</li>
+      <li>GHPR 沒有納入即時價格結構、流動性事件、總體消息或風控條件。</li>
+      <li>GHPR 的用途是風險濾網與歷史定位，最後仍需結合其他市場確認。</li>
+    </ol>
   </section>
 
   <section>
@@ -52,28 +95,28 @@
 
   <section>
     <h2>Top20 Similar Cases Historical Statistics</h2>
-    <div class="metric-row"><div class="metric"><div class="metric-label">1W</div><div class="metric-value">-1.05%</div></div><div class="metric"><div class="metric-label">2W</div><div class="metric-value">-1.27%</div></div><div class="metric"><div class="metric-label">4W</div><div class="metric-value">-2.07%</div></div><div class="metric"><div class="metric-label">8W</div><div class="metric-value">-3.03%</div></div><div class="metric"><div class="metric-label">8W Win Rate</div><div class="metric-value">30.00%</div></div></div>
+    <div class="metric-row"><div class="metric"><div class="metric-label">1W</div><div class="metric-value">-0.83%</div></div><div class="metric"><div class="metric-label">2W</div><div class="metric-value">-0.91%</div></div><div class="metric"><div class="metric-label">4W</div><div class="metric-value">-0.62%</div></div><div class="metric"><div class="metric-label">8W</div><div class="metric-value">-1.11%</div></div><div class="metric"><div class="metric-label">8W Win Rate</div><div class="metric-value">40.00%</div></div></div>
   </section>
 
   <section>
     <h2>Historical Similar Cases</h2>
     <p class="muted">Current Snapshot Date 是目前資料快照日期；Historical Case Date 是歷史相似案例的發生日期。</p>
     <div class="table-wrap">
-      <table><thead><tr><th>Historical Case Date</th><th>Similarity Score</th><th>Historical Case Gold</th><th>Historical MM Percentile</th><th>Historical Producer Percentile</th><th>Historical OI Percentile</th><th>Historical Case Forward Return 1W</th><th>Historical Case Forward Return 2W</th><th>Historical Case Forward Return 4W</th><th>Historical Case Forward Return 8W</th></tr></thead><tbody><tr><td>2026-02-17</td><td>97.86</td><td>4,882.90</td><td>27.56</td><td>97.44</td><td>1.92</td><td>5.59%</td><td>4.60%</td><td>2.42%</td><td>-1.19%</td></tr><tr><td>2026-03-03</td><td>97.65</td><td>5,107.40</td><td>27.56</td><td>96.79</td><td>3.21</td><td>2.39%</td><td>-2.08%</td><td>-9.00%</td><td>-10.10%</td></tr><tr><td>2026-02-03</td><td>97.65</td><td>4,903.70</td><td>24.36</td><td>95.51</td><td>1.28</td><td>2.04%</td><td>-0.42%</td><td>4.15%</td><td>-5.22%</td></tr><tr><td>2026-03-17</td><td>97.22</td><td>5,001.00</td><td>30.13</td><td>99.36</td><td>4.49</td><td>-12.03%</td><td>-7.07%</td><td>-3.52%</td><td>-6.47%</td></tr><tr><td>2013-10-08</td><td>97.22</td><td>1,324.20</td><td>23.72</td><td>92.95</td><td>0.64</td><td>-3.87%</td><td>1.38%</td><td>-1.22%</td><td>-7.74%</td></tr><tr><td>2026-03-31</td><td>97.22</td><td>4,647.60</td><td>23.08</td><td>96.15</td><td>0.64</td><td>0.20%</td><td>3.82%</td><td>-1.21%</td><td>-3.17%</td></tr><tr><td>2026-03-10</td><td>97.01</td><td>5,229.70</td><td>28.21</td><td>98.08</td><td>4.49</td><td>-4.37%</td><td>-15.88%</td><td>-10.95%</td><td>-12.89%</td></tr><tr><td>2026-02-10</td><td>96.58</td><td>5,003.80</td><td>23.72</td><td>98.72</td><td>0.64</td><td>-2.42%</td><td>3.04%</td><td>4.51%</td><td>-6.93%</td></tr><tr><td>2023-08-08</td><td>96.58</td><td>1,924.10</td><td>34.62</td><td>91.67</td><td>3.21</td><td>-1.12%</td><td>-1.44%</td><td>0.11%</td><td>-5.17%</td></tr><tr><td>2023-02-07</td><td>96.37</td><td>1,871.70</td><td>32.69</td><td>91.03</td><td>5.13</td><td>-0.95%</td><td>-2.07%</td><td>-3.09%</td><td>8.04%</td></tr><tr><td>2026-03-24</td><td>96.15</td><td>4,399.30</td><td>20.51</td><td>92.95</td><td>0.64</td><td>5.64%</td><td>5.86%</td><td>6.80%</td><td>2.43%</td></tr><tr><td>2026-02-24</td><td>96.15</td><td>5,155.80</td><td>27.56</td><td>98.08</td><td>6.41</td><td>-0.94%</td><td>1.43%</td><td>-14.67%</td><td>-8.87%</td></tr><tr><td>2013-08-27</td><td>95.73</td><td>1,420.60</td><td>20.51</td><td>93.59</td><td>2.56</td><td>-0.61%</td><td>-3.98%</td><td>-7.36%</td><td>-5.50%</td></tr><tr><td>2023-09-05</td><td>95.51</td><td>1,926.20</td><td>29.49</td><td>92.95</td><td>11.54</td><td>-0.77%</td><td>0.30%</td><td>-5.27%</td><td>3.06%</td></tr><tr><td>2023-02-14</td><td>95.51</td><td>1,854.00</td><td>20.51</td><td>91.67</td><td>1.28</td><td>-1.13%</td><td>-1.35%</td><td>2.82%</td><td>8.13%</td></tr><tr><td>2013-09-03</td><td>95.30</td><td>1,412.00</td><td>22.44</td><td>92.95</td><td>5.13</td><td>-3.39%</td><td>-7.26%</td><td>-8.92%</td><td>-4.73%</td></tr><tr><td>2013-09-10</td><td>95.09</td><td>1,364.10</td><td>17.95</td><td>94.87</td><td>3.21</td><td>-4.00%</td><td>-3.53%</td><td>-2.93%</td><td>-4.11%</td></tr><tr><td>2014-02-11</td><td>95.09</td><td>1,290.10</td><td>21.79</td><td>91.67</td><td>3.85</td><td>2.68%</td><td>4.10%</td><td>4.37%</td><td>1.44%</td></tr><tr><td>2013-09-24</td><td>94.66</td><td>1,316.00</td><td>17.95</td><td>96.79</td><td>2.56</td><td>-2.28%</td><td>0.62%</td><td>2.01%</td><td>-3.24%</td></tr><tr><td>2023-09-19</td><td>94.44</td><td>1,932.00</td><td>28.85</td><td>90.38</td><td>11.54</td><td>-1.64%</td><td>-5.56%</td><td>-0.48%</td><td>1.54%</td></tr></tbody></table>
+      <table><thead><tr><th>Historical Case Date</th><th>Similarity Score</th><th>Historical Case Gold</th><th>Historical MM Percentile</th><th>Historical Producer Percentile</th><th>Historical OI Percentile</th><th>Historical Case Forward Return 1W</th><th>Historical Case Forward Return 2W</th><th>Historical Case Forward Return 4W</th><th>Historical Case Forward Return 8W</th></tr></thead><tbody><tr><td>2013-10-08</td><td>97.22</td><td>1,324.20</td><td>23.72</td><td>92.95</td><td>0.64</td><td>-3.87%</td><td>1.38%</td><td>-1.22%</td><td>-7.74%</td></tr><tr><td>2023-08-08</td><td>96.58</td><td>1,924.10</td><td>34.62</td><td>91.67</td><td>3.21</td><td>-1.12%</td><td>-1.44%</td><td>0.11%</td><td>-5.17%</td></tr><tr><td>2023-02-07</td><td>96.37</td><td>1,871.70</td><td>32.69</td><td>91.03</td><td>5.13</td><td>-0.95%</td><td>-2.07%</td><td>-3.09%</td><td>8.04%</td></tr><tr><td>2013-08-27</td><td>95.73</td><td>1,420.60</td><td>20.51</td><td>93.59</td><td>2.56</td><td>-0.61%</td><td>-3.98%</td><td>-7.36%</td><td>-5.50%</td></tr><tr><td>2023-09-05</td><td>95.51</td><td>1,926.20</td><td>29.49</td><td>92.95</td><td>11.54</td><td>-0.77%</td><td>0.30%</td><td>-5.27%</td><td>3.06%</td></tr><tr><td>2023-02-14</td><td>95.51</td><td>1,854.00</td><td>20.51</td><td>91.67</td><td>1.28</td><td>-1.13%</td><td>-1.35%</td><td>2.82%</td><td>8.13%</td></tr><tr><td>2013-09-03</td><td>95.30</td><td>1,412.00</td><td>22.44</td><td>92.95</td><td>5.13</td><td>-3.39%</td><td>-7.26%</td><td>-8.92%</td><td>-4.73%</td></tr><tr><td>2013-09-10</td><td>95.09</td><td>1,364.10</td><td>17.95</td><td>94.87</td><td>3.21</td><td>-4.00%</td><td>-3.53%</td><td>-2.93%</td><td>-4.11%</td></tr><tr><td>2014-02-11</td><td>95.09</td><td>1,290.10</td><td>21.79</td><td>91.67</td><td>3.85</td><td>2.68%</td><td>4.10%</td><td>4.37%</td><td>1.44%</td></tr><tr><td>2013-09-24</td><td>94.66</td><td>1,316.00</td><td>17.95</td><td>96.79</td><td>2.56</td><td>-2.28%</td><td>0.62%</td><td>2.01%</td><td>-3.24%</td></tr><tr><td>2023-09-19</td><td>94.44</td><td>1,932.00</td><td>28.85</td><td>90.38</td><td>11.54</td><td>-1.64%</td><td>-5.56%</td><td>-0.48%</td><td>1.54%</td></tr><tr><td>2013-10-01</td><td>94.44</td><td>1,286.00</td><td>17.95</td><td>98.08</td><td>1.92</td><td>2.97%</td><td>-1.01%</td><td>4.60%</td><td>-3.47%</td></tr><tr><td>2013-11-05</td><td>94.44</td><td>1,308.00</td><td>28.85</td><td>86.54</td><td>7.69</td><td>-2.82%</td><td>-2.65%</td><td>-6.60%</td><td>-8.11%</td></tr><tr><td>2023-02-21</td><td>94.44</td><td>1,833.00</td><td>17.31</td><td>91.67</td><td>1.28</td><td>-0.22%</td><td>-1.04%</td><td>5.73%</td><td>9.51%</td></tr><tr><td>2013-10-29</td><td>94.23</td><td>1,345.20</td><td>33.33</td><td>87.82</td><td>7.69</td><td>-2.77%</td><td>-5.51%</td><td>-7.72%</td><td>-10.41%</td></tr><tr><td>2014-04-15</td><td>94.23</td><td>1,300.00</td><td>35.90</td><td>85.26</td><td>2.56</td><td>-1.49%</td><td>-0.31%</td><td>-0.42%</td><td>-3.09%</td></tr><tr><td>2014-02-04</td><td>93.80</td><td>1,251.70</td><td>14.10</td><td>92.31</td><td>0.64</td><td>3.07%</td><td>5.83%</td><td>6.88%</td><td>2.23%</td></tr><tr><td>2023-08-15</td><td>93.38</td><td>1,902.50</td><td>16.03</td><td>95.51</td><td>5.77</td><td>-0.32%</td><td>1.79%</td><td>0.46%</td><td>-2.18%</td></tr><tr><td>2023-06-27</td><td>93.38</td><td>1,914.00</td><td>44.87</td><td>92.95</td><td>3.85</td><td>0.40%</td><td>0.90%</td><td>2.51%</td><td>-0.92%</td></tr><tr><td>2021-06-29</td><td>93.38</td><td>1,762.80</td><td>35.26</td><td>88.46</td><td>8.97</td><td>1.74%</td><td>2.64%</td><td>2.08%</td><td>2.43%</td></tr></tbody></table>
     </div>
   </section>
 
   <section>
     <h2>Top 5 / Top 10 / Top 20 Statistics</h2>
     <div class="table-wrap">
-      <table><thead><tr><th>Group</th><th>Case Count</th><th>Avg 1W</th><th>Win Rate 1W</th><th>Avg 2W</th><th>Win Rate 2W</th><th>Avg 4W</th><th>Win Rate 4W</th><th>Avg 8W</th><th>Win Rate 8W</th></tr></thead><tbody><tr><td>Top 5</td><td>5</td><td>-1.17%</td><td>60.00%</td><td>-0.72%</td><td>40.00%</td><td>-1.43%</td><td>40.00%</td><td>-6.14%</td><td>0.00%</td></tr><tr><td>Top 10</td><td>10</td><td>-1.45%</td><td>40.00%</td><td>-1.61%</td><td>40.00%</td><td>-1.78%</td><td>40.00%</td><td>-5.08%</td><td>10.00%</td></tr><tr><td>Top 20</td><td>20</td><td>-1.05%</td><td>30.00%</td><td>-1.27%</td><td>45.00%</td><td>-2.07%</td><td>40.00%</td><td>-3.03%</td><td>30.00%</td></tr></tbody></table>
+      <table><thead><tr><th>Group</th><th>Case Count</th><th>Avg 1W</th><th>Win Rate 1W</th><th>Avg 2W</th><th>Win Rate 2W</th><th>Avg 4W</th><th>Win Rate 4W</th><th>Avg 8W</th><th>Win Rate 8W</th></tr></thead><tbody><tr><td>Top 5</td><td>5</td><td>-1.46%</td><td>0.00%</td><td>-1.16%</td><td>40.00%</td><td>-3.37%</td><td>20.00%</td><td>-1.46%</td><td>40.00%</td></tr><tr><td>Top 10</td><td>10</td><td>-1.54%</td><td>10.00%</td><td>-1.32%</td><td>40.00%</td><td>-1.95%</td><td>40.00%</td><td>-0.98%</td><td>40.00%</td></tr><tr><td>Top 20</td><td>20</td><td>-0.83%</td><td>25.00%</td><td>-0.91%</td><td>40.00%</td><td>-0.62%</td><td>50.00%</td><td>-1.11%</td><td>40.00%</td></tr></tbody></table>
     </div>
   </section>
 
   <section>
     <h2>Data Health</h2>
     <div class="table-wrap">
-      <table><thead><tr><th>Latest COT Date</th><th>Latest Gold Price</th><th>Gold Price Source</th><th>Snapshot Generated At</th><th>Data Freshness</th></tr></thead><tbody><tr><td>2026-05-26</td><td>4,500.40</td><td>COMEX GC futures proxy via Yahoo Finance GC=F</td><td>2026-06-05 14:43:23</td><td>Fresh</td></tr></tbody></table>
+      <table><thead><tr><th>Latest COT Date</th><th>Latest Gold Price</th><th>Gold Price Source</th><th>Snapshot Generated At</th><th>Data Freshness</th></tr></thead><tbody><tr><td>2026-05-26</td><td>4,500.40</td><td>COMEX GC futures proxy via Yahoo Finance GC=F</td><td>2026-06-05 18:29:34</td><td>Fresh</td></tr></tbody></table>
     </div>
     <p><strong>Gold price source:</strong> COMEX GC futures proxy via Yahoo Finance GC=F.</p>
     <p class="muted">This is not official LBMA PM benchmark or broker XAUUSD spot.</p>

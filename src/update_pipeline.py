@@ -46,6 +46,10 @@ class UpdatePipelineResult:
     def status_text(self) -> str:
         return "success" if self.success else "fail"
 
+    @property
+    def failed_step(self) -> UpdateStepResult | None:
+        return next((step for step in self.steps if not step.success), None)
+
 
 def run_update_pipeline(no_download: bool = True) -> UpdatePipelineResult:
     """Run all GHPR refresh steps and write a markdown update log."""
@@ -60,25 +64,47 @@ def run_update_pipeline(no_download: bool = True) -> UpdatePipelineResult:
 
     for name, command in commands:
         step_started = time.perf_counter()
-        completed = subprocess.run(
-            command,
-            cwd=PROJECT_ROOT,
-            env=env,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            timeout=900,
-        )
-        elapsed = time.perf_counter() - step_started
-        result = UpdateStepResult(
-            name=name,
-            command=command,
-            return_code=completed.returncode,
-            elapsed_seconds=elapsed,
-            stdout=sanitize_output(completed.stdout or ""),
-            stderr=sanitize_output(completed.stderr or ""),
-        )
+        try:
+            completed = subprocess.run(
+                command,
+                cwd=PROJECT_ROOT,
+                env=env,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=900,
+            )
+            elapsed = time.perf_counter() - step_started
+            result = UpdateStepResult(
+                name=name,
+                command=command,
+                return_code=completed.returncode,
+                elapsed_seconds=elapsed,
+                stdout=sanitize_output(completed.stdout or ""),
+                stderr=sanitize_output(completed.stderr or ""),
+            )
+        except subprocess.TimeoutExpired as error:
+            elapsed = time.perf_counter() - step_started
+            result = UpdateStepResult(
+                name=name,
+                command=command,
+                return_code=-1,
+                elapsed_seconds=elapsed,
+                stdout=sanitize_output((error.stdout or "") if isinstance(error.stdout, str) else ""),
+                stderr=sanitize_output(
+                    f"Command timed out after {error.timeout} seconds.\n{error.stderr or ''}"
+                ),
+            )
+        except Exception as error:
+            elapsed = time.perf_counter() - step_started
+            result = UpdateStepResult(
+                name=name,
+                command=command,
+                return_code=-1,
+                elapsed_seconds=elapsed,
+                stderr=sanitize_output(f"{type(error).__name__}: {error}"),
+            )
         steps.append(result)
         if not result.success:
             error_message = f"{name} failed with exit code {result.return_code}"
@@ -134,9 +160,26 @@ def render_update_log(result: UpdatePipelineResult) -> str:
         f"- Runtime note: `Cloud runtime file writes may be ephemeral; commit refreshed outputs to GitHub for durable deployment data.`",
         f"- Scope: `Historical statistics / research reference only.`",
         "",
-        "## Steps",
-        "",
     ]
+    if result.failed_step is not None:
+        step = result.failed_step
+        lines.extend(
+            [
+                "## Failure Summary",
+                "",
+                f"- Failed step: `{step.name}`",
+                f"- Command: `{format_command(step.command)}`",
+                f"- Exit code: `{step.return_code}`",
+                "",
+                "### stderr",
+                "",
+                "```text",
+                step.stderr or "N/A",
+                "```",
+                "",
+            ]
+        )
+    lines.extend(["## Steps", ""])
     for step in result.steps:
         lines.extend(
             [

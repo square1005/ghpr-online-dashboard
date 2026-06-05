@@ -27,6 +27,7 @@ CONTEXT_COLUMNS = ["gold_return_1w", "gold_return_2w", "gold_return_4w", "gold_r
 REQUIRED_COLUMNS = ["date", "gold_close", *FEATURE_COLUMNS]
 FORWARD_HORIZONS = [1, 2, 4, 8]
 MAX_DISTANCE_POINTS = 300
+DEFAULT_EXCLUDE_RECENT_WEEKS = 52
 
 REPORTS_DIR = PROJECT_ROOT / "outputs" / "reports"
 CHARTS_DIR = PROJECT_ROOT / "outputs" / "charts"
@@ -69,7 +70,7 @@ def add_forward_returns(frame: pd.DataFrame) -> pd.DataFrame:
 def compute_current_similarity(
     master_path: Path = OUTPUT_MASTER_WEEKLY,
     top_n: int = 20,
-    exclude_recent_weeks: int = 8,
+    exclude_recent_weeks: int = DEFAULT_EXCLUDE_RECENT_WEEKS,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, dict[str, object]]:
     master = load_master_dataset(master_path)
     if master.empty:
@@ -809,7 +810,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run GHPR v0.3 Historical Similarity Engine.")
     parser.add_argument("--master-path", type=Path, default=OUTPUT_MASTER_WEEKLY)
     parser.add_argument("--top-n", type=int, default=20)
-    parser.add_argument("--exclude-recent-weeks", type=int, default=8)
+    parser.add_argument("--exclude-recent-weeks", type=int, default=DEFAULT_EXCLUDE_RECENT_WEEKS)
     return parser.parse_args()
 
 

@@ -186,6 +186,67 @@ def market_state(mm_value: object, oi_value: object) -> str:
     return "Extreme Low / Potential Reset"
 
 
+def percentile_level(value: object) -> str:
+    percentile = percent_points(value)
+    if percentile is None:
+        return "N/A"
+    if percentile < 10:
+        return "極低"
+    if percentile < 20:
+        return "偏低到極低"
+    if percentile < 40:
+        return "偏低"
+    if percentile < 60:
+        return "中性"
+    if percentile < 80:
+        return "偏高"
+    if percentile < 90:
+        return "高"
+    return "極高"
+
+
+def percentile_rank_phrase(value: object) -> str:
+    percentile = percent_points(value)
+    if percentile is None:
+        return "N/A"
+    return f"約高於 {percentile:.1f}% 的近 156 週樣本，低於 {100 - percentile:.1f}% 的樣本"
+
+
+def indicator_explanation_rows(mm: object, producer: object, oi: object) -> list[dict]:
+    return [
+        {
+            "indicator": "MM Percentile",
+            "current": fmt_percent(mm, input_scale="fraction"),
+            "position": percentile_level(mm),
+            "reading": (
+                f"MM 代表 Managed Money 淨部位在近 156 週的位置。"
+                f"{fmt_percent(mm, input_scale='fraction')} 表示目前{percentile_rank_phrase(mm)}，"
+                "投機資金位置偏低，尚未呈現擁擠追價結構。"
+            ),
+        },
+        {
+            "indicator": "Producer Percentile",
+            "current": fmt_percent(producer, input_scale="fraction"),
+            "position": percentile_level(producer),
+            "reading": (
+                f"Producer / Merchant 代表商業避險端淨部位在近 156 週的位置。"
+                f"{fmt_percent(producer, input_scale='fraction')} 表示目前{percentile_rank_phrase(producer)}，"
+                "商業端結構處於偏高區，需要搭配價格與 OI 一起解讀。"
+            ),
+        },
+        {
+            "indicator": "OI Percentile",
+            "current": fmt_percent(oi, input_scale="fraction"),
+            "position": percentile_level(oi),
+            "reading": (
+                f"OI 代表期貨總未平倉量在近 156 週的位置。"
+                f"{fmt_percent(oi, input_scale='fraction')} 表示目前{percentile_rank_phrase(oi)}，"
+                "市場參與度極低，歷史相似案例需要等待 OI 或價格結構確認。"
+            ),
+        },
+    ]
+
+
 def html_table(rows: list[dict], columns: list[tuple[str, str]]) -> str:
     if not rows:
         return '<p class="muted">N/A</p>'
@@ -297,6 +358,54 @@ def build_html(master: pd.DataFrame, report: pd.DataFrame, stats: pd.DataFrame) 
             ("state", "Market State"),
         ],
     )
+    stats_used = summary["stats_used"]
+    avg_1w = fmt_percent(stats_used["avg_1w"])
+    avg_2w = fmt_percent(stats_used["avg_2w"])
+    avg_4w = fmt_percent(stats_used["avg_4w"])
+    avg_8w = fmt_percent(stats_used["avg_8w"])
+    win_8w = fmt_percent(stats_used["win_8w"], input_scale="fraction")
+    executive_read_rows = [
+        {
+            "topic": "目前市場歷史定位",
+            "reading": market_state(mm, oi),
+        },
+        {
+            "topic": "GHPR 判讀",
+            "reading": summary["signal_label"],
+        },
+        {
+            "topic": "MM 位置",
+            "reading": f"{fmt_percent(mm, input_scale='fraction')}，{percentile_level(mm)}",
+        },
+        {
+            "topic": "Producer 位置",
+            "reading": f"{fmt_percent(producer, input_scale='fraction')}，{percentile_level(producer)}",
+        },
+        {
+            "topic": "OI 位置",
+            "reading": f"{fmt_percent(oi, input_scale='fraction')}，{percentile_level(oi)}",
+        },
+        {
+            "topic": "Top20 後續統計",
+            "reading": f"1W {avg_1w}, 2W {avg_2w}, 4W {avg_4w}, 8W {avg_8w}, 8W win rate {win_8w}",
+        },
+    ]
+    executive_read_table = html_table(
+        executive_read_rows,
+        [
+            ("topic", "Question"),
+            ("reading", "Reading"),
+        ],
+    )
+    indicator_table = html_table(
+        indicator_explanation_rows(mm, producer, oi),
+        [
+            ("indicator", "Indicator"),
+            ("current", "Current"),
+            ("position", "Historical Position"),
+            ("reading", "How to read"),
+        ],
+    )
     historical_cases_table = html_table(
         historical_case_rows(report),
         [
@@ -381,12 +490,55 @@ def build_html(master: pd.DataFrame, report: pd.DataFrame, stats: pd.DataFrame) 
     <div class="summary-badge">GHPR 判讀摘要：{signal_label}</div>
     <h1>GHPR 判讀摘要 / Trader Summary</h1>
     <p><strong>GHPR 是大型資金籌碼結構的風險濾網，不是交易訊號。</strong></p>
+    <p class="muted">Historical statistics only. Not a trading signal. Not financial advice.</p>
     <p>{plain_language_summary}</p>
     <div class="grid">
       <div class="box"><h3>追多風險判讀</h3><p>{chase_long_advice}</p></div>
       <div class="box"><h3>放空條件判讀</h3><p>{short_advice}</p></div>
       <div class="box"><h3>等待確認條件</h3><p>{wait_for}</p></div>
     </div>
+  </section>
+
+  <section>
+    <h2>How to Read This Dashboard</h2>
+    <ol>
+      <li><strong>Step 1：</strong>先看 Current Market Snapshot，確認目前 MM、Producer、OI 的歷史位置。</li>
+      <li><strong>Step 2：</strong>看 Historical Positioning Explanation，理解目前是資金擁擠、低參與、還是弱部位狀態。</li>
+      <li><strong>Step 3：</strong>看 Top 20 Similar Cases 的 median return 與 win rate，理解歷史相似案例後續分布。</li>
+      <li><strong>Step 4：</strong>打開 Event Study，查看單一歷史案例前後走勢。</li>
+      <li><strong>Step 5：</strong>所有結果只能作為盤前背景與風險提醒，不可單獨作為交易決策。</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Executive Summary / 首頁快讀</h2>
+    <div class="table-wrap">
+      {executive_read_table}
+    </div>
+    <p class="muted">GHPR 只描述大型資金籌碼與歷史相似案例，不提供進出場點。</p>
+  </section>
+
+  <section>
+    <h2>MM / Producer / OI 指標怎麼讀</h2>
+    <div class="table-wrap">
+      {indicator_table}
+    </div>
+  </section>
+
+  <section>
+    <h2>Top 20 Similar Cases 後續統計代表什麼</h2>
+    <p>Top 20 Similar Cases 是用目前的 MM / Producer / OI percentile 去找過去最相近的 20 個歷史週。表格中的 1W / 2W / 4W / 8W 是那些歷史案例發生後的後續表現統計，不是對現在行情的保證。</p>
+    <p>目前 Top20 平均後續表現為：1W {avg_1w}, 2W {avg_2w}, 4W {avg_4w}, 8W {avg_8w}；8W win rate 為 {win_8w}。這代表歷史樣本傾向偏弱，但仍只是歷史統計研究參考。</p>
+  </section>
+
+  <section>
+    <h2>為什麼這不是交易訊號</h2>
+    <ol>
+      <li>Percentile 只代表相對歷史位置，不代表方向預測。</li>
+      <li>Top 20 Similar Cases 是歷史樣本統計，不保證當前市場會重複。</li>
+      <li>GHPR 沒有納入即時價格結構、流動性事件、總體消息或風控條件。</li>
+      <li>GHPR 的用途是風險濾網與歷史定位，最後仍需結合其他市場確認。</li>
+    </ol>
   </section>
 
   <section>

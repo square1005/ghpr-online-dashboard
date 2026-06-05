@@ -8,6 +8,12 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
 
+from src.historical_similarity_engine import (
+    DEFAULT_EXCLUDE_RECENT_WEEKS,
+    build_historical_similarity_report,
+    build_historical_similarity_stats,
+    compute_current_similarity,
+)
 from src.update_pipeline import UPDATE_LOG_PATH, run_update_pipeline
 
 
@@ -27,10 +33,11 @@ HISTORICAL_SIMILARITY_CASES_CHART_PATH = (
 
 MM_FACTOR = "mm_net_percentile_156w"
 FORWARD_HORIZONS = [1, 2, 4, 8]
+HSE_EXCLUDE_RECENT_OPTIONS = [8, 26, 52, 104]
 GOLD_SOURCE_TEXT = "COMEX GC futures proxy via Yahoo Finance GC=F"
 RESEARCH_WARNING_ZH = "此系統為歷史統計研究工具，不是交易訊號，不提供買賣建議。"
 RESEARCH_WARNING_EN = (
-    "Historical statistics / research reference only. This is not a trading signal."
+    "Historical statistics only. Not a trading signal. Not financial advice."
 )
 FUTURES_PROXY_NOTE = (
     "This is a futures proxy, not official LBMA PM benchmark or broker XAUUSD spot."
@@ -107,6 +114,37 @@ def load_historical_similarity_stats() -> pd.DataFrame:
         if column != "group":
             frame[column] = pd.to_numeric(frame[column], errors="coerce")
     return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_historical_similarity_for_exclusion(
+    exclude_recent_weeks: int,
+) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, object]]:
+    try:
+        result, current_vector, _summary, metadata = compute_current_similarity(
+            master_path=MASTER_PATH,
+            top_n=20,
+            exclude_recent_weeks=exclude_recent_weeks,
+        )
+        report = build_historical_similarity_report(result, current_vector, metadata)
+        stats = build_historical_similarity_stats(report)
+        report["current_date"] = pd.to_datetime(report["current_date"], errors="coerce")
+        report["historical_date"] = pd.to_datetime(report["historical_date"], errors="coerce")
+        for column in report.columns:
+            if column not in {"current_date", "historical_date"}:
+                report[column] = pd.to_numeric(report[column], errors="coerce")
+        for column in stats.columns:
+            if column != "group":
+                stats[column] = pd.to_numeric(stats[column], errors="coerce")
+        return report, stats, metadata
+    except Exception as error:
+        fallback_report = load_historical_similarity_report()
+        fallback_stats = load_historical_similarity_stats()
+        return fallback_report, fallback_stats, {
+            "exclude_recent_weeks": exclude_recent_weeks,
+            "dashboard_hse_error": str(error),
+            "fallback": True,
+        }
 
 
 @st.cache_data(show_spinner=False)
@@ -380,6 +418,292 @@ padding:16px 18px;border-radius:8px;background:#ffffff;margin-bottom:12px;">
     )
 
 
+def percentile_level(value: object) -> str:
+    percentile = percent_points(value)
+    if percentile is None:
+        return "N/A"
+    if percentile < 10:
+        return "極低"
+    if percentile < 20:
+        return "偏低到極低"
+    if percentile < 40:
+        return "偏低"
+    if percentile < 60:
+        return "中性"
+    if percentile < 80:
+        return "偏高"
+    if percentile < 90:
+        return "高"
+    return "極高"
+
+
+def percentile_rank_phrase(value: object) -> str:
+    percentile = percent_points(value)
+    if percentile is None:
+        return "N/A"
+    return f"約高於 {percentile:.1f}% 的近 156 週樣本，低於 {100 - percentile:.1f}% 的樣本"
+
+
+def fmt_percentile_rank(value: object) -> str:
+    percentile = percent_points(value)
+    if percentile is None:
+        return "N/A"
+    return f"第 {percentile:.1f} 百分位"
+
+
+def managed_money_position_sentence(value: object) -> str:
+    percentile = percent_points(value)
+    if percentile is None:
+        return "Managed Money 目前百分位資料不足。"
+    if percentile < 40:
+        return "這代表基金淨部位偏低，不是高擁擠多頭狀態。"
+    if percentile < 60:
+        return "這代表基金淨部位接近中性區，投機端尚未呈現明顯極端。"
+    if percentile < 80:
+        return "這代表基金淨部位偏高，投機端參與度較強，但尚未進入最高擁擠區。"
+    return "這代表基金淨部位位於高擁擠區，需要留意追價風險，但不等於價格一定反轉。"
+
+
+def producer_position_sentence(value: object) -> str:
+    percentile = percent_points(value)
+    if percentile is None:
+        return "Producer / Merchant 目前百分位資料不足。"
+    if percentile >= 90:
+        return "Producer / Merchant 部位位於極高百分位。這通常代表商業避險端處於歷史偏極端位置，但不等於價格一定反轉。"
+    if percentile >= 70:
+        return "Producer / Merchant 部位位於偏高百分位。這代表商業避險端位置較歷史多數週偏高，需要搭配價格與 OI 一起解讀。"
+    if percentile <= 20:
+        return "Producer / Merchant 部位位於偏低百分位。這代表商業避險端結構並未處於高位極端。"
+    return "Producer / Merchant 部位位於中性區間。這代表商業避險端位置沒有明顯歷史極端。"
+
+
+def open_interest_position_sentence(value: object) -> str:
+    percentile = percent_points(value)
+    if percentile is None:
+        return "Open Interest 目前百分位資料不足。"
+    if percentile < 10:
+        return "Open Interest 位於極低百分位。這代表市場參與度或持倉規模極低，市場可能處於低參與、重新累積或資金退潮狀態。"
+    if percentile < 30:
+        return "Open Interest 位於偏低百分位。這代表市場參與度或持倉規模偏低，趨勢延續需要更多資金參與確認。"
+    if percentile < 70:
+        return "Open Interest 位於中性區間。這代表市場參與度沒有明顯歷史極端。"
+    return "Open Interest 位於偏高百分位。這代表市場參與度或持倉規模偏高，需要留意波動擴大與部位擁擠。"
+
+
+def render_how_to_read_dashboard() -> None:
+    st.subheader("How to Read This Dashboard")
+    steps = [
+        (
+            "Step 1",
+            "先看 Current Market Snapshot，確認目前 MM、Producer、OI 的歷史位置。",
+        ),
+        (
+            "Step 2",
+            "看 Historical Positioning Explanation，理解目前是資金擁擠、低參與、還是弱部位狀態。",
+        ),
+        (
+            "Step 3",
+            "看 Top 20 Similar Cases 的 median return 與 win rate，理解歷史相似案例後續分布。",
+        ),
+        (
+            "Step 4",
+            "打開 Event Study，查看單一歷史案例前後走勢。",
+        ),
+        (
+            "Step 5",
+            "所有結果只能作為盤前背景與風險提醒，不可單獨作為交易決策。",
+        ),
+    ]
+    for label, body in steps:
+        st.markdown(f"**{label}：** {body}")
+
+
+def render_current_market_snapshot(latest: pd.Series) -> None:
+    st.subheader("Current Market Snapshot")
+    state = market_state(latest.get(MM_FACTOR), latest.get("oi_percentile_156w"))
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Date", fmt_date(latest.get("date")))
+    c2.metric("Gold Close", fmt_number(latest.get("gold_close")))
+    c3.metric("Market State", state)
+    c4.metric("MM Net", fmt_int(latest.get("mm_net")))
+
+    c1, c2, c3 = st.columns(3)
+    c1.metric("MM Percentile", fmt_percent(latest.get(MM_FACTOR), input_scale="fraction"))
+    c2.metric(
+        "Producer Percentile",
+        fmt_percent(latest.get("producer_net_percentile_156w"), input_scale="fraction"),
+    )
+    c3.metric("OI Percentile", fmt_percent(latest.get("oi_percentile_156w"), input_scale="fraction"))
+
+
+def render_historical_positioning_explanation(latest: pd.Series) -> None:
+    st.subheader("Historical Positioning Explanation")
+    mm = latest.get(MM_FACTOR)
+    producer = latest.get("producer_net_percentile_156w")
+    oi = latest.get("oi_percentile_156w")
+
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown("**MM Percentile**")
+        st.write(
+            f"Managed Money 目前位於過去 156 週 rolling window 的{fmt_percentile_rank(mm)}。"
+        )
+        st.write(managed_money_position_sentence(mm))
+    with c2:
+        st.markdown("**Producer Percentile**")
+        st.write(
+            f"Producer / Merchant 部位目前位於過去 156 週 rolling window 的{fmt_percentile_rank(producer)}。"
+        )
+        st.write(producer_position_sentence(producer))
+    with c3:
+        st.markdown("**OI Percentile**")
+        st.write(
+            f"Open Interest 目前位於過去 156 週 rolling window 的{fmt_percentile_rank(oi)}。"
+        )
+        st.write(open_interest_position_sentence(oi))
+
+
+def render_indicator_dictionary_cards(latest: pd.Series) -> None:
+    st.subheader("Indicator Dictionary")
+    oi_value = fmt_percent(latest.get("oi_percentile_156w"), input_scale="fraction")
+
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown("### MM Percentile 是什麼？")
+        st.markdown(
+            """
+MM = Managed Money，通常代表基金、CTA、投機型資金在 COT 報告中的部位。
+
+MM Percentile 不是多空訊號，而是用來判斷目前基金部位在歷史上偏高或偏低。
+
+低百分位：基金參與度偏低或淨多偏低。
+
+高百分位：基金部位偏積極或較擁擠。
+"""
+        )
+    with c2:
+        st.markdown("### Producer Percentile 是什麼？")
+        st.markdown(
+            """
+Producer / Merchant 通常代表生產商、商業避險端。
+
+高百分位代表其部位處於歷史偏高區間，可能反映避險需求或商業端壓力。
+
+此數值需搭配 MM、OI、價格趨勢一起看，不能單獨解讀。
+"""
+        )
+    with c3:
+        st.markdown("### OI Percentile 是什麼？")
+        st.markdown(
+            f"""
+OI = Open Interest，代表期貨市場未平倉合約總量。
+
+OI 高代表市場參與度高、資金擁擠度高。
+
+OI 低代表市場參與度低、資金尚未大規模進場或退場後沉澱。
+
+OI Percentile {oi_value} 代表目前 OI 位於極低歷史位置。
+"""
+        )
+
+
+def render_executive_readability_summary(latest: pd.Series, summary: dict) -> None:
+    state = market_state(latest.get(MM_FACTOR), latest.get("oi_percentile_156w"))
+    stats = summary["stats_used"]
+    st.subheader("Executive Summary / 首頁快讀")
+    st.markdown(
+        f"""
+**目前市場歷史定位：** {state}
+
+**GHPR 判讀：** {summary['signal_label']}
+
+**MM 位置：** {fmt_percent(latest.get(MM_FACTOR), input_scale='fraction')}，{percentile_level(latest.get(MM_FACTOR))}
+
+**Producer 位置：** {fmt_percent(latest.get('producer_net_percentile_156w'), input_scale='fraction')}，{percentile_level(latest.get('producer_net_percentile_156w'))}
+
+**OI 位置：** {fmt_percent(latest.get('oi_percentile_156w'), input_scale='fraction')}，{percentile_level(latest.get('oi_percentile_156w'))}
+
+**Top20 歷史相似案例後續統計：** 1W {fmt_percent(stats['avg_1w'])}, 2W {fmt_percent(stats['avg_2w'])}, 4W {fmt_percent(stats['avg_4w'])}, 8W {fmt_percent(stats['avg_8w'])}, 8W win rate {fmt_percent(stats['win_8w'], input_scale='fraction')}。
+
+**核心提醒：** GHPR 只描述大型資金籌碼與歷史相似案例，不提供進出場點。
+"""
+    )
+
+
+def build_indicator_explanation_rows(latest: pd.Series) -> list[dict]:
+    mm = latest.get(MM_FACTOR)
+    producer = latest.get("producer_net_percentile_156w")
+    oi = latest.get("oi_percentile_156w")
+    return [
+        {
+            "Indicator": "MM Percentile",
+            "Current": fmt_percent(mm, input_scale="fraction"),
+            "Historical position": percentile_level(mm),
+            "How to read": (
+                f"MM 代表 Managed Money 淨部位在近 156 週的位置。"
+                f"{fmt_percent(mm, input_scale='fraction')} 表示目前{percentile_rank_phrase(mm)}，"
+                "投機資金位置偏低，尚未呈現擁擠追價結構。"
+            ),
+        },
+        {
+            "Indicator": "Producer Percentile",
+            "Current": fmt_percent(producer, input_scale="fraction"),
+            "Historical position": percentile_level(producer),
+            "How to read": (
+                f"Producer / Merchant 代表商業避險端淨部位在近 156 週的位置。"
+                f"{fmt_percent(producer, input_scale='fraction')} 表示目前{percentile_rank_phrase(producer)}，"
+                "商業端結構處於偏高區，需要搭配價格與 OI 一起解讀。"
+            ),
+        },
+        {
+            "Indicator": "OI Percentile",
+            "Current": fmt_percent(oi, input_scale="fraction"),
+            "Historical position": percentile_level(oi),
+            "How to read": (
+                f"OI 代表期貨總未平倉量在近 156 週的位置。"
+                f"{fmt_percent(oi, input_scale='fraction')} 表示目前{percentile_rank_phrase(oi)}，"
+                "市場參與度極低，歷史相似案例需要等待 OI 或價格結構確認。"
+            ),
+        },
+    ]
+
+
+def render_indicator_explanations(latest: pd.Series) -> None:
+    st.subheader("MM / Producer / OI 指標怎麼讀")
+    st.dataframe(
+        pd.DataFrame(build_indicator_explanation_rows(latest)),
+        width="stretch",
+        hide_index=True,
+    )
+
+
+def render_top20_following_explanation(summary: dict) -> None:
+    stats = summary["stats_used"]
+    st.subheader("Top 20 Similar Cases 後續統計代表什麼")
+    st.markdown(
+        f"""
+Top 20 Similar Cases 是用目前的 MM / Producer / OI percentile 去找過去最相近的 20 個歷史週。
+表格中的 1W / 2W / 4W / 8W 是那些歷史案例發生後的後續表現統計，不是對現在行情的保證。
+
+目前 Top20 平均後續表現為：1W {fmt_percent(stats['avg_1w'])}, 2W {fmt_percent(stats['avg_2w'])}, 4W {fmt_percent(stats['avg_4w'])}, 8W {fmt_percent(stats['avg_8w'])}；8W win rate 為 {fmt_percent(stats['win_8w'], input_scale='fraction')}。
+這代表歷史樣本傾向偏弱，但仍只是歷史統計研究參考。
+"""
+    )
+
+
+def render_not_signal_explanation() -> None:
+    st.subheader("為什麼這不是交易訊號")
+    st.markdown(
+        """
+1. Percentile 只代表相對歷史位置，不代表方向預測。
+2. Top 20 Similar Cases 是歷史樣本統計，不保證當前市場會重複。
+3. GHPR 沒有納入即時價格結構、流動性事件、總體消息或風控條件。
+4. GHPR 的用途是風險濾網與歷史定位，最後仍需結合其他市場確認。
+"""
+    )
+
+
 def data_freshness(latest_date: object) -> str:
     if pd.isna(latest_date):
         return "N/A"
@@ -452,9 +776,47 @@ def latest_update_time() -> str:
     return datetime.fromtimestamp(latest_mtime).strftime("%Y-%m-%d %H:%M:%S")
 
 
+def format_update_command(command: list[str]) -> str:
+    return " ".join(str(part) for part in command)
+
+
+def build_update_failure_summary(result: object) -> dict[str, str]:
+    failed_step = next((step for step in result.steps if not step.success), None)
+    return {
+        "failed_step": failed_step.name if failed_step else "N/A",
+        "command": format_update_command(failed_step.command) if failed_step else "N/A",
+        "exit_code": str(failed_step.return_code) if failed_step else "N/A",
+        "stderr": failed_step.stderr if failed_step and failed_step.stderr else "N/A",
+        "update_log_path": str(result.log_path),
+        "error_message": result.error_message or "N/A",
+    }
+
+
+def render_update_failure_summary(summary: dict[str, str]) -> None:
+    with st.sidebar.expander("Update failure details", expanded=True):
+        st.markdown(f"**Failed step:** `{summary.get('failed_step', 'N/A')}`")
+        st.markdown(f"**Exit code:** `{summary.get('exit_code', 'N/A')}`")
+        st.markdown("**Command**")
+        st.code(summary.get("command", "N/A"), language="text")
+        st.markdown("**stderr**")
+        st.code(summary.get("stderr", "N/A"), language="text")
+        st.markdown("**Update log path**")
+        st.code(summary.get("update_log_path", "N/A"), language="text")
+
+
 def render_update_controls() -> None:
     st.sidebar.subheader("Update")
     st.sidebar.caption("Historical statistics / research reference refresh.")
+    st.sidebar.info(
+        """
+Cloud deployment note:
+On Streamlit Cloud, runtime file writes may be temporary.
+For stable production data, refresh locally/VPS, commit updated data and outputs, then push to GitHub.
+
+雲端部署環境中的檔案寫入可能是暫時性的。
+若要穩定保存資料，建議在本機或 VPS 更新後，將 data/ 與 outputs/ 提交回 GitHub。
+"""
+    )
     if st.sidebar.button("一鍵更新 GHPR 資料", width="stretch"):
         with st.spinner("Running GHPR update pipeline..."):
             result = run_update_pipeline(no_download=True)
@@ -462,6 +824,9 @@ def render_update_controls() -> None:
         st.session_state["last_update_status"] = result.status_text
         st.session_state["last_update_log"] = str(result.log_path)
         st.session_state["last_update_error"] = result.error_message
+        st.session_state["last_update_failure_summary"] = (
+            build_update_failure_summary(result) if not result.success else None
+        )
 
     status = st.session_state.get("last_update_status")
     if status == "success":
@@ -471,6 +836,9 @@ def render_update_controls() -> None:
         error = st.session_state.get("last_update_error")
         if error:
             st.sidebar.caption(error)
+        summary = st.session_state.get("last_update_failure_summary")
+        if summary:
+            render_update_failure_summary(summary)
 
     log_path = st.session_state.get("last_update_log")
     if log_path:
@@ -494,6 +862,32 @@ def render_sidebar_metadata(master: pd.DataFrame) -> None:
                 latest.get("oi_percentile_156w"),
             )
         )
+
+
+def render_hse_exclusion_control() -> int:
+    st.sidebar.subheader("HSE Similarity Window")
+    labels = {
+        8: "Exclude recent 8 weeks",
+        26: "Exclude recent 26 weeks",
+        52: "Exclude recent 52 weeks",
+        104: "Exclude recent 104 weeks",
+    }
+    default_index = HSE_EXCLUDE_RECENT_OPTIONS.index(DEFAULT_EXCLUDE_RECENT_WEEKS)
+    selected_label = st.sidebar.selectbox(
+        "Recent history exclusion",
+        [labels[value] for value in HSE_EXCLUDE_RECENT_OPTIONS],
+        index=default_index,
+        help="Avoid having Top Similar Cases dominated by the same recent market phase.",
+    )
+    selected_weeks = next(
+        value for value, label in labels.items() if label == selected_label
+    )
+    st.sidebar.caption(
+        f"Recent {selected_weeks} weeks are excluded from similarity search by default."
+        if selected_weeks == DEFAULT_EXCLUDE_RECENT_WEEKS
+        else f"Recent {selected_weeks} weeks are excluded from similarity search for this view."
+    )
+    return selected_weeks
 
 
 def render_research_banner() -> None:
@@ -522,9 +916,10 @@ def page_current_position(
     master: pd.DataFrame,
     historical_report: pd.DataFrame,
     historical_stats: pd.DataFrame,
+    hse_exclude_recent_weeks: int,
 ) -> None:
-    st.header("Current Position")
-    render_research_banner()
+    st.header("GHPR Executive Summary")
+    st.caption(RESEARCH_WARNING_EN)
 
     required = [
         "date",
@@ -542,11 +937,21 @@ def page_current_position(
         st.info("N/A")
         return
 
-    render_trader_summary(build_trader_summary(latest, historical_stats))
+    trader_summary = build_trader_summary(latest, historical_stats)
+    render_how_to_read_dashboard()
+    render_current_market_snapshot(latest)
+    render_historical_positioning_explanation(latest)
+    render_indicator_dictionary_cards(latest)
+
+    st.divider()
+    render_research_banner()
+    render_trader_summary(trader_summary)
+    render_top20_following_explanation(trader_summary)
+    render_not_signal_explanation()
     render_data_health(latest)
     render_how_to_use_ghpr()
 
-    st.subheader("Executive Summary")
+    st.subheader("Current Metrics")
     state = market_state(latest.get(MM_FACTOR), latest.get("oi_percentile_156w"))
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Current data date", fmt_date(latest["date"]))
@@ -563,12 +968,24 @@ def page_current_position(
     c3.metric("OI Percentile", fmt_percent(latest["oi_percentile_156w"], input_scale="fraction"))
     c4.metric("MM Net", fmt_int(latest["mm_net"]))
 
-    st.subheader("Historical Similar Cases: Top 20 Following Statistics")
+    st.subheader("Top 20 Similar Cases — Historical Outcome")
+    st.caption(
+        "這代表歷史上與目前 MM / Producer / OI 結構相似的案例，在後續 1W / 2W / 4W / 8W 的統計結果。"
+        "這不是預測，只是歷史樣本後續表現分布。"
+    )
+    st.caption(
+        "Recent 52 weeks are excluded from similarity search by default."
+        if hse_exclude_recent_weeks == DEFAULT_EXCLUDE_RECENT_WEEKS
+        else f"Recent {hse_exclude_recent_weeks} weeks are excluded from similarity search for this view."
+    )
     top20 = top20_similarity_summary(historical_report, historical_stats)
     if top20.empty:
         st.info("N/A")
     else:
-        st.dataframe(top20, width="stretch", hide_index=True)
+        render_historical_confidence(
+            build_historical_confidence(historical_report, historical_stats)
+        )
+        st.dataframe(format_top20_historical_outcome(top20), width="stretch", hide_index=True)
 
     st.subheader("Current Position Detail")
     detail = {
@@ -614,7 +1031,124 @@ def top20_similarity_summary(
         rows[f"avg_return_{weeks}w"] = fmt_percent(values.mean(), input_scale="return") if not values.empty else "N/A"
         rows[f"median_return_{weeks}w"] = fmt_percent(values.median(), input_scale="return") if not values.empty else "N/A"
         rows[f"win_rate_{weeks}w"] = fmt_percent((values > 0).mean(), input_scale="fraction") if not values.empty else "N/A"
+    values_8w = pd.to_numeric(top.get("future_return_8w"), errors="coerce").dropna()
+    rows["best_return_8w"] = fmt_percent(values_8w.max(), input_scale="return") if not values_8w.empty else "N/A"
+    rows["worst_return_8w"] = fmt_percent(values_8w.min(), input_scale="return") if not values_8w.empty else "N/A"
     return pd.DataFrame([rows])
+
+
+def format_top20_historical_outcome(frame: pd.DataFrame) -> pd.DataFrame:
+    preferred_columns = [
+        "case_count",
+        "median_return_1w",
+        "win_rate_1w",
+        "median_return_2w",
+        "win_rate_2w",
+        "median_return_4w",
+        "win_rate_4w",
+        "median_return_8w",
+        "win_rate_8w",
+        "best_return_8w",
+        "worst_return_8w",
+    ]
+    display = frame.copy()
+    if "group" in display.columns:
+        display = display.drop(columns=["group"])
+    ordered_columns = [column for column in preferred_columns if column in display.columns]
+    return display[ordered_columns]
+
+
+def same_return_direction(left: object, right: object) -> bool:
+    left_number = scalar_float(left)
+    right_number = scalar_float(right)
+    if left_number is None or right_number is None:
+        return False
+    return (left_number > 0 and right_number > 0) or (left_number < 0 and right_number < 0)
+
+
+def top20_similarity_score_average(historical_report: pd.DataFrame) -> float | None:
+    if historical_report.empty or "similarity_score" not in historical_report.columns:
+        return None
+    values = pd.to_numeric(historical_report.head(20)["similarity_score"], errors="coerce").dropna()
+    if values.empty:
+        return None
+    return float(values.mean())
+
+
+def build_historical_confidence(
+    historical_report: pd.DataFrame,
+    historical_stats: pd.DataFrame,
+) -> dict:
+    stats_row = top20_stats_row(historical_stats)
+    if stats_row is not None:
+        case_count = scalar_float(stats_row.get("case_count"))
+        win_rate_8w = scalar_float(stats_row.get("win_rate_8w"))
+        median_return_8w = scalar_float(stats_row.get("median_return_8w"))
+        avg_return_8w = scalar_float(stats_row.get("avg_return_8w"))
+        best_return_8w = scalar_float(stats_row.get("best_return_8w"))
+        worst_return_8w = scalar_float(stats_row.get("worst_return_8w"))
+    elif not historical_report.empty:
+        top = historical_report.head(20)
+        values_8w = pd.to_numeric(top.get("future_return_8w"), errors="coerce").dropna()
+        case_count = float(len(top))
+        win_rate_8w = float((values_8w > 0).mean()) if not values_8w.empty else None
+        median_return_8w = float(values_8w.median()) if not values_8w.empty else None
+        avg_return_8w = float(values_8w.mean()) if not values_8w.empty else None
+        best_return_8w = float(values_8w.max()) if not values_8w.empty else None
+        worst_return_8w = float(values_8w.min()) if not values_8w.empty else None
+    else:
+        case_count = None
+        win_rate_8w = None
+        median_return_8w = None
+        avg_return_8w = None
+        best_return_8w = None
+        worst_return_8w = None
+
+    avg_similarity_score = top20_similarity_score_average(historical_report)
+    direction_consistent = same_return_direction(median_return_8w, avg_return_8w)
+
+    confidence = "Low"
+    if case_count is not None and case_count >= 20 and direction_consistent:
+        if (
+            win_rate_8w is not None
+            and (win_rate_8w >= 0.75 or win_rate_8w <= 0.25)
+            and avg_similarity_score is not None
+            and avg_similarity_score >= 85
+        ):
+            confidence = "High"
+        elif win_rate_8w is not None and (win_rate_8w >= 0.65 or win_rate_8w <= 0.35):
+            confidence = "Medium"
+
+    if case_count is None or case_count < 10:
+        confidence = "Low"
+
+    return {
+        "confidence": confidence,
+        "case_count": case_count,
+        "win_rate_8w": win_rate_8w,
+        "median_return_8w": median_return_8w,
+        "avg_return_8w": avg_return_8w,
+        "best_return_8w": best_return_8w,
+        "worst_return_8w": worst_return_8w,
+        "avg_similarity_score": avg_similarity_score,
+        "direction_consistent": direction_consistent,
+    }
+
+
+def render_historical_confidence(confidence: dict) -> None:
+    st.metric("Historical Confidence", confidence["confidence"])
+    st.caption("Confidence 代表歷史樣本方向一致性與相似度品質，不代表交易勝率。")
+    details = {
+        "case_count": fmt_number(confidence.get("case_count"), 0),
+        "win_rate_8w": fmt_percent(confidence.get("win_rate_8w"), input_scale="fraction"),
+        "median_return_8w": fmt_percent(confidence.get("median_return_8w")),
+        "avg_return_8w": fmt_percent(confidence.get("avg_return_8w")),
+        "best_return_8w": fmt_percent(confidence.get("best_return_8w")),
+        "worst_return_8w": fmt_percent(confidence.get("worst_return_8w")),
+        "avg_similarity_score": fmt_number(confidence.get("avg_similarity_score"), 2),
+        "median_avg_same_direction": "Yes" if confidence.get("direction_consistent") else "No",
+    }
+    st.dataframe(pd.DataFrame([details]), width="stretch", hide_index=True)
 
 
 def page_historical_database(master: pd.DataFrame) -> None:
@@ -1142,11 +1676,17 @@ def bucket_bar_chart(frame: pd.DataFrame, y_column: str, title: str) -> go.Figur
 def page_historical_similarity_engine(
     historical_report: pd.DataFrame,
     historical_stats: pd.DataFrame,
+    hse_exclude_recent_weeks: int,
 ) -> None:
     st.header("Historical Similarity Engine")
     st.caption("Historical Statistics / Research Reference.")
     render_research_banner()
     st.info("This page compares the current feature vector with prior weekly states. It is not a forecast.")
+    st.info(
+        "Recent 52 weeks are excluded from similarity search by default."
+        if hse_exclude_recent_weeks == DEFAULT_EXCLUDE_RECENT_WEEKS
+        else f"Recent {hse_exclude_recent_weeks} weeks are excluded from similarity search for this view."
+    )
     st.caption("Current Snapshot Date 是目前資料快照日期；Historical Case Date 是歷史相似案例的發生日期。")
 
     if historical_report.empty:
@@ -1294,10 +1834,16 @@ def main() -> None:
 
     master = load_master_dataset()
     factor_result = load_factor_dataset()
-    historical_similarity_report = load_historical_similarity_report()
-    historical_similarity_stats = load_historical_similarity_stats()
 
     render_sidebar_metadata(master)
+    hse_exclude_recent_weeks = render_hse_exclusion_control()
+    (
+        historical_similarity_report,
+        historical_similarity_stats,
+        hse_metadata,
+    ) = load_historical_similarity_for_exclusion(hse_exclude_recent_weeks)
+    if hse_metadata.get("fallback"):
+        st.sidebar.warning("HSE used saved CSV fallback.")
 
     if master.empty:
         st.warning(f"N/A: master dataset not found or empty: {MASTER_PATH}")
@@ -1317,7 +1863,12 @@ def main() -> None:
     )
 
     if page == "Current Position":
-        page_current_position(master, historical_similarity_report, historical_similarity_stats)
+        page_current_position(
+            master,
+            historical_similarity_report,
+            historical_similarity_stats,
+            hse_exclude_recent_weeks,
+        )
     elif page == "Historical Database":
         page_historical_database(master)
     elif page == "Similar Cases":
@@ -1329,7 +1880,11 @@ def main() -> None:
     elif page == "Research Report":
         page_research_report()
     elif page == "Historical Similarity Engine":
-        page_historical_similarity_engine(historical_similarity_report, historical_similarity_stats)
+        page_historical_similarity_engine(
+            historical_similarity_report,
+            historical_similarity_stats,
+            hse_exclude_recent_weeks,
+        )
     else:
         page_update_log()
 

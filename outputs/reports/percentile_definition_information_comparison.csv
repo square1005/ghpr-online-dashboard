@@ -1,0 +1,109 @@
+factor,display_name,definition,definition_type,window_weeks,signal_column,horizon,return_column,rank_corr,high_low_spread,bucket_monotonicity_score,positive_bucket_count,negative_bucket_count,sample_count,missing_count
+mm_net,MM Net,52W percentile,percentile,52.0,mm_net_percentile_52w,1W,gold_return_1w,-0.01823687827703308,-0.00023537348842280815,-0.24848484848484845,8,2,822,52
+mm_net,MM Net,52W percentile,percentile,52.0,mm_net_percentile_52w,2W,gold_return_2w,-0.03833785872336433,-0.0007983796315714632,-0.34545454545454546,8,2,821,53
+mm_net,MM Net,52W percentile,percentile,52.0,mm_net_percentile_52w,4W,gold_return_4w,-0.04002207529902312,-0.0019330907284914713,-0.28484848484848485,9,1,819,55
+mm_net,MM Net,52W percentile,percentile,52.0,mm_net_percentile_52w,8W,gold_return_8w,-0.02161002367061617,-0.003084764544793296,-0.2727272727272727,10,0,815,59
+mm_net,MM Net,104W percentile,percentile,104.0,mm_net_percentile_104w,1W,gold_return_1w,0.004480620230392366,0.0018675149408210808,0.07878787878787878,8,2,822,52
+mm_net,MM Net,104W percentile,percentile,104.0,mm_net_percentile_104w,2W,gold_return_2w,-0.011358466915016942,0.003296519533304943,0.406060606060606,10,0,821,53
+mm_net,MM Net,104W percentile,percentile,104.0,mm_net_percentile_104w,4W,gold_return_4w,0.005008106680389949,0.0062774396295269316,0.35757575757575755,10,0,819,55
+mm_net,MM Net,104W percentile,percentile,104.0,mm_net_percentile_104w,8W,gold_return_8w,0.05518682643379499,0.009924067378881317,0.33333333333333326,10,0,815,59
+mm_net,MM Net,156W percentile,percentile,156.0,mm_net_percentile_156w,1W,gold_return_1w,0.018936530673630315,0.0019392607129323051,0.07878787878787878,7,3,822,52
+mm_net,MM Net,156W percentile,percentile,156.0,mm_net_percentile_156w,2W,gold_return_2w,0.00879749805128709,0.004660537567216451,0.12727272727272726,7,3,821,53
+mm_net,MM Net,156W percentile,percentile,156.0,mm_net_percentile_156w,4W,gold_return_4w,0.029221051233583654,0.008596996317779007,0.309090909090909,10,0,819,55
+mm_net,MM Net,156W percentile,percentile,156.0,mm_net_percentile_156w,8W,gold_return_8w,0.07982626421720779,0.011421538400336016,0.7575757575757575,10,0,815,59
+mm_net,MM Net,260W percentile,percentile,260.0,mm_net_percentile_260w,1W,gold_return_1w,0.031794085627490434,0.0013197554722958124,0.4545454545454545,8,2,822,52
+mm_net,MM Net,260W percentile,percentile,260.0,mm_net_percentile_260w,2W,gold_return_2w,0.027663210845516737,0.00030681516272007244,0.5636363636363636,8,2,821,53
+mm_net,MM Net,260W percentile,percentile,260.0,mm_net_percentile_260w,4W,gold_return_4w,0.05450989086125852,0.00022315809614622227,0.5878787878787878,8,2,819,55
+mm_net,MM Net,260W percentile,percentile,260.0,mm_net_percentile_260w,8W,gold_return_8w,0.10675057424471945,0.0056186169087701614,0.6606060606060605,8,2,815,59
+mm_net,MM Net,Full History percentile,percentile,,mm_net_percentile_full_history,1W,gold_return_1w,0.027942569522488143,-0.0012633493064980275,0.17575757575757575,8,2,873,1
+mm_net,MM Net,Full History percentile,percentile,,mm_net_percentile_full_history,2W,gold_return_2w,0.01454558518064525,-0.0018045036277553267,0.0303030303030303,7,3,872,2
+mm_net,MM Net,Full History percentile,percentile,,mm_net_percentile_full_history,4W,gold_return_4w,0.028836335234053094,-0.0029846264827125893,0.16363636363636364,8,2,870,4
+mm_net,MM Net,Full History percentile,percentile,,mm_net_percentile_full_history,8W,gold_return_8w,0.058128467459811727,-0.01684224339802648,0.38181818181818183,7,3,866,8
+mm_net,MM Net,52W zscore,zscore,52.0,mm_net_zscore_52w,1W,gold_return_1w,-0.024662441856210568,-0.002319466631388009,-0.17575757575757575,7,3,822,52
+mm_net,MM Net,52W zscore,zscore,52.0,mm_net_zscore_52w,2W,gold_return_2w,-0.049546736601108914,-0.004077907147477988,-0.406060606060606,9,1,821,53
+mm_net,MM Net,52W zscore,zscore,52.0,mm_net_zscore_52w,4W,gold_return_4w,-0.05298515466682919,-0.00969387106205605,-0.41818181818181815,9,1,819,55
+mm_net,MM Net,52W zscore,zscore,52.0,mm_net_zscore_52w,8W,gold_return_8w,-0.03410813293527115,-0.01571994831493015,-0.2727272727272727,10,0,815,59
+mm_net,MM Net,104W zscore,zscore,104.0,mm_net_zscore_104w,1W,gold_return_1w,0.00831572737576342,-0.0005422175764142534,0.09090909090909088,8,2,822,52
+mm_net,MM Net,104W zscore,zscore,104.0,mm_net_zscore_104w,2W,gold_return_2w,-0.009430459170297582,-0.0005437129930592885,0.23636363636363633,8,2,821,53
+mm_net,MM Net,104W zscore,zscore,104.0,mm_net_zscore_104w,4W,gold_return_4w,0.007327165052730083,-0.00679255113160981,-0.0303030303030303,9,1,819,55
+mm_net,MM Net,104W zscore,zscore,104.0,mm_net_zscore_104w,8W,gold_return_8w,0.0558409226128461,-0.004752713762338058,0.33333333333333326,9,1,815,59
+mm_net,MM Net,156W zscore,zscore,156.0,mm_net_zscore_156w,1W,gold_return_1w,0.018584547448615145,0.0014367601198968592,0.3939393939393939,7,3,822,52
+mm_net,MM Net,156W zscore,zscore,156.0,mm_net_zscore_156w,2W,gold_return_2w,0.005623285150763615,-0.00028405039700119764,0.2121212121212121,8,2,821,53
+mm_net,MM Net,156W zscore,zscore,156.0,mm_net_zscore_156w,4W,gold_return_4w,0.02740232117654743,-0.004318142390222719,0.28484848484848485,8,2,819,55
+mm_net,MM Net,156W zscore,zscore,156.0,mm_net_zscore_156w,8W,gold_return_8w,0.07973263362112154,-0.0010456561272403735,0.5515151515151515,9,1,815,59
+mm_net,MM Net,260W zscore,zscore,260.0,mm_net_zscore_260w,1W,gold_return_1w,0.03209148599690493,0.0032306208345199436,0.18787878787878787,8,2,822,52
+mm_net,MM Net,260W zscore,zscore,260.0,mm_net_zscore_260w,2W,gold_return_2w,0.027607703862274714,0.0026130833437862304,0.3939393939393939,8,2,821,53
+mm_net,MM Net,260W zscore,zscore,260.0,mm_net_zscore_260w,4W,gold_return_4w,0.05738436330600443,0.0012787492286878803,0.3696969696969697,8,2,819,55
+mm_net,MM Net,260W zscore,zscore,260.0,mm_net_zscore_260w,8W,gold_return_8w,0.1144407193847829,0.006570062837836864,0.3939393939393939,8,2,815,59
+producer_net,Producer Net,52W percentile,percentile,52.0,producer_net_percentile_52w,1W,gold_return_1w,0.004292563947100472,4.24982712809405e-05,0.43030303030303024,9,1,822,52
+producer_net,Producer Net,52W percentile,percentile,52.0,producer_net_percentile_52w,2W,gold_return_2w,0.015908012684411808,-0.0008019626548435546,0.11515151515151514,9,1,821,53
+producer_net,Producer Net,52W percentile,percentile,52.0,producer_net_percentile_52w,4W,gold_return_4w,0.040787689063952665,0.001372817279010836,0.33333333333333326,9,1,819,55
+producer_net,Producer Net,52W percentile,percentile,52.0,producer_net_percentile_52w,8W,gold_return_8w,0.025940025162047953,-0.00133090229268095,0.41818181818181815,9,1,815,59
+producer_net,Producer Net,104W percentile,percentile,104.0,producer_net_percentile_104w,1W,gold_return_1w,-0.01627765761325454,0.002224891262126902,-0.18787878787878787,8,2,822,52
+producer_net,Producer Net,104W percentile,percentile,104.0,producer_net_percentile_104w,2W,gold_return_2w,-0.014356236474683051,0.002674730267019738,-0.12727272727272726,8,2,821,53
+producer_net,Producer Net,104W percentile,percentile,104.0,producer_net_percentile_104w,4W,gold_return_4w,-0.012940530729472067,0.0005287573238931084,0.2121212121212121,8,2,819,55
+producer_net,Producer Net,104W percentile,percentile,104.0,producer_net_percentile_104w,8W,gold_return_8w,-0.04619605910790767,-0.006523578838701833,0.2121212121212121,9,1,815,59
+producer_net,Producer Net,156W percentile,percentile,156.0,producer_net_percentile_156w,1W,gold_return_1w,-0.03364796781694356,0.0007330768763738002,-0.17575757575757575,9,1,822,52
+producer_net,Producer Net,156W percentile,percentile,156.0,producer_net_percentile_156w,2W,gold_return_2w,-0.03599845881888939,-0.001402521544808684,-0.24848484848484845,9,1,821,53
+producer_net,Producer Net,156W percentile,percentile,156.0,producer_net_percentile_156w,4W,gold_return_4w,-0.04111089696459135,-0.0036469649495737694,-0.28484848484848485,9,1,819,55
+producer_net,Producer Net,156W percentile,percentile,156.0,producer_net_percentile_156w,8W,gold_return_8w,-0.07496654125457693,-0.00872095411014435,-0.2727272727272727,10,0,815,59
+producer_net,Producer Net,260W percentile,percentile,260.0,producer_net_percentile_260w,1W,gold_return_1w,-0.036654847727568475,0.003936459681606009,0.0303030303030303,8,2,822,52
+producer_net,Producer Net,260W percentile,percentile,260.0,producer_net_percentile_260w,2W,gold_return_2w,-0.038990234083650176,0.006727611951712131,-0.09090909090909088,8,2,821,53
+producer_net,Producer Net,260W percentile,percentile,260.0,producer_net_percentile_260w,4W,gold_return_4w,-0.040874403957667255,0.01048043747254671,0.10303030303030303,7,3,819,55
+producer_net,Producer Net,260W percentile,percentile,260.0,producer_net_percentile_260w,8W,gold_return_8w,-0.0758877709895658,0.005762934277478436,0.07878787878787878,7,3,815,59
+producer_net,Producer Net,Full History percentile,percentile,,producer_net_percentile_full_history,1W,gold_return_1w,-0.006957936902716316,-0.0003560113278282183,-0.07878787878787878,8,2,873,1
+producer_net,Producer Net,Full History percentile,percentile,,producer_net_percentile_full_history,2W,gold_return_2w,0.0154486790871639,0.0015407831158945752,0.07878787878787878,9,1,872,2
+producer_net,Producer Net,Full History percentile,percentile,,producer_net_percentile_full_history,4W,gold_return_4w,0.029023505473157747,0.005344062725313024,0.17575757575757575,9,1,870,4
+producer_net,Producer Net,Full History percentile,percentile,,producer_net_percentile_full_history,8W,gold_return_8w,0.04050546996335226,0.007896630096355727,0.29696969696969694,10,0,866,8
+producer_net,Producer Net,52W zscore,zscore,52.0,producer_net_zscore_52w,1W,gold_return_1w,0.004468330833366759,-0.0014916416733473524,-0.006060606060606061,7,3,822,52
+producer_net,Producer Net,52W zscore,zscore,52.0,producer_net_zscore_52w,2W,gold_return_2w,0.012262062466104182,-0.0035036085648003064,0.05454545454545454,8,2,821,53
+producer_net,Producer Net,52W zscore,zscore,52.0,producer_net_zscore_52w,4W,gold_return_4w,0.023962409268629078,-0.0031038353297890057,-0.05454545454545454,8,2,819,55
+producer_net,Producer Net,52W zscore,zscore,52.0,producer_net_zscore_52w,8W,gold_return_8w,0.004654694062849963,-0.011433951961920343,0.11515151515151514,9,1,815,59
+producer_net,Producer Net,104W zscore,zscore,104.0,producer_net_zscore_104w,1W,gold_return_1w,-0.022070374187800737,0.00037945262082060744,-0.16363636363636364,7,3,822,52
+producer_net,Producer Net,104W zscore,zscore,104.0,producer_net_zscore_104w,2W,gold_return_2w,-0.024005579894165897,0.0004964107226443492,-0.2606060606060606,7,3,821,53
+producer_net,Producer Net,104W zscore,zscore,104.0,producer_net_zscore_104w,4W,gold_return_4w,-0.03300899509975782,-0.003807374307389867,-0.28484848484848485,7,3,819,55
+producer_net,Producer Net,104W zscore,zscore,104.0,producer_net_zscore_104w,8W,gold_return_8w,-0.07084262504688345,-0.019320894780465347,-0.12727272727272726,9,1,815,59
+producer_net,Producer Net,156W zscore,zscore,156.0,producer_net_zscore_156w,1W,gold_return_1w,-0.03972366603779592,-0.004025864288951281,-0.2606060606060606,9,1,822,52
+producer_net,Producer Net,156W zscore,zscore,156.0,producer_net_zscore_156w,2W,gold_return_2w,-0.04737150597943384,-0.004823728468562649,-0.41818181818181815,9,1,821,53
+producer_net,Producer Net,156W zscore,zscore,156.0,producer_net_zscore_156w,4W,gold_return_4w,-0.06032166890894305,-0.009044002195927093,-0.5393939393939393,9,1,819,55
+producer_net,Producer Net,156W zscore,zscore,156.0,producer_net_zscore_156w,8W,gold_return_8w,-0.09859797463550622,-0.019225114806117376,-0.4424242424242424,9,1,815,59
+producer_net,Producer Net,260W zscore,zscore,260.0,producer_net_zscore_260w,1W,gold_return_1w,-0.03432118445471087,-0.0010020068376142535,-0.3939393939393939,8,2,822,52
+producer_net,Producer Net,260W zscore,zscore,260.0,producer_net_zscore_260w,2W,gold_return_2w,-0.03759990389363073,-0.00019863741899005553,-0.4545454545454545,7,3,821,53
+producer_net,Producer Net,260W zscore,zscore,260.0,producer_net_zscore_260w,4W,gold_return_4w,-0.046746624079798384,0.00014797136862250166,-0.2121212121212121,7,3,819,55
+producer_net,Producer Net,260W zscore,zscore,260.0,producer_net_zscore_260w,8W,gold_return_8w,-0.08373291026665258,-0.011977034026949739,-0.24848484848484845,8,2,815,59
+total_open_interest,Total Open Interest,52W percentile,percentile,52.0,oi_percentile_52w,1W,gold_return_1w,-0.03924118251752943,-0.0037217188850868885,-0.04242424242424241,9,1,822,52
+total_open_interest,Total Open Interest,52W percentile,percentile,52.0,oi_percentile_52w,2W,gold_return_2w,-0.0658721655109696,-0.004943875320086726,-0.22424242424242422,9,1,821,53
+total_open_interest,Total Open Interest,52W percentile,percentile,52.0,oi_percentile_52w,4W,gold_return_4w,-0.08377749728650996,-0.008752199316578987,-0.4787878787878787,9,1,819,55
+total_open_interest,Total Open Interest,52W percentile,percentile,52.0,oi_percentile_52w,8W,gold_return_8w,-0.09196472138015227,-0.017476285991575954,-0.7212121212121211,9,1,815,59
+total_open_interest,Total Open Interest,104W percentile,percentile,104.0,oi_percentile_104w,1W,gold_return_1w,-0.007470666130393726,-0.0009345212689347655,0.006060606060606061,8,2,822,52
+total_open_interest,Total Open Interest,104W percentile,percentile,104.0,oi_percentile_104w,2W,gold_return_2w,-0.023764477450781016,-0.0010764197629343285,0.04242424242424241,10,0,821,53
+total_open_interest,Total Open Interest,104W percentile,percentile,104.0,oi_percentile_104w,4W,gold_return_4w,-0.021916839494834466,-0.001686624892627036,0.09090909090909088,10,0,819,55
+total_open_interest,Total Open Interest,104W percentile,percentile,104.0,oi_percentile_104w,8W,gold_return_8w,-0.010963312695813472,-0.0007442209280175034,-0.43030303030303024,9,1,815,59
+total_open_interest,Total Open Interest,156W percentile,percentile,156.0,oi_percentile_156w,1W,gold_return_1w,0.004794265629370884,0.0011448593203661319,0.04242424242424241,8,2,822,52
+total_open_interest,Total Open Interest,156W percentile,percentile,156.0,oi_percentile_156w,2W,gold_return_2w,-0.007591769293210805,0.0005510272329872183,0.0303030303030303,10,0,821,53
+total_open_interest,Total Open Interest,156W percentile,percentile,156.0,oi_percentile_156w,4W,gold_return_4w,-0.000694308792105845,0.002883098140288245,-0.04242424242424241,10,0,819,55
+total_open_interest,Total Open Interest,156W percentile,percentile,156.0,oi_percentile_156w,8W,gold_return_8w,0.019489613760642316,0.008652339135367948,-0.2727272727272727,10,0,815,59
+total_open_interest,Total Open Interest,260W percentile,percentile,260.0,oi_percentile_260w,1W,gold_return_1w,-0.0005057816468662085,-0.0004967824381025841,-0.05454545454545454,8,2,822,52
+total_open_interest,Total Open Interest,260W percentile,percentile,260.0,oi_percentile_260w,2W,gold_return_2w,-0.017367101859907905,0.000661570165637281,0.06666666666666665,9,1,821,53
+total_open_interest,Total Open Interest,260W percentile,percentile,260.0,oi_percentile_260w,4W,gold_return_4w,-0.014616110874461227,0.0011761924270831453,-0.06666666666666665,10,0,819,55
+total_open_interest,Total Open Interest,260W percentile,percentile,260.0,oi_percentile_260w,8W,gold_return_8w,-0.0002893280457148127,0.003730628423938835,-0.3939393939393939,10,0,815,59
+total_open_interest,Total Open Interest,Full History percentile,percentile,,oi_percentile_full_history,1W,gold_return_1w,0.018863153508393175,-0.0014266139479504139,0.16363636363636364,8,2,873,1
+total_open_interest,Total Open Interest,Full History percentile,percentile,,oi_percentile_full_history,2W,gold_return_2w,0.004670678575344219,-0.0019175795184141614,0.19999999999999998,9,1,872,2
+total_open_interest,Total Open Interest,Full History percentile,percentile,,oi_percentile_full_history,4W,gold_return_4w,0.02117103858115083,0.0039075662723613335,0.23636363636363633,10,0,870,4
+total_open_interest,Total Open Interest,Full History percentile,percentile,,oi_percentile_full_history,8W,gold_return_8w,0.04624666394533325,0.011132944663064585,0.309090909090909,10,0,866,8
+total_open_interest,Total Open Interest,52W zscore,zscore,52.0,oi_zscore_52w,1W,gold_return_1w,-0.034093418164573376,-0.007272592393045115,-0.10303030303030303,9,1,822,52
+total_open_interest,Total Open Interest,52W zscore,zscore,52.0,oi_zscore_52w,2W,gold_return_2w,-0.0636284231117603,-0.009778448829871144,-0.34545454545454546,8,2,821,53
+total_open_interest,Total Open Interest,52W zscore,zscore,52.0,oi_zscore_52w,4W,gold_return_4w,-0.07698332240046117,-0.011742972091915948,-0.5757575757575757,10,0,819,55
+total_open_interest,Total Open Interest,52W zscore,zscore,52.0,oi_zscore_52w,8W,gold_return_8w,-0.08610720723676336,-0.010267401906952748,-0.6484848484848483,10,0,815,59
+total_open_interest,Total Open Interest,104W zscore,zscore,104.0,oi_zscore_104w,1W,gold_return_1w,-0.006625283218426262,-0.0020784458216525133,-0.05454545454545454,7,3,822,52
+total_open_interest,Total Open Interest,104W zscore,zscore,104.0,oi_zscore_104w,2W,gold_return_2w,-0.020695374685816528,-0.0003208109229688552,-0.09090909090909088,8,2,821,53
+total_open_interest,Total Open Interest,104W zscore,zscore,104.0,oi_zscore_104w,4W,gold_return_4w,-0.014974365090651096,0.0047961159765861575,0.0303030303030303,9,1,819,55
+total_open_interest,Total Open Interest,104W zscore,zscore,104.0,oi_zscore_104w,8W,gold_return_8w,-0.0015310379438852914,0.010027515549867892,-0.2727272727272727,10,0,815,59
+total_open_interest,Total Open Interest,156W zscore,zscore,156.0,oi_zscore_156w,1W,gold_return_1w,0.0013291444241912297,-0.0005948456240399702,-0.0303030303030303,9,1,822,52
+total_open_interest,Total Open Interest,156W zscore,zscore,156.0,oi_zscore_156w,2W,gold_return_2w,-0.010899962854194365,-0.001712483731288852,0.0303030303030303,8,2,821,53
+total_open_interest,Total Open Interest,156W zscore,zscore,156.0,oi_zscore_156w,4W,gold_return_4w,-0.004267926797594637,-5.501447612046373e-05,0.07878787878787878,10,0,819,55
+total_open_interest,Total Open Interest,156W zscore,zscore,156.0,oi_zscore_156w,8W,gold_return_8w,0.020398418332377193,0.004045985229477189,-0.09090909090909088,10,0,815,59
+total_open_interest,Total Open Interest,260W zscore,zscore,260.0,oi_zscore_260w,1W,gold_return_1w,-0.0009962236534903407,-0.0008988625658771165,0.10303030303030303,9,1,822,52
+total_open_interest,Total Open Interest,260W zscore,zscore,260.0,oi_zscore_260w,2W,gold_return_2w,-0.0161015899835999,0.00023297529650354162,0.01818181818181818,9,1,821,53
+total_open_interest,Total Open Interest,260W zscore,zscore,260.0,oi_zscore_260w,4W,gold_return_4w,-0.010357787798303037,0.0060834798047133395,-0.04242424242424241,9,1,819,55
+total_open_interest,Total Open Interest,260W zscore,zscore,260.0,oi_zscore_260w,8W,gold_return_8w,0.012011603151985685,0.01571991134727245,-0.2121212121212121,9,1,815,59

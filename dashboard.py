@@ -30,6 +30,15 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 MASTER_PATH = PROJECT_ROOT / "data" / "processed" / "ghpr_master_weekly.csv"
 FACTOR_PATH = PROJECT_ROOT / "outputs" / "reports" / "single_factor_decile_analysis.csv"
 REPORT_PATH = PROJECT_ROOT / "outputs" / "reports" / "ghpr_factor_report.md"
+PERCENTILE_AUDIT_REPORT_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "percentile_definition_audit_report.md"
+)
+PERCENTILE_SCORECARD_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "percentile_definition_scorecard.csv"
+)
+PERCENTILE_RECOMMENDATION_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "percentile_definition_recommendation.csv"
+)
 HISTORICAL_SIMILARITY_REPORT_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_report.csv"
 )
@@ -40,6 +49,27 @@ HISTORICAL_SIMILARITY_CASES_CHART_PATH = (
     PROJECT_ROOT / "outputs" / "charts" / "historical_similarity_cases.png"
 )
 GOLD_DAILY_OHLC_PATH = PROJECT_ROOT / "data" / "processed" / "gold_daily_ohlc.csv"
+PERCENTILE_AUDIT_CHARTS = [
+    ("MM Percentile Window Comparison", PROJECT_ROOT / "outputs" / "charts" / "mm_percentile_window_comparison.png"),
+    (
+        "Producer Percentile Window Comparison",
+        PROJECT_ROOT / "outputs" / "charts" / "producer_percentile_window_comparison.png",
+    ),
+    ("OI Percentile Window Comparison", PROJECT_ROOT / "outputs" / "charts" / "oi_percentile_window_comparison.png"),
+    ("Definition Scorecard", PROJECT_ROOT / "outputs" / "charts" / "percentile_definition_scorecard.png"),
+    (
+        "MM Windows vs 8W Historical Following Performance",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_52_104_156_260_vs_forward_8w.png",
+    ),
+    (
+        "Producer Windows vs 8W Historical Following Performance",
+        PROJECT_ROOT / "outputs" / "charts" / "producer_52_104_156_260_vs_forward_8w.png",
+    ),
+    (
+        "OI Windows vs 8W Historical Following Performance",
+        PROJECT_ROOT / "outputs" / "charts" / "oi_52_104_156_260_vs_forward_8w.png",
+    ),
+]
 
 MM_FACTOR = "mm_net_percentile_156w"
 FORWARD_HORIZONS = [1, 2, 4, 8]
@@ -167,6 +197,39 @@ def load_research_report() -> str:
     if not REPORT_PATH.exists():
         return "N/A"
     return REPORT_PATH.read_text(encoding="utf-8", errors="replace")
+
+
+@st.cache_data(show_spinner=False)
+def load_percentile_audit_report() -> str:
+    if not PERCENTILE_AUDIT_REPORT_PATH.exists():
+        return "N/A"
+    return PERCENTILE_AUDIT_REPORT_PATH.read_text(encoding="utf-8", errors="replace")
+
+
+@st.cache_data(show_spinner=False)
+def load_percentile_scorecard() -> pd.DataFrame:
+    if not PERCENTILE_SCORECARD_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(PERCENTILE_SCORECARD_PATH)
+    for column in ["train_score", "test_score", "stability_score"]:
+        if column in frame.columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    if "recommended" in frame.columns:
+        frame["recommended"] = frame["recommended"].astype(str).str.lower().isin(
+            {"true", "1", "yes"}
+        )
+    return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_percentile_recommendation() -> pd.DataFrame:
+    if not PERCENTILE_RECOMMENDATION_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(PERCENTILE_RECOMMENDATION_PATH)
+    for column in frame.columns:
+        if "score" in column:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame
 
 
 @st.cache_data(show_spinner=False)
@@ -1893,6 +1956,95 @@ def page_research_report() -> None:
     st.markdown(load_research_report())
 
 
+def format_scorecard_table(frame: pd.DataFrame) -> pd.DataFrame:
+    if frame.empty:
+        return frame
+    display = frame.copy()
+    score_columns = [
+        column
+        for column in display.columns
+        if column in {"train_score", "test_score", "stability_score"} or "score" in column
+    ]
+    for column in score_columns:
+        if column in display.columns:
+            display[column] = display[column].map(
+                lambda value: "N/A" if pd.isna(value) else f"{float(value):.1f}"
+            )
+    return display
+
+
+def page_percentile_definition_audit() -> None:
+    st.header("Percentile Definition Audit")
+    render_research_banner()
+    st.info(
+        "v0.5 research page only. Current Position still uses the existing 156W rolling percentile logic. "
+        "Formal dashboard definition changes should wait for the v0.6 decision."
+    )
+
+    scorecard = load_percentile_scorecard()
+    recommendation = load_percentile_recommendation()
+
+    st.subheader("Recommended Definitions")
+    if not recommendation.empty:
+        preferred = [
+            "display_name",
+            "formal_recommended_definition",
+            "recommended_production_safe_definition",
+            "recommended_rolling_definition",
+            "recommended_unified_rolling_definition",
+            "production_safe_overall_score",
+            "rolling_overall_score",
+        ]
+        columns = [column for column in preferred if column in recommendation.columns]
+        st.dataframe(format_scorecard_table(recommendation[columns]), width="stretch", hide_index=True)
+    elif not scorecard.empty and "recommended" in scorecard.columns:
+        recommended = scorecard[scorecard["recommended"]].copy()
+        preferred = [
+            "factor",
+            "horizon",
+            "definition",
+            "stability_score",
+            "train_score",
+            "test_score",
+            "reason",
+        ]
+        columns = [column for column in preferred if column in recommended.columns]
+        st.dataframe(format_scorecard_table(recommended[columns]), width="stretch", hide_index=True)
+    else:
+        st.warning(f"N/A: missing recommendation data: {PERCENTILE_RECOMMENDATION_PATH}")
+
+    st.subheader("Scorecard")
+    if scorecard.empty:
+        st.warning(f"N/A: missing scorecard data: {PERCENTILE_SCORECARD_PATH}")
+    else:
+        c1, c2 = st.columns(2)
+        factor_options = ["All", *sorted(scorecard["factor"].dropna().astype(str).unique())]
+        horizon_options = ["All", *sorted(scorecard["horizon"].dropna().astype(str).unique())]
+        selected_factor = c1.selectbox("Factor", factor_options)
+        selected_horizon = c2.selectbox("Horizon", horizon_options)
+        filtered = scorecard.copy()
+        if selected_factor != "All":
+            filtered = filtered[filtered["factor"].astype(str) == selected_factor]
+        if selected_horizon != "All":
+            filtered = filtered[filtered["horizon"].astype(str) == selected_horizon]
+        st.dataframe(format_scorecard_table(filtered), width="stretch", hide_index=True)
+
+    st.subheader("Main Comparison Charts")
+    for title, path in PERCENTILE_AUDIT_CHARTS:
+        if path.exists():
+            st.markdown(f"**{title}**")
+            st.image(str(path), width="stretch")
+        else:
+            st.warning(f"N/A: missing chart: {path.name}")
+
+    st.subheader("Audit Report Markdown")
+    report = load_percentile_audit_report()
+    if report == "N/A":
+        st.warning(f"N/A: missing audit report: {PERCENTILE_AUDIT_REPORT_PATH}")
+    else:
+        st.markdown(report)
+
+
 def page_update_log() -> None:
     st.header("Update Log")
     render_research_banner()
@@ -1930,6 +2082,7 @@ def main() -> None:
             "Event Study",
             "Forward Statistics",
             "Research Report",
+            "Percentile Definition Audit",
             "Historical Similarity Engine",
             "Update Log",
         ],
@@ -1952,6 +2105,8 @@ def main() -> None:
         page_forward_statistics(factor_result)
     elif page == "Research Report":
         page_research_report()
+    elif page == "Percentile Definition Audit":
+        page_percentile_definition_audit()
     elif page == "Historical Similarity Engine":
         page_historical_similarity_engine(
             historical_similarity_report,

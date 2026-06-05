@@ -130,6 +130,7 @@ def build_update_commands(no_download: bool = True) -> list[tuple[str, list[str]
         build_master.append("--no-download")
 
     return [
+        ("Fetch daily gold OHLC", [python, "src/fetch_gold_daily_ohlc.py"]),
         ("Build master weekly dataset", build_master),
         ("Run single-factor analysis", [python, "src/factor_analysis.py"]),
         ("Regenerate charts", [python, "src/plot_engine.py"]),

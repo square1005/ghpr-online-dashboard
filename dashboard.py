@@ -8,6 +8,15 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
 
+from src.candlestick_viewer import (
+    CANDLESTICK_SOURCE_NOTE_EN,
+    CANDLESTICK_SOURCE_NOTE_ZH,
+    VIEW_RANGE_OPTIONS,
+    build_candlestick_figure,
+    load_gold_daily_ohlc,
+    ohlc_for_window,
+    week_window_for_event,
+)
 from src.historical_similarity_engine import (
     DEFAULT_EXCLUDE_RECENT_WEEKS,
     build_historical_similarity_report,
@@ -30,6 +39,7 @@ HISTORICAL_SIMILARITY_STATS_PATH = (
 HISTORICAL_SIMILARITY_CASES_CHART_PATH = (
     PROJECT_ROOT / "outputs" / "charts" / "historical_similarity_cases.png"
 )
+GOLD_DAILY_OHLC_PATH = PROJECT_ROOT / "data" / "processed" / "gold_daily_ohlc.csv"
 
 MM_FACTOR = "mm_net_percentile_156w"
 FORWARD_HORIZONS = [1, 2, 4, 8]
@@ -89,6 +99,11 @@ def load_factor_dataset() -> pd.DataFrame:
     if not FACTOR_PATH.exists():
         return pd.DataFrame()
     return pd.read_csv(FACTOR_PATH)
+
+
+@st.cache_data(show_spinner=False)
+def load_gold_daily_ohlc_dataset() -> pd.DataFrame:
+    return load_gold_daily_ohlc(GOLD_DAILY_OHLC_PATH)
 
 
 @st.cache_data(show_spinner=False)
@@ -1729,6 +1744,8 @@ def page_historical_similarity_engine(
         hide_index=True,
     )
 
+    render_historical_weekly_candlestick(historical_report)
+
     st.subheader("歷史相似案例後續統計")
     if historical_stats.empty:
         st.info("N/A")
@@ -1812,6 +1829,62 @@ def best_worst_cases_by_group(historical_report: pd.DataFrame) -> pd.DataFrame:
             }
         )
     return pd.DataFrame(rows)
+
+
+def render_historical_weekly_candlestick(historical_report: pd.DataFrame) -> None:
+    st.subheader("Historical Weekly Candlestick")
+    st.caption("K 線只作為歷史案例視覺化與研究參考。")
+    if historical_report.empty or "historical_date" not in historical_report.columns:
+        st.info("N/A: historical case dates are unavailable.")
+        return
+
+    top20_dates = (
+        pd.to_datetime(historical_report.head(20)["historical_date"], errors="coerce")
+        .dropna()
+        .dt.strftime("%Y-%m-%d")
+        .drop_duplicates()
+        .tolist()
+    )
+    if not top20_dates:
+        st.info("N/A: Top 20 historical case dates are unavailable.")
+        return
+
+    selected_date = st.selectbox(
+        "Select historical case date",
+        top20_dates,
+        key="hse_candlestick_case_date",
+    )
+    view_range = st.selectbox(
+        "View Range:",
+        VIEW_RANGE_OPTIONS,
+        index=0,
+        key="hse_candlestick_view_range",
+    )
+
+    ohlc = load_gold_daily_ohlc_dataset()
+    if ohlc.empty:
+        st.info(
+            "N/A: daily OHLC data is missing. Run `python src/fetch_gold_daily_ohlc.py` "
+            "or use the one-click update after daily data access is available."
+        )
+        st.caption(CANDLESTICK_SOURCE_NOTE_EN)
+        st.caption(CANDLESTICK_SOURCE_NOTE_ZH)
+        return
+
+    window = week_window_for_event(selected_date, view_range)
+    window_ohlc = ohlc_for_window(ohlc, window)
+    if window_ohlc.empty:
+        st.warning(
+            "N/A: no daily OHLC rows found for "
+            f"{window.range_start:%Y-%m-%d} to {window.range_end:%Y-%m-%d}."
+        )
+        st.caption(CANDLESTICK_SOURCE_NOTE_EN)
+        st.caption(CANDLESTICK_SOURCE_NOTE_ZH)
+        return
+
+    st.plotly_chart(build_candlestick_figure(window_ohlc, window), width="stretch")
+    st.caption(CANDLESTICK_SOURCE_NOTE_EN)
+    st.caption(CANDLESTICK_SOURCE_NOTE_ZH)
 
 
 def page_research_report() -> None:

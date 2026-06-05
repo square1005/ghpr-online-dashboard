@@ -1,18 +1,37 @@
 # GHPR Update Log
 
 - Status: `success`
-- Started UTC: `2026-06-04T13:59:59.558455+00:00`
-- Finished UTC: `2026-06-04T14:01:02.782493+00:00`
+- Started UTC: `2026-06-05T11:25:43.384426+00:00`
+- Finished UTC: `2026-06-05T11:26:41.670568+00:00`
 - Runtime note: `Cloud runtime file writes may be ephemeral; commit refreshed outputs to GitHub for durable deployment data.`
 - Scope: `Historical statistics / research reference only.`
 
 ## Steps
 
+### Fetch daily gold OHLC
+
+- Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/fetch_gold_daily_ohlc.py`
+- Exit code: `0`
+- Elapsed seconds: `4.33`
+
+#### stdout
+
+```text
+Wrote 4,382 daily OHLC rows to PROJECT_ROOT/data\processed\gold_daily_ohlc.csv
+Source: Yahoo Finance GC=F futures proxy
+```
+
+#### stderr
+
+```text
+N/A
+```
+
 ### Build master weekly dataset
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/build_master_dataset.py --no-download`
 - Exit code: `0`
-- Elapsed seconds: `20.55`
+- Elapsed seconds: `17.02`
 
 #### stdout
 
@@ -31,7 +50,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/factor_analysis.py`
 - Exit code: `0`
-- Elapsed seconds: `24.18`
+- Elapsed seconds: `18.80`
 
 #### stdout
 
@@ -53,7 +72,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/plot_engine.py`
 - Exit code: `0`
-- Elapsed seconds: `7.50`
+- Elapsed seconds: `4.69`
 
 #### stdout
 
@@ -77,7 +96,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/report_engine.py`
 - Exit code: `0`
-- Elapsed seconds: `7.35`
+- Elapsed seconds: `11.05`
 
 #### stdout
 
@@ -95,7 +114,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/historical_similarity_engine.py`
 - Exit code: `0`
-- Elapsed seconds: `3.66`
+- Elapsed seconds: `2.39`
 
 #### stdout
 

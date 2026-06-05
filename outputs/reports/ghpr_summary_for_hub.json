@@ -1,0 +1,30 @@
+{
+  "date": "2026-05-26",
+  "gold_close": 4500.3999,
+  "mm_percentile": 30.1282,
+  "producer_percentile": 94.8718,
+  "oi_percentile": 0.641,
+  "mm_state": "MM_LOW",
+  "market_state": "Accumulation / Weak Positioning",
+  "historical_tendency": "historical_sample_negative",
+  "confidence": "Low",
+  "top20_median_return_1w": -0.010341,
+  "top20_median_return_2w": -0.010264,
+  "top20_median_return_4w": -0.001531,
+  "top20_median_return_8w": -0.026368,
+  "top20_win_rate_8w": 0.4,
+  "data_health": {
+    "status": "ok",
+    "warnings": [],
+    "master_rows": 874,
+    "historical_similarity_cases": 20,
+    "historical_similarity_stats_rows": 3,
+    "missing_master_columns": [],
+    "missing_files": [],
+    "current_date_matches_hse": true,
+    "gold_price_source": "COMEX GC futures proxy via Yahoo Finance GC=F",
+    "scope": "historical statistics / research reference only"
+  },
+  "last_update_time": "2026-06-05T17:25:17.163916+00:00",
+  "dashboard_url": "https://square1005.github.io/ghpr-online-dashboard/"
+}

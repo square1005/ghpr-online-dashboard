@@ -1,92 +1,98 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GHPR Public Snapshot</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GHPR Static Snapshot</title>
   <style>
-    :root { --bg:#f8fafc; --card:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --blue:#2563eb; --amber:#92400e; --soft:#eff6ff; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family: Arial, "Noto Sans TC", "Microsoft JhengHei", sans-serif; background:var(--bg); color:var(--ink); }
-    .wrap { max-width:1180px; margin:0 auto; padding:36px 22px 60px; }
-    .hero { margin-bottom:28px; }
-    h1 { font-size:42px; letter-spacing:-0.04em; margin:0 0 10px; }
-    h2 { font-size:26px; margin:34px 0 14px; }
-    h3 { font-size:18px; margin:0 0 12px; }
-    p { color:var(--muted); line-height:1.65; }
-    .banner { background:#dbeafe; color:#075985; padding:14px 18px; border-radius:12px; margin:18px 0; }
-    .grid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:16px; }
-    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:0 8px 20px rgba(15,23,42,.04); }
-    .label { color:var(--muted); font-size:13px; margin-bottom:8px; }
-    .value { font-size:30px; font-weight:700; letter-spacing:-.03em; }
-    .value.small { font-size:22px; }
-    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:var(--soft); color:#1d4ed8; font-weight:700; font-size:13px; }
-    .warning { background:#fffbeb; border:1px solid #fde68a; color:var(--amber); padding:14px 18px; border-radius:12px; }
-    table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; display:block; overflow-x:auto; }
-    thead { background:#f1f5f9; }
-    th, td { text-align:left; padding:11px 12px; border-bottom:1px solid var(--line); white-space:nowrap; font-size:14px; }
-    th { color:#334155; font-weight:700; }
-    td { color:#0f172a; }
-    .section-note { margin-top:8px; color:var(--muted); font-size:14px; }
-    .footer { margin-top:38px; color:var(--muted); font-size:13px; }
-    @media (max-width:900px) { .grid { grid-template-columns:repeat(2, minmax(0,1fr)); } h1{font-size:34px;} }
-    @media (max-width:560px) { .grid { grid-template-columns:1fr; } }
+    :root { color-scheme: light; --line:#e5e7eb; --text:#0f172a; --muted:#64748b; --bg:#f8fafc; }
+    body { margin:0; font-family: Arial, "Microsoft JhengHei", sans-serif; color:var(--text); background:var(--bg); }
+    main { max-width:1180px; margin:0 auto; padding:28px 18px 48px; }
+    section { margin-top:22px; padding:18px; background:#fff; border:1px solid var(--line); border-radius:8px; }
+    h1 { margin:0 0 6px; font-size:30px; line-height:1.25; }
+    h2 { margin:0 0 14px; font-size:22px; }
+    h3 { margin:0 0 8px; font-size:17px; }
+    p { line-height:1.65; }
+    .muted { color:var(--muted); }
+    .warning { color:#7c2d12; background:#fff7ed; border:1px solid #fed7aa; padding:12px; border-radius:8px; }
+    .summary { border-left:8px solid #f97316; }
+    .summary-badge { display:inline-block; font-weight:700; color:#f97316; margin-bottom:8px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; }
+    .box { border:1px solid var(--line); border-radius:8px; padding:14px; background:#fff; }
+    .metric-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; }
+    .metric { border:1px solid var(--line); border-radius:8px; padding:12px; background:#f8fafc; }
+    .metric-label { color:var(--muted); font-size:13px; }
+    .metric-value { font-size:20px; font-weight:700; margin-top:4px; }
+    table { border-collapse:collapse; width:100%; font-size:14px; }
+    th, td { border-bottom:1px solid var(--line); padding:9px 8px; text-align:left; white-space:nowrap; }
+    th { background:#f1f5f9; color:#334155; }
+    .table-wrap { overflow-x:auto; }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="hero">
-      <div class="pill">GHPR Public Snapshot</div>
-      <h1>GHPR Online Dashboard v0.4</h1>
-      <p>Public static snapshot generated from the GHPR repository outputs. This page is designed as a backup review entry when Streamlit Cloud authentication blocks external inspection tools.</p>
-      <div class="banner">此系統為歷史統計研究工具，不是交易訊號，不提供買賣建議。</div>
-      <div class="warning">Gold price source: COMEX GC futures proxy via Yahoo Finance GC=F. This is not official LBMA PM benchmark or broker XAUUSD spot.</div>
-    </section>
-
-    <h2>Executive Summary</h2>
-    <section class="grid">
-      <div class="card"><div class="label">Current data date</div><div class="value">2026-05-26</div></div>
-      <div class="card"><div class="label">Gold price</div><div class="value">4,500.40</div></div>
-      <div class="card"><div class="label">MM State</div><div class="value small">MM_LOW</div></div>
-      <div class="card"><div class="label">Market State</div><div class="value small">Accumulation / Weak Positioning</div></div>
-      <div class="card"><div class="label">MM Percentile</div><div class="value">30.13%</div></div>
-      <div class="card"><div class="label">Producer Percentile</div><div class="value">94.87%</div></div>
-      <div class="card"><div class="label">OI Percentile</div><div class="value">0.64%</div></div>
-      <div class="card"><div class="label">MM Net</div><div class="value">97,446</div></div>
-    </section>
-
-    <h2>Top 20 Similar Cases: Following Statistics</h2>
-    <table>
-      <thead><tr><th>Group</th><th>Case Count</th><th>Avg 1W</th><th>Median 1W</th><th>Win 1W</th><th>Avg 2W</th><th>Median 2W</th><th>Win 2W</th><th>Avg 4W</th><th>Median 4W</th><th>Win 4W</th><th>Avg 8W</th><th>Median 8W</th><th>Win 8W</th></tr></thead>
-      <tbody><tr><td>Top 20</td><td>20</td><td>-1.05%</td><td>-1.03%</td><td>30.00%</td><td>-1.27%</td><td>-0.89%</td><td>45.00%</td><td>-2.07%</td><td>-1.22%</td><td>40.00%</td><td>-3.03%</td><td>-4.42%</td><td>30.00%</td></tr></tbody>
-    </table>
-    <p class="section-note">Interpretation: similar historical cases leaned negative on average across 1W, 2W, 4W and 8W windows. Treat this as risk context, not a standalone trade signal.</p>
-
-    <h2>Top Similar Historical Cases</h2>
-    <table>
-      <thead><tr><th>Rank</th><th>Current Snapshot Date</th><th>Historical Case Date</th><th>Similarity</th><th>Historical Gold</th><th>MM %</th><th>Producer %</th><th>OI %</th><th>Forward 1W</th><th>Forward 2W</th><th>Forward 4W</th><th>Forward 8W</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>2026-05-26</td><td>2026-02-17</td><td>97.86</td><td>4,882.90</td><td>27.56</td><td>97.44</td><td>1.92</td><td>5.59%</td><td>4.60%</td><td>2.42%</td><td>-1.19%</td></tr>
-        <tr><td>2</td><td>2026-05-26</td><td>2026-03-03</td><td>97.65</td><td>5,107.40</td><td>27.56</td><td>96.79</td><td>3.21</td><td>2.39%</td><td>-2.08%</td><td>-9.00%</td><td>-10.10%</td></tr>
-        <tr><td>3</td><td>2026-05-26</td><td>2026-02-03</td><td>97.65</td><td>4,903.70</td><td>24.36</td><td>95.51</td><td>1.28</td><td>2.04%</td><td>-0.42%</td><td>4.15%</td><td>-5.22%</td></tr>
-        <tr><td>4</td><td>2026-05-26</td><td>2026-03-17</td><td>97.22</td><td>5,001.00</td><td>30.13</td><td>99.36</td><td>4.49</td><td>-12.03%</td><td>-7.07%</td><td>-3.52%</td><td>-6.47%</td></tr>
-        <tr><td>5</td><td>2026-05-26</td><td>2013-10-08</td><td>97.22</td><td>1,324.20</td><td>23.72</td><td>92.95</td><td>0.64</td><td>-3.87%</td><td>1.38%</td><td>-1.22%</td><td>-7.74%</td></tr>
-        <tr><td>6</td><td>2026-05-26</td><td>2026-03-31</td><td>97.22</td><td>4,647.60</td><td>23.08</td><td>96.15</td><td>0.64</td><td>0.20%</td><td>3.82%</td><td>-1.21%</td><td>-3.17%</td></tr>
-        <tr><td>7</td><td>2026-05-26</td><td>2026-03-10</td><td>97.01</td><td>5,229.70</td><td>28.21</td><td>98.08</td><td>4.49</td><td>-4.37%</td><td>-15.88%</td><td>-10.95%</td><td>-12.89%</td></tr>
-        <tr><td>8</td><td>2026-05-26</td><td>2026-02-10</td><td>96.58</td><td>5,003.80</td><td>23.72</td><td>98.72</td><td>0.64</td><td>-2.42%</td><td>3.04%</td><td>4.51%</td><td>-6.93%</td></tr>
-        <tr><td>9</td><td>2026-05-26</td><td>2023-08-08</td><td>96.58</td><td>1,924.10</td><td>34.62</td><td>91.67</td><td>3.21</td><td>-1.12%</td><td>-1.44%</td><td>0.11%</td><td>-5.17%</td></tr>
-        <tr><td>10</td><td>2026-05-26</td><td>2023-02-07</td><td>96.37</td><td>1,871.70</td><td>32.69</td><td>91.03</td><td>5.13</td><td>-0.95%</td><td>-2.07%</td><td>-3.09%</td><td>8.04%</td></tr>
-      </tbody>
-    </table>
-
-    <h2>Data Health Notes</h2>
-    <div class="card">
-      <p><strong>Current interpretation:</strong> MM percentile is low, Producer percentile is very high, and OI percentile is extremely low. This combination currently classifies as <strong>Accumulation / Weak Positioning</strong>.</p>
-      <p><strong>Important UX note:</strong> repeated 2026-05-26 values in similarity output represent the current snapshot date, not the historical case date. Future UI should rename this field to <code>current_snapshot_date</code> to avoid confusion.</p>
-      <p><strong>Update note:</strong> Streamlit one-click refresh may use temporary hosted runtime files. Durable deployment data should be committed back to GitHub.</p>
+<main>
+  <section class="summary">
+    <div class="summary-badge">GHPR 判讀摘要：黃燈偏紅 / Risk-off Caution</div>
+    <h1>GHPR 判讀摘要 / Trader Summary</h1>
+    <p><strong>GHPR 是大型資金籌碼結構的風險濾網，不是交易訊號。</strong></p>
+    <p>目前歷史相似案例偏向後續弱勢，追多風險較高，尚不宜視為直接放空訊號。</p>
+    <div class="grid">
+      <div class="box"><h3>追多風險判讀</h3><p>目前不適合高槓桿追多，因為歷史樣本後續表現偏弱。</p></div>
+      <div class="box"><h3>放空條件判讀</h3><p>尚不可直接視為 GHPR 放空訊號。GHPR 只提供歷史定位，仍需價格結構或其他確認。</p></div>
+      <div class="box"><h3>等待確認條件</h3><p>等待價格結構、OGR / MMP、OI 回升或跌破支撐後，再作進一步判斷。</p></div>
     </div>
+  </section>
 
-    <p class="footer">Generated snapshot version: manual bootstrap. For automatic refresh, run <code>python scripts/build_static_snapshot.py</code>.</p>
-  </main>
+  <section>
+    <h2>Current Position</h2>
+    <div class="table-wrap">
+      <table><thead><tr><th>Current Snapshot Date</th><th>Gold Price</th><th>MM Percentile</th><th>Producer Percentile</th><th>OI Percentile</th><th>Market State</th></tr></thead><tbody><tr><td>2026-05-26</td><td>4,500.40</td><td>30.13%</td><td>94.87%</td><td>0.64%</td><td>Accumulation / Weak Positioning</td></tr></tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Top20 Similar Cases Historical Statistics</h2>
+    <div class="metric-row"><div class="metric"><div class="metric-label">1W</div><div class="metric-value">-1.05%</div></div><div class="metric"><div class="metric-label">2W</div><div class="metric-value">-1.27%</div></div><div class="metric"><div class="metric-label">4W</div><div class="metric-value">-2.07%</div></div><div class="metric"><div class="metric-label">8W</div><div class="metric-value">-3.03%</div></div><div class="metric"><div class="metric-label">8W Win Rate</div><div class="metric-value">30.00%</div></div></div>
+  </section>
+
+  <section>
+    <h2>Historical Similar Cases</h2>
+    <p class="muted">Current Snapshot Date 是目前資料快照日期；Historical Case Date 是歷史相似案例的發生日期。</p>
+    <div class="table-wrap">
+      <table><thead><tr><th>Historical Case Date</th><th>Similarity Score</th><th>Historical Case Gold</th><th>Historical MM Percentile</th><th>Historical Producer Percentile</th><th>Historical OI Percentile</th><th>Historical Case Forward Return 1W</th><th>Historical Case Forward Return 2W</th><th>Historical Case Forward Return 4W</th><th>Historical Case Forward Return 8W</th></tr></thead><tbody><tr><td>2026-02-17</td><td>97.86</td><td>4,882.90</td><td>27.56</td><td>97.44</td><td>1.92</td><td>5.59%</td><td>4.60%</td><td>2.42%</td><td>-1.19%</td></tr><tr><td>2026-03-03</td><td>97.65</td><td>5,107.40</td><td>27.56</td><td>96.79</td><td>3.21</td><td>2.39%</td><td>-2.08%</td><td>-9.00%</td><td>-10.10%</td></tr><tr><td>2026-02-03</td><td>97.65</td><td>4,903.70</td><td>24.36</td><td>95.51</td><td>1.28</td><td>2.04%</td><td>-0.42%</td><td>4.15%</td><td>-5.22%</td></tr><tr><td>2026-03-17</td><td>97.22</td><td>5,001.00</td><td>30.13</td><td>99.36</td><td>4.49</td><td>-12.03%</td><td>-7.07%</td><td>-3.52%</td><td>-6.47%</td></tr><tr><td>2013-10-08</td><td>97.22</td><td>1,324.20</td><td>23.72</td><td>92.95</td><td>0.64</td><td>-3.87%</td><td>1.38%</td><td>-1.22%</td><td>-7.74%</td></tr><tr><td>2026-03-31</td><td>97.22</td><td>4,647.60</td><td>23.08</td><td>96.15</td><td>0.64</td><td>0.20%</td><td>3.82%</td><td>-1.21%</td><td>-3.17%</td></tr><tr><td>2026-03-10</td><td>97.01</td><td>5,229.70</td><td>28.21</td><td>98.08</td><td>4.49</td><td>-4.37%</td><td>-15.88%</td><td>-10.95%</td><td>-12.89%</td></tr><tr><td>2026-02-10</td><td>96.58</td><td>5,003.80</td><td>23.72</td><td>98.72</td><td>0.64</td><td>-2.42%</td><td>3.04%</td><td>4.51%</td><td>-6.93%</td></tr><tr><td>2023-08-08</td><td>96.58</td><td>1,924.10</td><td>34.62</td><td>91.67</td><td>3.21</td><td>-1.12%</td><td>-1.44%</td><td>0.11%</td><td>-5.17%</td></tr><tr><td>2023-02-07</td><td>96.37</td><td>1,871.70</td><td>32.69</td><td>91.03</td><td>5.13</td><td>-0.95%</td><td>-2.07%</td><td>-3.09%</td><td>8.04%</td></tr><tr><td>2026-03-24</td><td>96.15</td><td>4,399.30</td><td>20.51</td><td>92.95</td><td>0.64</td><td>5.64%</td><td>5.86%</td><td>6.80%</td><td>2.43%</td></tr><tr><td>2026-02-24</td><td>96.15</td><td>5,155.80</td><td>27.56</td><td>98.08</td><td>6.41</td><td>-0.94%</td><td>1.43%</td><td>-14.67%</td><td>-8.87%</td></tr><tr><td>2013-08-27</td><td>95.73</td><td>1,420.60</td><td>20.51</td><td>93.59</td><td>2.56</td><td>-0.61%</td><td>-3.98%</td><td>-7.36%</td><td>-5.50%</td></tr><tr><td>2023-09-05</td><td>95.51</td><td>1,926.20</td><td>29.49</td><td>92.95</td><td>11.54</td><td>-0.77%</td><td>0.30%</td><td>-5.27%</td><td>3.06%</td></tr><tr><td>2023-02-14</td><td>95.51</td><td>1,854.00</td><td>20.51</td><td>91.67</td><td>1.28</td><td>-1.13%</td><td>-1.35%</td><td>2.82%</td><td>8.13%</td></tr><tr><td>2013-09-03</td><td>95.30</td><td>1,412.00</td><td>22.44</td><td>92.95</td><td>5.13</td><td>-3.39%</td><td>-7.26%</td><td>-8.92%</td><td>-4.73%</td></tr><tr><td>2013-09-10</td><td>95.09</td><td>1,364.10</td><td>17.95</td><td>94.87</td><td>3.21</td><td>-4.00%</td><td>-3.53%</td><td>-2.93%</td><td>-4.11%</td></tr><tr><td>2014-02-11</td><td>95.09</td><td>1,290.10</td><td>21.79</td><td>91.67</td><td>3.85</td><td>2.68%</td><td>4.10%</td><td>4.37%</td><td>1.44%</td></tr><tr><td>2013-09-24</td><td>94.66</td><td>1,316.00</td><td>17.95</td><td>96.79</td><td>2.56</td><td>-2.28%</td><td>0.62%</td><td>2.01%</td><td>-3.24%</td></tr><tr><td>2023-09-19</td><td>94.44</td><td>1,932.00</td><td>28.85</td><td>90.38</td><td>11.54</td><td>-1.64%</td><td>-5.56%</td><td>-0.48%</td><td>1.54%</td></tr></tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Top 5 / Top 10 / Top 20 Statistics</h2>
+    <div class="table-wrap">
+      <table><thead><tr><th>Group</th><th>Case Count</th><th>Avg 1W</th><th>Win Rate 1W</th><th>Avg 2W</th><th>Win Rate 2W</th><th>Avg 4W</th><th>Win Rate 4W</th><th>Avg 8W</th><th>Win Rate 8W</th></tr></thead><tbody><tr><td>Top 5</td><td>5</td><td>-1.17%</td><td>60.00%</td><td>-0.72%</td><td>40.00%</td><td>-1.43%</td><td>40.00%</td><td>-6.14%</td><td>0.00%</td></tr><tr><td>Top 10</td><td>10</td><td>-1.45%</td><td>40.00%</td><td>-1.61%</td><td>40.00%</td><td>-1.78%</td><td>40.00%</td><td>-5.08%</td><td>10.00%</td></tr><tr><td>Top 20</td><td>20</td><td>-1.05%</td><td>30.00%</td><td>-1.27%</td><td>45.00%</td><td>-2.07%</td><td>40.00%</td><td>-3.03%</td><td>30.00%</td></tr></tbody></table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Data Health</h2>
+    <div class="table-wrap">
+      <table><thead><tr><th>Latest COT Date</th><th>Latest Gold Price</th><th>Gold Price Source</th><th>Snapshot Generated At</th><th>Data Freshness</th></tr></thead><tbody><tr><td>2026-05-26</td><td>4,500.40</td><td>COMEX GC futures proxy via Yahoo Finance GC=F</td><td>2026-06-05 14:43:23</td><td>Fresh</td></tr></tbody></table>
+    </div>
+    <p><strong>Gold price source:</strong> COMEX GC futures proxy via Yahoo Finance GC=F.</p>
+    <p class="muted">This is not official LBMA PM benchmark or broker XAUUSD spot.</p>
+  </section>
+
+  <section>
+    <h2>如何使用 GHPR</h2>
+    <ol>
+      <li>先看 GHPR 判讀摘要，了解目前是順風、逆風還是混亂。</li>
+      <li>再看 MM / Producer / OI percentile，判斷大型資金位置。</li>
+      <li>再看 Top 20 Similar Cases，了解歷史樣本後續表現。</li>
+      <li>GHPR 不提供進出場點，只提供追多或放空前的風險濾網。</li>
+      <li>最後仍需結合價格結構、OGR / MMP、成交量或其他市場確認。</li>
+    </ol>
+  </section>
+
+  <section class="warning">
+    本頁為 GHPR 歷史定位研究摘要，不是交易訊號，不提供買賣建議。
+  </section>
+</main>
 </body>
 </html>

@@ -217,6 +217,224 @@ def fmt_percent(value: object, digits: int = 2, input_scale: str = "return") -> 
     return f"{number:.{digits}f}%"
 
 
+def scalar_float(value: object) -> float | None:
+    if value is None or pd.isna(value):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def top20_stats_row(historical_stats: pd.DataFrame) -> pd.Series | None:
+    if historical_stats.empty or "group" not in historical_stats.columns:
+        return None
+    top20 = historical_stats[historical_stats["group"].astype(str).str.lower().eq("top 20")]
+    if top20.empty:
+        return None
+    return top20.iloc[0]
+
+
+def classify_ghpr_signal(stats_row: pd.Series | None) -> str:
+    """
+    Classify Top 20 historical following stats into:
+    - tailwind
+    - mixed
+    - risk_off_caution
+    - high_risk
+    - na
+    """
+    if stats_row is None:
+        return "na"
+
+    avg_1w = scalar_float(stats_row.get("avg_return_1w"))
+    avg_2w = scalar_float(stats_row.get("avg_return_2w"))
+    avg_4w = scalar_float(stats_row.get("avg_return_4w"))
+    avg_8w = scalar_float(stats_row.get("avg_return_8w"))
+    win_8w = scalar_float(stats_row.get("win_rate_8w"))
+
+    if any(value is None for value in [avg_1w, avg_2w, avg_4w, avg_8w, win_8w]):
+        return "na"
+    if avg_1w < 0 and avg_4w < 0 and avg_8w < 0 and win_8w < 0.45:
+        return "risk_off_caution"
+    if avg_1w < 0 and avg_2w < 0 and avg_4w < 0 and avg_8w < 0 and win_8w < 0.35:
+        return "high_risk"
+    if avg_1w > 0 and avg_4w > 0 and avg_8w > 0 and win_8w >= 0.55:
+        return "tailwind"
+    return "mixed"
+
+
+def build_trader_summary(latest_row: pd.Series | None, historical_stats: pd.DataFrame) -> dict:
+    """
+    Return a dict with:
+    - signal_label
+    - signal_color
+    - plain_language_summary_zh
+    - chase_long_advice_zh
+    - short_advice_zh
+    - wait_for_zh
+    - stats_used
+    """
+    stats_row = top20_stats_row(historical_stats)
+    status = classify_ghpr_signal(stats_row)
+    copy = {
+        "tailwind": {
+            "signal_label": "綠燈順風 / Tailwind",
+            "signal_color": "#16a34a",
+            "plain_language_summary_zh": "歷史相似案例後續表現偏正向，環境較順風；仍只代表歷史樣本傾向。",
+            "chase_long_advice_zh": "歷史樣本偏順風，但 GHPR 不提供進出場點，仍需價格結構確認。",
+            "short_advice_zh": "不應僅因 GHPR 統計偏順風就建立反向假設；等待價格結構或其他市場確認。",
+            "wait_for_zh": "等待價格結構、OGR / MMP、OI 回升或關鍵區間反應後，再作進一步判斷。",
+        },
+        "mixed": {
+            "signal_label": "黃燈混亂 / Mixed",
+            "signal_color": "#ca8a04",
+            "plain_language_summary_zh": "歷史相似案例分歧，尚未形成明確風險方向，適合等待更多確認。",
+            "chase_long_advice_zh": "追多風險未明顯改善，較適合降低假設強度並觀察後續資料。",
+            "short_advice_zh": "尚不可直接視為 GHPR 放空訊號；需要價格結構或其他確認。",
+            "wait_for_zh": "等待價格結構、OGR / MMP、OI 回升或跌破支撐後，再作進一步判斷。",
+        },
+        "risk_off_caution": {
+            "signal_label": "黃燈偏紅 / Risk-off Caution",
+            "signal_color": "#f97316",
+            "plain_language_summary_zh": "目前歷史相似案例偏向後續弱勢，追多風險較高，尚不宜視為直接放空訊號。",
+            "chase_long_advice_zh": "目前不適合高槓桿追多，因為歷史樣本後續表現偏弱。",
+            "short_advice_zh": "尚不可直接視為 GHPR 放空訊號。GHPR 只提供歷史定位，仍需價格結構或其他確認。",
+            "wait_for_zh": "等待價格結構、OGR / MMP、OI 回升或跌破支撐後，再作進一步判斷。",
+        },
+        "high_risk": {
+            "signal_label": "紅燈高風險 / High Risk",
+            "signal_color": "#dc2626",
+            "plain_language_summary_zh": "歷史相似案例短中期後續表現偏弱，追多風險很高；仍不能單獨作為放空依據。",
+            "chase_long_advice_zh": "目前追多風險偏高，尤其不適合把 GHPR 當作高槓桿追多依據。",
+            "short_advice_zh": "即使風險偏高，也不可直接視為 GHPR 放空訊號；仍需價格結構或其他確認。",
+            "wait_for_zh": "等待價格結構、OGR / MMP、OI 回升或跌破支撐後，再作進一步判斷。",
+        },
+        "na": {
+            "signal_label": "資料不足 / N/A",
+            "signal_color": "#64748b",
+            "plain_language_summary_zh": "目前歷史相似案例統計不足，暫不做定位判讀。",
+            "chase_long_advice_zh": "資料不足，GHPR 暫不提供追多風險濾網判讀。",
+            "short_advice_zh": "資料不足，GHPR 暫不提供放空條件判讀。",
+            "wait_for_zh": "等待資料更新完成後，再查看歷史統計研究結果。",
+        },
+    }
+
+    stats_used = {
+        "group": stats_row.get("group") if stats_row is not None else "Top 20",
+        "avg_1w": scalar_float(stats_row.get("avg_return_1w")) if stats_row is not None else None,
+        "avg_2w": scalar_float(stats_row.get("avg_return_2w")) if stats_row is not None else None,
+        "avg_4w": scalar_float(stats_row.get("avg_return_4w")) if stats_row is not None else None,
+        "avg_8w": scalar_float(stats_row.get("avg_return_8w")) if stats_row is not None else None,
+        "win_8w": scalar_float(stats_row.get("win_rate_8w")) if stats_row is not None else None,
+    }
+    latest_snapshot = {
+        "date": fmt_date(latest_row.get("date")) if latest_row is not None else "N/A",
+        "gold_close": fmt_number(latest_row.get("gold_close")) if latest_row is not None else "N/A",
+    }
+    return {
+        **copy[status],
+        "status_key": status,
+        "stats_used": stats_used,
+        "latest_snapshot": latest_snapshot,
+    }
+
+
+def render_trader_summary(summary: dict) -> None:
+    """
+    Render Streamlit cards / info boxes for trader-readable interpretation.
+    """
+    st.subheader("GHPR 判讀摘要 / Trader Summary")
+    st.caption("GHPR 是大型資金籌碼結構的風險濾網，不是交易訊號。")
+    st.markdown(
+        f"""
+<div style="border:1px solid #e5e7eb;border-left:8px solid {summary['signal_color']};
+padding:16px 18px;border-radius:8px;background:#ffffff;margin-bottom:12px;">
+  <div style="font-size:0.85rem;color:#475569;">GHPR 今日判讀</div>
+  <div style="font-size:1.35rem;font-weight:700;color:#0f172a;">{summary['signal_label']}</div>
+  <div style="margin-top:8px;color:#334155;">{summary['plain_language_summary_zh']}</div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.markdown("**追多風險判讀**")
+        st.write(summary["chase_long_advice_zh"])
+    with c2:
+        st.markdown("**放空條件判讀**")
+        st.write(summary["short_advice_zh"])
+    with c3:
+        st.markdown("**等待確認條件**")
+        st.write(summary["wait_for_zh"])
+
+    stats = summary["stats_used"]
+    st.caption(
+        "Stats used: Top20 historical similar cases "
+        f"1W {fmt_percent(stats['avg_1w'])}, "
+        f"2W {fmt_percent(stats['avg_2w'])}, "
+        f"4W {fmt_percent(stats['avg_4w'])}, "
+        f"8W {fmt_percent(stats['avg_8w'])}, "
+        f"8W win rate {fmt_percent(stats['win_8w'], input_scale='fraction')}."
+    )
+
+
+def data_freshness(latest_date: object) -> str:
+    if pd.isna(latest_date):
+        return "N/A"
+    age_days = (pd.Timestamp(datetime.now().date()) - pd.Timestamp(latest_date).normalize()).days
+    if age_days <= 10:
+        return "Fresh"
+    if age_days <= 21:
+        return "Slightly stale"
+    return "Stale"
+
+
+def build_data_health(latest_row: pd.Series | None) -> dict:
+    source = GOLD_SOURCE_TEXT
+    if latest_row is not None and "gold_price_source" in latest_row:
+        source = str(latest_row.get("gold_price_source") or GOLD_SOURCE_TEXT)
+    latest_date = latest_row.get("date") if latest_row is not None else None
+    return {
+        "Latest COT Date": fmt_date(latest_date),
+        "Latest Gold Price": fmt_number(latest_row.get("gold_close")) if latest_row is not None else "N/A",
+        "Gold Price Source": source,
+        "Snapshot Generated At": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "Data Freshness": data_freshness(latest_date),
+    }
+
+
+def render_data_health(latest_row: pd.Series | None) -> None:
+    st.subheader("Data Health")
+    st.dataframe(pd.DataFrame([build_data_health(latest_row)]), width="stretch", hide_index=True)
+
+
+def render_how_to_use_ghpr() -> None:
+    st.subheader("如何使用 GHPR")
+    st.markdown(
+        """
+1. 先看 GHPR 判讀摘要，了解目前是順風、逆風還是混亂。
+2. 再看 MM / Producer / OI percentile，判斷大型資金位置。
+3. 再看 Top 20 Similar Cases，了解歷史樣本後續表現。
+4. GHPR 不提供進出場點，只提供追多或放空前的風險濾網。
+5. 最後仍需結合價格結構、OGR / MMP、成交量或其他市場確認。
+"""
+    )
+
+
+def fmt_current_following_return(value: object) -> str:
+    if pd.isna(value):
+        return "N/A"
+    return fmt_percent(value, input_scale="return")
+
+
+def following_return_note(value: object) -> str:
+    if pd.isna(value):
+        return "Future data not formed yet / 未來資料尚未形成"
+    return "Historical following data available"
+
+
 def latest_update_time() -> str:
     candidates = [
         MASTER_PATH,
@@ -305,7 +523,7 @@ def page_current_position(
     historical_report: pd.DataFrame,
     historical_stats: pd.DataFrame,
 ) -> None:
-    st.header("Executive Summary")
+    st.header("Current Position")
     render_research_banner()
 
     required = [
@@ -324,6 +542,11 @@ def page_current_position(
         st.info("N/A")
         return
 
+    render_trader_summary(build_trader_summary(latest, historical_stats))
+    render_data_health(latest)
+    render_how_to_use_ghpr()
+
+    st.subheader("Executive Summary")
     state = market_state(latest.get(MM_FACTOR), latest.get("oi_percentile_156w"))
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Current data date", fmt_date(latest["date"]))
@@ -358,10 +581,14 @@ def page_current_position(
             latest["producer_net_percentile_156w"], input_scale="fraction"
         ),
         "oi_percentile_156w": fmt_percent(latest["oi_percentile_156w"], input_scale="fraction"),
-        "gold_return_1w": fmt_percent(latest.get("forward_return_1w"), input_scale="return"),
-        "gold_return_2w": fmt_percent(latest.get("forward_return_2w"), input_scale="return"),
-        "gold_return_4w": fmt_percent(latest.get("forward_return_4w"), input_scale="return"),
-        "gold_return_8w": fmt_percent(latest.get("forward_return_8w"), input_scale="return"),
+        "gold_return_1w": fmt_current_following_return(latest.get("forward_return_1w")),
+        "gold_return_1w_reason": following_return_note(latest.get("forward_return_1w")),
+        "gold_return_2w": fmt_current_following_return(latest.get("forward_return_2w")),
+        "gold_return_2w_reason": following_return_note(latest.get("forward_return_2w")),
+        "gold_return_4w": fmt_current_following_return(latest.get("forward_return_4w")),
+        "gold_return_4w_reason": following_return_note(latest.get("forward_return_4w")),
+        "gold_return_8w": fmt_current_following_return(latest.get("forward_return_8w")),
+        "gold_return_8w_reason": following_return_note(latest.get("forward_return_8w")),
     }
     st.dataframe(pd.DataFrame([detail]), width="stretch", hide_index=True)
     render_data_source_box(master)
@@ -920,6 +1147,7 @@ def page_historical_similarity_engine(
     st.caption("Historical Statistics / Research Reference.")
     render_research_banner()
     st.info("This page compares the current feature vector with prior weekly states. It is not a forecast.")
+    st.caption("Current Snapshot Date 是目前資料快照日期；Historical Case Date 是歷史相似案例的發生日期。")
 
     if historical_report.empty:
         st.info(f"N/A: HSE output not found. Run `python src/historical_similarity_engine.py` from `{PROJECT_ROOT}`.")
@@ -948,11 +1176,11 @@ def page_historical_similarity_engine(
     current = historical_report.iloc[0]
     st.subheader("Current Market State")
     c1, c2, c3, c4, c5 = st.columns(5)
-    c1.metric("current_date", fmt_date(current["current_date"]))
-    c2.metric("current_gold_close", fmt_number(current["current_gold_close"]))
-    c3.metric("current_mm_percentile", fmt_number(current["current_mm_percentile"], 2))
-    c4.metric("current_producer_percentile", fmt_number(current["current_producer_percentile"], 2))
-    c5.metric("current_oi_percentile", fmt_number(current["current_oi_percentile"], 2))
+    c1.metric("Current Snapshot Date", fmt_date(current["current_date"]))
+    c2.metric("Current Snapshot Gold", fmt_number(current["current_gold_close"]))
+    c3.metric("Current MM Percentile", fmt_number(current["current_mm_percentile"], 2))
+    c4.metric("Current Producer Percentile", fmt_number(current["current_producer_percentile"], 2))
+    c5.metric("Current OI Percentile", fmt_number(current["current_oi_percentile"], 2))
 
     st.subheader("Top Similar Historical Cases")
     st.dataframe(
@@ -984,11 +1212,25 @@ def format_historical_similarity_report(frame: pd.DataFrame) -> pd.DataFrame:
         if column in display.columns:
             display[column] = pd.to_datetime(display[column], errors="coerce").dt.strftime("%Y-%m-%d")
     rename_map = {
-        f"future_return_{weeks}w": f"historical_case_following_return_{weeks}w"
-        for weeks in FORWARD_HORIZONS
+        "current_date": "Current Snapshot Date",
+        "current_gold_close": "Current Snapshot Gold",
+        "current_mm_percentile": "Current MM Percentile",
+        "current_producer_percentile": "Current Producer Percentile",
+        "current_oi_percentile": "Current OI Percentile",
+        "historical_date": "Historical Case Date",
+        "similarity_score": "Similarity Score",
+        "historical_gold_close": "Historical Case Gold",
+        "historical_mm_percentile": "Historical MM Percentile",
+        "historical_producer_percentile": "Historical Producer Percentile",
+        "historical_oi_percentile": "Historical OI Percentile",
+        "future_return_1w": "Historical Case Forward Return 1W",
+        "future_return_2w": "Historical Case Forward Return 2W",
+        "future_return_4w": "Historical Case Forward Return 4W",
+        "future_return_8w": "Historical Case Forward Return 8W",
     }
     display = display.rename(columns=rename_map)
-    for column in rename_map.values():
+    return_columns = [f"Historical Case Forward Return {weeks}W" for weeks in FORWARD_HORIZONS]
+    for column in return_columns:
         if column in display.columns:
             display[column] = display[column].apply(lambda value: fmt_percent(value, input_scale="return"))
     return display

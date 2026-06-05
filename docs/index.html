@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GHPR Public Snapshot</title>
+  <style>
+    :root { --bg:#f8fafc; --card:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --blue:#2563eb; --amber:#92400e; --soft:#eff6ff; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: Arial, "Noto Sans TC", "Microsoft JhengHei", sans-serif; background:var(--bg); color:var(--ink); }
+    .wrap { max-width:1180px; margin:0 auto; padding:36px 22px 60px; }
+    .hero { margin-bottom:28px; }
+    h1 { font-size:42px; letter-spacing:-0.04em; margin:0 0 10px; }
+    h2 { font-size:26px; margin:34px 0 14px; }
+    h3 { font-size:18px; margin:0 0 12px; }
+    p { color:var(--muted); line-height:1.65; }
+    .banner { background:#dbeafe; color:#075985; padding:14px 18px; border-radius:12px; margin:18px 0; }
+    .grid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:16px; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:0 8px 20px rgba(15,23,42,.04); }
+    .label { color:var(--muted); font-size:13px; margin-bottom:8px; }
+    .value { font-size:30px; font-weight:700; letter-spacing:-.03em; }
+    .value.small { font-size:22px; }
+    .pill { display:inline-block; padding:6px 10px; border-radius:999px; background:var(--soft); color:#1d4ed8; font-weight:700; font-size:13px; }
+    .warning { background:#fffbeb; border:1px solid #fde68a; color:var(--amber); padding:14px 18px; border-radius:12px; }
+    table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; display:block; overflow-x:auto; }
+    thead { background:#f1f5f9; }
+    th, td { text-align:left; padding:11px 12px; border-bottom:1px solid var(--line); white-space:nowrap; font-size:14px; }
+    th { color:#334155; font-weight:700; }
+    td { color:#0f172a; }
+    .section-note { margin-top:8px; color:var(--muted); font-size:14px; }
+    .footer { margin-top:38px; color:var(--muted); font-size:13px; }
+    @media (max-width:900px) { .grid { grid-template-columns:repeat(2, minmax(0,1fr)); } h1{font-size:34px;} }
+    @media (max-width:560px) { .grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="pill">GHPR Public Snapshot</div>
+      <h1>GHPR Online Dashboard v0.4</h1>
+      <p>Public static snapshot generated from the GHPR repository outputs. This page is designed as a backup review entry when Streamlit Cloud authentication blocks external inspection tools.</p>
+      <div class="banner">此系統為歷史統計研究工具，不是交易訊號，不提供買賣建議。</div>
+      <div class="warning">Gold price source: COMEX GC futures proxy via Yahoo Finance GC=F. This is not official LBMA PM benchmark or broker XAUUSD spot.</div>
+    </section>
+
+    <h2>Executive Summary</h2>
+    <section class="grid">
+      <div class="card"><div class="label">Current data date</div><div class="value">2026-05-26</div></div>
+      <div class="card"><div class="label">Gold price</div><div class="value">4,500.40</div></div>
+      <div class="card"><div class="label">MM State</div><div class="value small">MM_LOW</div></div>
+      <div class="card"><div class="label">Market State</div><div class="value small">Accumulation / Weak Positioning</div></div>
+      <div class="card"><div class="label">MM Percentile</div><div class="value">30.13%</div></div>
+      <div class="card"><div class="label">Producer Percentile</div><div class="value">94.87%</div></div>
+      <div class="card"><div class="label">OI Percentile</div><div class="value">0.64%</div></div>
+      <div class="card"><div class="label">MM Net</div><div class="value">97,446</div></div>
+    </section>
+
+    <h2>Top 20 Similar Cases: Following Statistics</h2>
+    <table>
+      <thead><tr><th>Group</th><th>Case Count</th><th>Avg 1W</th><th>Median 1W</th><th>Win 1W</th><th>Avg 2W</th><th>Median 2W</th><th>Win 2W</th><th>Avg 4W</th><th>Median 4W</th><th>Win 4W</th><th>Avg 8W</th><th>Median 8W</th><th>Win 8W</th></tr></thead>
+      <tbody><tr><td>Top 20</td><td>20</td><td>-1.05%</td><td>-1.03%</td><td>30.00%</td><td>-1.27%</td><td>-0.89%</td><td>45.00%</td><td>-2.07%</td><td>-1.22%</td><td>40.00%</td><td>-3.03%</td><td>-4.42%</td><td>30.00%</td></tr></tbody>
+    </table>
+    <p class="section-note">Interpretation: similar historical cases leaned negative on average across 1W, 2W, 4W and 8W windows. Treat this as risk context, not a standalone trade signal.</p>
+
+    <h2>Top Similar Historical Cases</h2>
+    <table>
+      <thead><tr><th>Rank</th><th>Current Snapshot Date</th><th>Historical Case Date</th><th>Similarity</th><th>Historical Gold</th><th>MM %</th><th>Producer %</th><th>OI %</th><th>Forward 1W</th><th>Forward 2W</th><th>Forward 4W</th><th>Forward 8W</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>2026-05-26</td><td>2026-02-17</td><td>97.86</td><td>4,882.90</td><td>27.56</td><td>97.44</td><td>1.92</td><td>5.59%</td><td>4.60%</td><td>2.42%</td><td>-1.19%</td></tr>
+        <tr><td>2</td><td>2026-05-26</td><td>2026-03-03</td><td>97.65</td><td>5,107.40</td><td>27.56</td><td>96.79</td><td>3.21</td><td>2.39%</td><td>-2.08%</td><td>-9.00%</td><td>-10.10%</td></tr>
+        <tr><td>3</td><td>2026-05-26</td><td>2026-02-03</td><td>97.65</td><td>4,903.70</td><td>24.36</td><td>95.51</td><td>1.28</td><td>2.04%</td><td>-0.42%</td><td>4.15%</td><td>-5.22%</td></tr>
+        <tr><td>4</td><td>2026-05-26</td><td>2026-03-17</td><td>97.22</td><td>5,001.00</td><td>30.13</td><td>99.36</td><td>4.49</td><td>-12.03%</td><td>-7.07%</td><td>-3.52%</td><td>-6.47%</td></tr>
+        <tr><td>5</td><td>2026-05-26</td><td>2013-10-08</td><td>97.22</td><td>1,324.20</td><td>23.72</td><td>92.95</td><td>0.64</td><td>-3.87%</td><td>1.38%</td><td>-1.22%</td><td>-7.74%</td></tr>
+        <tr><td>6</td><td>2026-05-26</td><td>2026-03-31</td><td>97.22</td><td>4,647.60</td><td>23.08</td><td>96.15</td><td>0.64</td><td>0.20%</td><td>3.82%</td><td>-1.21%</td><td>-3.17%</td></tr>
+        <tr><td>7</td><td>2026-05-26</td><td>2026-03-10</td><td>97.01</td><td>5,229.70</td><td>28.21</td><td>98.08</td><td>4.49</td><td>-4.37%</td><td>-15.88%</td><td>-10.95%</td><td>-12.89%</td></tr>
+        <tr><td>8</td><td>2026-05-26</td><td>2026-02-10</td><td>96.58</td><td>5,003.80</td><td>23.72</td><td>98.72</td><td>0.64</td><td>-2.42%</td><td>3.04%</td><td>4.51%</td><td>-6.93%</td></tr>
+        <tr><td>9</td><td>2026-05-26</td><td>2023-08-08</td><td>96.58</td><td>1,924.10</td><td>34.62</td><td>91.67</td><td>3.21</td><td>-1.12%</td><td>-1.44%</td><td>0.11%</td><td>-5.17%</td></tr>
+        <tr><td>10</td><td>2026-05-26</td><td>2023-02-07</td><td>96.37</td><td>1,871.70</td><td>32.69</td><td>91.03</td><td>5.13</td><td>-0.95%</td><td>-2.07%</td><td>-3.09%</td><td>8.04%</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Data Health Notes</h2>
+    <div class="card">
+      <p><strong>Current interpretation:</strong> MM percentile is low, Producer percentile is very high, and OI percentile is extremely low. This combination currently classifies as <strong>Accumulation / Weak Positioning</strong>.</p>
+      <p><strong>Important UX note:</strong> repeated 2026-05-26 values in similarity output represent the current snapshot date, not the historical case date. Future UI should rename this field to <code>current_snapshot_date</code> to avoid confusion.</p>
+      <p><strong>Update note:</strong> Streamlit one-click refresh may use temporary hosted runtime files. Durable deployment data should be committed back to GitHub.</p>
+    </div>
+
+    <p class="footer">Generated snapshot version: manual bootstrap. For automatic refresh, run <code>python scripts/build_static_snapshot.py</code>.</p>
+  </main>
+</body>
+</html>

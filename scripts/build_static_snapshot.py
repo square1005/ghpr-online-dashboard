@@ -83,7 +83,7 @@ def top20_stats_row(stats: pd.DataFrame) -> pd.Series | None:
     return top20.iloc[0]
 
 
-def classify_ghpr_signal(stats_row: pd.Series | None) -> str:
+def classify_historical_tendency(stats_row: pd.Series | None) -> str:
     if stats_row is None:
         return "na"
     avg_1w = scalar_float(stats_row.get("avg_return_1w"))
@@ -102,49 +102,49 @@ def classify_ghpr_signal(stats_row: pd.Series | None) -> str:
     return "mixed"
 
 
-def build_trader_summary(latest: pd.Series | None, stats: pd.DataFrame) -> dict:
+def build_historical_tendency_summary(latest: pd.Series | None, stats: pd.DataFrame) -> dict:
     stats_row = top20_stats_row(stats)
-    status = classify_ghpr_signal(stats_row)
+    status = classify_historical_tendency(stats_row)
     copy = {
         "tailwind": {
-            "signal_label": "綠燈順風 / Tailwind",
-            "signal_color": "#16a34a",
-            "plain_language_summary_zh": "歷史相似案例後續表現偏正向，環境較順風；仍只代表歷史樣本傾向。",
-            "chase_long_advice_zh": "歷史樣本偏順風，但 GHPR 不提供進出場點，仍需價格結構確認。",
-            "short_advice_zh": "不應僅因 GHPR 統計偏順風就建立反向假設；等待價格結構或其他市場確認。",
-            "wait_for_zh": "等待價格結構、OGR / MMP、OI 回升或關鍵區間反應後，再作進一步判斷。",
+            "tendency_label": "Historical Tendency: Positive Sample Tilt",
+            "tendency_color": "#16a34a",
+            "plain_language_summary_zh": "歷史相似案例後續表現偏正向；這只代表歷史統計傾向。",
+            "risk_context_zh": "歷史樣本偏正向，但 GHPR 不提供進出場點，不能轉換為操作結論。",
+            "interpretation_limit_zh": "不要把此傾向單獨解讀成市場方向；仍需搭配其他研究資料。",
+            "monitor_zh": "觀察價格結構、OI 變化、成交量與後續資料更新。",
         },
         "mixed": {
-            "signal_label": "黃燈混亂 / Mixed",
-            "signal_color": "#ca8a04",
-            "plain_language_summary_zh": "歷史相似案例分歧，尚未形成明確風險方向，適合等待更多確認。",
-            "chase_long_advice_zh": "追多風險未明顯改善，較適合降低假設強度並觀察後續資料。",
-            "short_advice_zh": "尚不可直接視為 GHPR 放空訊號；需要價格結構或其他確認。",
-            "wait_for_zh": "等待價格結構、OGR / MMP、OI 回升或跌破支撐後，再作進一步判斷。",
+            "tendency_label": "Historical Tendency: Mixed Sample",
+            "tendency_color": "#ca8a04",
+            "plain_language_summary_zh": "歷史相似案例分布分歧，目前只能視為混合樣本狀態。",
+            "risk_context_zh": "歷史樣本沒有一致分布，適合降低單一假設強度並觀察後續資料。",
+            "interpretation_limit_zh": "不可把混合樣本解讀成明確市場方向或操作依據。",
+            "monitor_zh": "觀察價格結構、OI 變化、成交量與後續資料更新。",
         },
         "risk_off_caution": {
-            "signal_label": "黃燈偏紅 / Risk-off Caution",
-            "signal_color": "#f97316",
-            "plain_language_summary_zh": "目前歷史相似案例偏向後續弱勢，追多風險較高，尚不宜視為直接放空訊號。",
-            "chase_long_advice_zh": "目前不適合高槓桿追多，因為歷史樣本後續表現偏弱。",
-            "short_advice_zh": "尚不可直接視為 GHPR 放空訊號。GHPR 只提供歷史定位，仍需價格結構或其他確認。",
-            "wait_for_zh": "等待價格結構、OGR / MMP、OI 回升或跌破支撐後，再作進一步判斷。",
+            "tendency_label": "Historical Tendency: Weak Sample Tilt",
+            "tendency_color": "#f97316",
+            "plain_language_summary_zh": "目前歷史相似案例後續表現偏弱；這只是歷史樣本傾向。",
+            "risk_context_zh": "歷史樣本偏弱，代表研究背景需提高風險意識，但不等於操作方向。",
+            "interpretation_limit_zh": "不可把偏弱樣本直接解讀成市場方向或交易結論。",
+            "monitor_zh": "觀察價格結構、OI 變化、成交量與後續資料更新。",
         },
         "high_risk": {
-            "signal_label": "紅燈高風險 / High Risk",
-            "signal_color": "#dc2626",
-            "plain_language_summary_zh": "歷史相似案例短中期後續表現偏弱，追多風險很高；仍不能單獨作為放空依據。",
-            "chase_long_advice_zh": "目前追多風險偏高，尤其不適合把 GHPR 當作高槓桿追多依據。",
-            "short_advice_zh": "即使風險偏高，也不可直接視為 GHPR 放空訊號；仍需價格結構或其他確認。",
-            "wait_for_zh": "等待價格結構、OGR / MMP、OI 回升或跌破支撐後，再作進一步判斷。",
+            "tendency_label": "Historical Tendency: Weak High-Dispersion Sample",
+            "tendency_color": "#dc2626",
+            "plain_language_summary_zh": "歷史相似案例短中期後續表現偏弱，且需留意樣本波動；這不是交易結論。",
+            "risk_context_zh": "歷史樣本顯示風險背景偏高，但只代表統計分布。",
+            "interpretation_limit_zh": "不可把高風險背景單獨解讀成明確市場方向。",
+            "monitor_zh": "觀察價格結構、OI 變化、成交量與後續資料更新。",
         },
         "na": {
-            "signal_label": "資料不足 / N/A",
-            "signal_color": "#64748b",
+            "tendency_label": "Historical Tendency: N/A",
+            "tendency_color": "#64748b",
             "plain_language_summary_zh": "目前歷史相似案例統計不足，暫不做定位判讀。",
-            "chase_long_advice_zh": "資料不足，GHPR 暫不提供追多風險濾網判讀。",
-            "short_advice_zh": "資料不足，GHPR 暫不提供放空條件判讀。",
-            "wait_for_zh": "等待資料更新完成後，再查看歷史統計研究結果。",
+            "risk_context_zh": "資料不足，暫不做歷史風險背景判讀。",
+            "interpretation_limit_zh": "資料不足時不應做任何方向性推論。",
+            "monitor_zh": "等待資料更新完成後，再查看歷史統計研究結果。",
         },
     }
     stats_used = {
@@ -304,7 +304,7 @@ def historical_case_rows(report: pd.DataFrame) -> list[dict]:
 
 def build_html(master: pd.DataFrame, report: pd.DataFrame, stats: pd.DataFrame) -> str:
     latest = latest_row(master)
-    summary = build_trader_summary(latest, stats)
+    summary = build_historical_tendency_summary(latest, stats)
     source = GOLD_SOURCE_TEXT
     if latest is not None and "gold_price_source" in latest:
         source = str(latest.get("gold_price_source") or GOLD_SOURCE_TEXT)
@@ -370,8 +370,8 @@ def build_html(master: pd.DataFrame, report: pd.DataFrame, stats: pd.DataFrame) 
             "reading": market_state(mm, oi),
         },
         {
-            "topic": "GHPR 判讀",
-            "reading": summary["signal_label"],
+            "topic": "Historical Tendency",
+            "reading": f"{summary['tendency_label']}（僅為歷史統計傾向）",
         },
         {
             "topic": "MM 位置",
@@ -446,12 +446,12 @@ def build_html(master: pd.DataFrame, report: pd.DataFrame, stats: pd.DataFrame) 
             ("freshness", "Data Freshness"),
         ],
     )
-    signal_label = escape(summary["signal_label"])
-    signal_color = summary["signal_color"]
+    tendency_label = escape(summary["tendency_label"])
+    tendency_color = summary["tendency_color"]
     plain_language_summary = escape(summary["plain_language_summary_zh"])
-    chase_long_advice = escape(summary["chase_long_advice_zh"])
-    short_advice = escape(summary["short_advice_zh"])
-    wait_for = escape(summary["wait_for_zh"])
+    risk_context = escape(summary["risk_context_zh"])
+    interpretation_limit = escape(summary["interpretation_limit_zh"])
+    monitor_context = escape(summary["monitor_zh"])
 
     return f"""<!doctype html>
 <html lang="zh-Hant">
@@ -470,8 +470,8 @@ def build_html(master: pd.DataFrame, report: pd.DataFrame, stats: pd.DataFrame) 
     p {{ line-height:1.65; }}
     .muted {{ color:var(--muted); }}
     .warning {{ color:#7c2d12; background:#fff7ed; border:1px solid #fed7aa; padding:12px; border-radius:8px; }}
-    .summary {{ border-left:8px solid {signal_color}; }}
-    .summary-badge {{ display:inline-block; font-weight:700; color:{signal_color}; margin-bottom:8px; }}
+    .summary {{ border-left:8px solid {tendency_color}; }}
+    .summary-badge {{ display:inline-block; font-weight:700; color:{tendency_color}; margin-bottom:8px; }}
     .grid {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; }}
     .box {{ border:1px solid var(--line); border-radius:8px; padding:14px; background:#fff; }}
     .metric-row {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; }}
@@ -487,15 +487,15 @@ def build_html(master: pd.DataFrame, report: pd.DataFrame, stats: pd.DataFrame) 
 <body>
 <main>
   <section class="summary">
-    <div class="summary-badge">GHPR 判讀摘要：{signal_label}</div>
-    <h1>GHPR 判讀摘要 / Trader Summary</h1>
+    <div class="summary-badge">Historical Tendency：{tendency_label}</div>
+    <h1>GHPR Historical Tendency / 歷史統計傾向</h1>
     <p><strong>GHPR 是大型資金籌碼結構的風險濾網，不是交易訊號。</strong></p>
     <p class="muted">Historical statistics only. Not a trading signal. Not financial advice.</p>
     <p>{plain_language_summary}</p>
     <div class="grid">
-      <div class="box"><h3>追多風險判讀</h3><p>{chase_long_advice}</p></div>
-      <div class="box"><h3>放空條件判讀</h3><p>{short_advice}</p></div>
-      <div class="box"><h3>等待確認條件</h3><p>{wait_for}</p></div>
+      <div class="box"><h3>歷史樣本風險背景</h3><p>{risk_context}</p></div>
+      <div class="box"><h3>解讀限制</h3><p>{interpretation_limit}</p></div>
+      <div class="box"><h3>觀察項目</h3><p>{monitor_context}</p></div>
     </div>
   </section>
 
@@ -580,10 +580,10 @@ def build_html(master: pd.DataFrame, report: pd.DataFrame, stats: pd.DataFrame) 
   <section>
     <h2>如何使用 GHPR</h2>
     <ol>
-      <li>先看 GHPR 判讀摘要，了解目前是順風、逆風還是混亂。</li>
+      <li>先看 Historical Tendency，了解歷史相似樣本分布是偏正向、偏弱或分歧。</li>
       <li>再看 MM / Producer / OI percentile，判斷大型資金位置。</li>
       <li>再看 Top 20 Similar Cases，了解歷史樣本後續表現。</li>
-      <li>GHPR 不提供進出場點，只提供追多或放空前的風險濾網。</li>
+      <li>GHPR 不提供進出場點，只提供歷史定位與風險背景。</li>
       <li>最後仍需結合價格結構、OGR / MMP、成交量或其他市場確認。</li>
     </ol>
   </section>

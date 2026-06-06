@@ -290,6 +290,19 @@ def build_structure_note(row: pd.Series | None) -> str | None:
     return "; ".join(parts)
 
 
+def velocity_window_review_metadata() -> dict[str, str]:
+    return {
+        "long_current_baseline": "8W",
+        "long_research_candidate": "26W",
+        "short_current_baseline": "8W",
+        "short_research_candidate": "2W/4W",
+        "net_current_baseline": "8W",
+        "net_research_candidate": "26W",
+        "status": "research_candidate_not_replaced",
+        "scope": "historical research definition layer only",
+    }
+
+
 def build_lifecycle_lead_lag_note(lead_lag: pd.DataFrame) -> str | None:
     required = ["mm_feature", "lag_weeks", "rank_correlation", "interpretation"]
     if lead_lag.empty or any(column not in lead_lag.columns for column in required):
@@ -380,6 +393,7 @@ def build_hub_summary() -> dict[str, Any]:
             None if latest_structure is None else latest_structure.get("mm_structure_state")
         ),
         "mm_structure_note": build_structure_note(latest_structure),
+        "velocity_window_review": velocity_window_review_metadata(),
     }
     return summary
 

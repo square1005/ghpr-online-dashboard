@@ -80,6 +80,9 @@ MM_VELOCITY_WINDOW_TRAIN_TEST_PATH = (
 MM_VELOCITY_WINDOW_SUMMARY_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "mm_velocity_window_summary.md"
 )
+MM_VELOCITY_WINDOW_REVIEW_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_velocity_window_review.md"
+)
 HISTORICAL_SIMILARITY_REPORT_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_report.csv"
 )
@@ -217,6 +220,26 @@ MM_STATE_ORDER = [
     "MM_NEUTRAL",
     "MM_HIGH",
     "MM_EXTREME_HIGH",
+]
+VELOCITY_WINDOW_DEFINITION_ROWS = [
+    {
+        "Component": "Long Velocity",
+        "Current Baseline": "8W",
+        "Research Candidate": "26W",
+        "Interpretation": "中期建倉 / 減倉週期",
+    },
+    {
+        "Component": "Short Velocity",
+        "Current Baseline": "8W",
+        "Research Candidate": "2W / 4W",
+        "Interpretation": "短線壓力 / 空單回補週期",
+    },
+    {
+        "Component": "Net Velocity",
+        "Current Baseline": "8W",
+        "Research Candidate": "26W",
+        "Interpretation": "綜合中期資金週期",
+    },
 ]
 TEXT_COLUMNS = {
     "gold_price_source",
@@ -572,6 +595,13 @@ def load_mm_velocity_window_summary() -> str:
     if not MM_VELOCITY_WINDOW_SUMMARY_PATH.exists():
         return "N/A"
     return MM_VELOCITY_WINDOW_SUMMARY_PATH.read_text(encoding="utf-8", errors="replace")
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_velocity_window_review() -> str:
+    if not MM_VELOCITY_WINDOW_REVIEW_PATH.exists():
+        return "N/A"
+    return MM_VELOCITY_WINDOW_REVIEW_PATH.read_text(encoding="utf-8", errors="replace")
 
 
 @st.cache_data(show_spinner=False)
@@ -3124,6 +3154,66 @@ def page_mm_velocity_window_discovery() -> None:
         "without replacing the current 8W definition on the dashboard."
     )
 
+    st.subheader("Velocity Window Review")
+    st.caption(
+        "Current Dashboard Baseline remains 8W. Research candidates are shown as a definition layer only."
+    )
+    card_cols = st.columns(3)
+    cards = [
+        {
+            "title": "MM Long Velocity Window",
+            "primary": "26W",
+            "baseline": "8W",
+            "meaning": (
+                "Long velocity reflects slower managed-money position building or reduction. "
+                "Current research suggests 26W may better capture the medium-term lifecycle of long positioning."
+            ),
+            "zh": (
+                "MM Long Velocity 比較像中期建倉或減倉週期。"
+                "目前研究顯示 26W 可能比 8W 更適合觀察 Long 的中期生命週期。"
+            ),
+        },
+        {
+            "title": "MM Short Velocity Window",
+            "primary": "2W / 4W",
+            "baseline": "8W",
+            "meaning": (
+                "Short velocity appears to react faster and may be more event-driven. "
+                "Current research suggests 2W and 4W should be monitored as short-term stress / covering windows."
+            ),
+            "zh": (
+                "MM Short Velocity 比較像短線避險、事件反應或空單回補週期。"
+                "目前研究顯示 2W / 4W 可能比 8W 更適合觀察 Short 的快速變化。"
+            ),
+        },
+        {
+            "title": "MM Net Velocity Window",
+            "primary": "26W",
+            "baseline": "8W",
+            "meaning": (
+                "Net velocity combines Long and Short behavior. Current research suggests it behaves more like "
+                "a medium-term cycle, closer to Long positioning."
+            ),
+            "zh": (
+                "MM Net Velocity 是 Long 與 Short 的綜合結果。"
+                "目前研究顯示 Net 的節奏比較接近 Long 的中期週期，因此 26W 值得作為候選主視窗。"
+            ),
+        },
+    ]
+    for column, card in zip(card_cols, cards):
+        with column.container(border=True):
+            st.markdown(f"**{card['title']}**")
+            st.metric("Primary Research Window", card["primary"])
+            st.metric("Current Dashboard Baseline", card["baseline"])
+            st.markdown(f"**Meaning:** {card['meaning']}")
+            st.markdown(card["zh"])
+
+    st.subheader("Velocity Window Summary")
+    st.dataframe(pd.DataFrame(VELOCITY_WINDOW_DEFINITION_ROWS), width="stretch", hide_index=True)
+    st.caption(
+        "These rows are historical research definitions only. They do not change the current 8W baseline."
+    )
+
     scorecard = load_mm_velocity_window_scorecard()
     train_test = load_mm_velocity_window_train_test()
     bucket = load_mm_velocity_window_bucket_analysis()
@@ -3205,6 +3295,13 @@ def page_mm_velocity_window_discovery() -> None:
         st.warning(f"N/A: missing velocity window summary: {MM_VELOCITY_WINDOW_SUMMARY_PATH}")
     else:
         st.markdown(summary_md)
+
+    st.subheader("MM Velocity Window Review Markdown")
+    review_md = load_mm_velocity_window_review()
+    if review_md == "N/A":
+        st.warning(f"N/A: missing velocity window review: {MM_VELOCITY_WINDOW_REVIEW_PATH}")
+    else:
+        st.markdown(review_md)
 
 
 def page_update_log() -> None:

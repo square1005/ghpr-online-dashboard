@@ -2134,6 +2134,169 @@ def format_lifecycle_table(frame: pd.DataFrame) -> pd.DataFrame:
     return display
 
 
+PLOTLY_LIFECYCLE_CONFIG = {
+    "displayModeBar": True,
+    "displaylogo": False,
+    "scrollZoom": True,
+    "modeBarButtonsToAdd": ["select2d"],
+    "toImageButtonOptions": {
+        "format": "png",
+        "filename": "ghpr_mm_lifecycle_interactive",
+        "scale": 2,
+    },
+}
+
+
+def lifecycle_plot_frame(lifecycle: pd.DataFrame) -> pd.DataFrame:
+    required = [
+        "date",
+        "gold_close",
+        "mm_percentile",
+        "mm_velocity_8w",
+        "mm_acceleration_8w",
+        "mm_lifecycle_state",
+    ]
+    missing = missing_columns(lifecycle, required)
+    if missing:
+        raise ValueError("Missing lifecycle columns: " + ", ".join(missing))
+    frame = lifecycle[required].copy().dropna(subset=["date", "gold_close", "mm_percentile"])
+    if frame.empty:
+        raise ValueError("No valid lifecycle rows for interactive chart.")
+    first_gold = frame["gold_close"].dropna().iloc[0]
+    frame["gold_normalized_index"] = frame["gold_close"] / first_gold * 100
+    frame["mm_percentile_pct"] = frame["mm_percentile"] * 100
+    frame["mm_velocity_8w_pct"] = frame["mm_velocity_8w"] * 100
+    frame["mm_acceleration_8w_pct"] = frame["mm_acceleration_8w"] * 100
+    return frame
+
+
+def lifecycle_hover_template(trace_name: str) -> str:
+    return (
+        "Date: %{x|%Y-%m-%d}<br>"
+        "gold_close: %{customdata[0]:,.2f}<br>"
+        "gold_normalized_index: %{customdata[1]:.2f}<br>"
+        "mm_percentile: %{customdata[2]:.2f}%<br>"
+        "mm_velocity_8w: %{customdata[3]:.2f} pct points<br>"
+        "mm_acceleration_8w: %{customdata[4]:.2f} pct points<br>"
+        "mm_lifecycle_state: %{customdata[5]}<extra>" + trace_name + "</extra>"
+    )
+
+
+def lifecycle_range_controls() -> dict[str, object]:
+    return {
+        "rangeslider": {"visible": True},
+        "rangeselector": {
+            "buttons": [
+                {"count": 1, "label": "1Y", "step": "year", "stepmode": "backward"},
+                {"count": 3, "label": "3Y", "step": "year", "stepmode": "backward"},
+                {"count": 5, "label": "5Y", "step": "year", "stepmode": "backward"},
+                {"label": "All", "step": "all"},
+            ]
+        },
+        "type": "date",
+    }
+
+
+def build_interactive_lifecycle_core_chart(lifecycle: pd.DataFrame) -> go.Figure:
+    frame = lifecycle_plot_frame(lifecycle)
+    customdata = frame[
+        [
+            "gold_close",
+            "gold_normalized_index",
+            "mm_percentile_pct",
+            "mm_velocity_8w_pct",
+            "mm_acceleration_8w_pct",
+            "mm_lifecycle_state",
+        ]
+    ].to_numpy()
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    fig.add_trace(
+        go.Scatter(
+            x=frame["date"],
+            y=frame["gold_normalized_index"],
+            mode="lines",
+            name="Gold normalized index",
+            line={"color": "#111827", "width": 2},
+            customdata=customdata,
+            hovertemplate=lifecycle_hover_template("Gold normalized index"),
+        ),
+        secondary_y=False,
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=frame["date"],
+            y=frame["mm_percentile_pct"],
+            mode="lines",
+            name="MM Percentile",
+            line={"color": "#2563eb", "width": 2},
+            customdata=customdata,
+            hovertemplate=lifecycle_hover_template("MM Percentile"),
+        ),
+        secondary_y=True,
+    )
+    fig.update_layout(
+        title="Interactive Gold vs MM Lifecycle Core Chart",
+        height=520,
+        margin={"l": 40, "r": 48, "t": 58, "b": 35},
+        hovermode="x unified",
+        dragmode="pan",
+        legend={"orientation": "h", "y": 1.08, "x": 0},
+        xaxis=lifecycle_range_controls(),
+    )
+    fig.update_yaxes(title_text="Gold normalized index", secondary_y=False)
+    fig.update_yaxes(title_text="MM Percentile", range=[0, 100], secondary_y=True)
+    return fig
+
+
+def build_interactive_velocity_acceleration_chart(lifecycle: pd.DataFrame) -> go.Figure:
+    frame = lifecycle_plot_frame(lifecycle)
+    customdata = frame[
+        [
+            "gold_close",
+            "gold_normalized_index",
+            "mm_percentile_pct",
+            "mm_velocity_8w_pct",
+            "mm_acceleration_8w_pct",
+            "mm_lifecycle_state",
+        ]
+    ].to_numpy()
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=frame["date"],
+            y=frame["mm_velocity_8w_pct"],
+            mode="lines",
+            name="MM Velocity 8W",
+            line={"color": "#f97316", "width": 2},
+            customdata=customdata,
+            hovertemplate=lifecycle_hover_template("MM Velocity 8W"),
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=frame["date"],
+            y=frame["mm_acceleration_8w_pct"],
+            mode="lines",
+            name="MM Acceleration 8W",
+            line={"color": "#16a34a", "width": 2},
+            customdata=customdata,
+            hovertemplate=lifecycle_hover_template("MM Acceleration 8W"),
+        )
+    )
+    fig.add_hline(y=0, line_color="#111827", line_width=1)
+    fig.update_layout(
+        title="Interactive MM Velocity / Acceleration",
+        height=420,
+        margin={"l": 40, "r": 40, "t": 58, "b": 35},
+        hovermode="x unified",
+        dragmode="pan",
+        legend={"orientation": "h", "y": 1.08, "x": 0},
+        xaxis=lifecycle_range_controls(),
+        yaxis={"title": "Pct points"},
+    )
+    return fig
+
+
 def page_percentile_definition_audit() -> None:
     st.header("Percentile Definition Audit")
     render_research_banner()
@@ -2314,6 +2477,35 @@ def page_mm_lifecycle_research() -> None:
         c5.metric("MM Percentile", fmt_percent(latest.get("mm_percentile"), input_scale="fraction"))
         c6.metric("MM Velocity 4W", fmt_percent(latest.get("mm_velocity_4w"), input_scale="fraction"))
         c7.metric("MM Velocity 26W", fmt_percent(latest.get("mm_velocity_26w"), input_scale="fraction"))
+
+    st.subheader("Interactive Gold vs MM Lifecycle")
+    st.caption(
+        "此圖用來觀察黃金價格生命週期與 Managed Money Percentile 生命週期的同步、背離與轉折。"
+    )
+    if lifecycle.empty:
+        st.warning("N/A: lifecycle data unavailable for interactive chart.")
+    else:
+        try:
+            st.plotly_chart(
+                build_interactive_lifecycle_core_chart(lifecycle),
+                use_container_width=True,
+                config=PLOTLY_LIFECYCLE_CONFIG,
+            )
+        except ValueError as error:
+            st.warning(f"N/A: {error}")
+
+    st.subheader("Interactive MM Velocity / Acceleration")
+    if lifecycle.empty:
+        st.warning("N/A: lifecycle velocity data unavailable for interactive chart.")
+    else:
+        try:
+            st.plotly_chart(
+                build_interactive_velocity_acceleration_chart(lifecycle),
+                use_container_width=True,
+                config=PLOTLY_LIFECYCLE_CONFIG,
+            )
+        except ValueError as error:
+            st.warning(f"N/A: {error}")
 
     st.subheader("MM Velocity / Acceleration")
     if lifecycle.empty:

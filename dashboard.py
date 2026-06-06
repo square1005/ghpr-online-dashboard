@@ -39,6 +39,12 @@ PERCENTILE_SCORECARD_PATH = (
 PERCENTILE_RECOMMENDATION_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "percentile_definition_recommendation.csv"
 )
+MM_DEFINITION_AUDIT_REPORT_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_percentile_definition_audit_report.md"
+)
+MM_DEFINITION_SCORECARD_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_percentile_definition_scorecard.csv"
+)
 HISTORICAL_SIMILARITY_REPORT_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_report.csv"
 )
@@ -68,6 +74,24 @@ PERCENTILE_AUDIT_CHARTS = [
     (
         "OI Windows vs 8W Historical Following Performance",
         PROJECT_ROOT / "outputs" / "charts" / "oi_52_104_156_260_vs_forward_8w.png",
+    ),
+]
+MM_DEFINITION_AUDIT_CHARTS = [
+    (
+        "MM Percentile Window Comparison",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_percentile_window_comparison.png",
+    ),
+    (
+        "MM Definition Scorecard",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_definition_scorecard.png",
+    ),
+    (
+        "MM Bucket 8W Following Performance",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_bucket_forward_8w_by_definition.png",
+    ),
+    (
+        "MM Definition Train / Test Comparison",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_definition_train_test_comparison.png",
     ),
 ]
 
@@ -229,6 +253,39 @@ def load_percentile_recommendation() -> pd.DataFrame:
     for column in frame.columns:
         if "score" in column:
             frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_definition_audit_report() -> str:
+    if not MM_DEFINITION_AUDIT_REPORT_PATH.exists():
+        return "N/A"
+    return MM_DEFINITION_AUDIT_REPORT_PATH.read_text(encoding="utf-8", errors="replace")
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_definition_scorecard() -> pd.DataFrame:
+    if not MM_DEFINITION_SCORECARD_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_DEFINITION_SCORECARD_PATH)
+    for column in [
+        "rank_corr",
+        "high_low_spread",
+        "weekly_change_avg",
+        "train_rank_corr",
+        "test_rank_corr",
+        "information_score",
+        "stability_score",
+        "train_test_score",
+        "interpretability_score",
+        "total_score",
+    ]:
+        if column in frame.columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    if "recommended" in frame.columns:
+        frame["recommended"] = frame["recommended"].astype(str).str.lower().isin(
+            {"true", "1", "yes"}
+        )
     return frame
 
 
@@ -2045,6 +2102,87 @@ def page_percentile_definition_audit() -> None:
         st.markdown(report)
 
 
+def page_mm_definition_audit() -> None:
+    st.header("MM Definition Audit")
+    render_research_banner()
+    st.info(
+        "Research page only. Current Position still displays the existing "
+        "`mm_net_percentile_156w` value. Formal homepage definition changes should wait for GHPR v0.5-B."
+    )
+
+    scorecard = load_mm_definition_scorecard()
+
+    st.subheader("Recommended Definition Summary")
+    st.markdown(
+        "`暫不替換`: keep `mm_net_percentile_156w` as the current dashboard MM reference while reviewing "
+        "`104W percentile` and `260W percentile` as research candidates."
+    )
+    if scorecard.empty:
+        st.warning(f"N/A: missing MM scorecard data: {MM_DEFINITION_SCORECARD_PATH}")
+    else:
+        recommended = (
+            scorecard[scorecard["recommended"]].copy()
+            if "recommended" in scorecard.columns
+            else pd.DataFrame()
+        )
+        preferred = [
+            "horizon",
+            "definition",
+            "total_score",
+            "information_score",
+            "stability_score",
+            "train_test_score",
+            "interpretability_score",
+            "reason",
+        ]
+        columns = [column for column in preferred if column in recommended.columns]
+        if columns and not recommended.empty:
+            st.dataframe(format_scorecard_table(recommended[columns]), width="stretch", hide_index=True)
+        else:
+            st.info("N/A: no recommended rows in MM scorecard.")
+
+        summary = (
+            scorecard.groupby("definition", as_index=False)
+            .agg(
+                avg_total_score=("total_score", "mean"),
+                recommended_horizon_count=("recommended", "sum"),
+            )
+            .sort_values("avg_total_score", ascending=False)
+        )
+        st.dataframe(format_scorecard_table(summary), width="stretch", hide_index=True)
+
+    st.subheader("Scorecard")
+    if scorecard.empty:
+        st.warning(f"N/A: missing scorecard data: {MM_DEFINITION_SCORECARD_PATH}")
+    else:
+        c1, c2 = st.columns(2)
+        definition_options = ["All", *sorted(scorecard["definition"].dropna().astype(str).unique())]
+        horizon_options = ["All", *sorted(scorecard["horizon"].dropna().astype(str).unique())]
+        selected_definition = c1.selectbox("Definition", definition_options)
+        selected_horizon = c2.selectbox("Horizon", horizon_options)
+        filtered = scorecard.copy()
+        if selected_definition != "All":
+            filtered = filtered[filtered["definition"].astype(str) == selected_definition]
+        if selected_horizon != "All":
+            filtered = filtered[filtered["horizon"].astype(str) == selected_horizon]
+        st.dataframe(format_scorecard_table(filtered), width="stretch", hide_index=True)
+
+    st.subheader("Audit Report Markdown")
+    report = load_mm_definition_audit_report()
+    if report == "N/A":
+        st.warning(f"N/A: missing MM audit report: {MM_DEFINITION_AUDIT_REPORT_PATH}")
+    else:
+        st.markdown(report)
+
+    st.subheader("Main Charts")
+    for title, path in MM_DEFINITION_AUDIT_CHARTS:
+        if path.exists():
+            st.markdown(f"**{title}**")
+            st.image(str(path), width="stretch")
+        else:
+            st.warning(f"N/A: missing chart: {path.name}")
+
+
 def page_update_log() -> None:
     st.header("Update Log")
     render_research_banner()
@@ -2083,6 +2221,7 @@ def main() -> None:
             "Forward Statistics",
             "Research Report",
             "Percentile Definition Audit",
+            "MM Definition Audit",
             "Historical Similarity Engine",
             "Update Log",
         ],
@@ -2107,6 +2246,8 @@ def main() -> None:
         page_research_report()
     elif page == "Percentile Definition Audit":
         page_percentile_definition_audit()
+    elif page == "MM Definition Audit":
+        page_mm_definition_audit()
     elif page == "Historical Similarity Engine":
         page_historical_similarity_engine(
             historical_similarity_report,

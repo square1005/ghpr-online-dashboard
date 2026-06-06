@@ -2240,6 +2240,18 @@ PLOTLY_LIFECYCLE_CONFIG = {
     },
 }
 
+PLOTLY_STRUCTURE_CONFIG = {
+    "displayModeBar": True,
+    "displaylogo": False,
+    "scrollZoom": True,
+    "modeBarButtonsToAdd": ["select2d"],
+    "toImageButtonOptions": {
+        "format": "png",
+        "filename": "ghpr_mm_structure_lifecycle_interactive",
+        "scale": 2,
+    },
+}
+
 
 def lifecycle_plot_frame(lifecycle: pd.DataFrame) -> pd.DataFrame:
     required = [
@@ -2387,6 +2399,167 @@ def build_interactive_velocity_acceleration_chart(lifecycle: pd.DataFrame) -> go
         legend={"orientation": "h", "y": 1.08, "x": 0},
         xaxis=lifecycle_range_controls(),
         yaxis={"title": "Pct points"},
+    )
+    return fig
+
+
+def structure_plot_frame(structure: pd.DataFrame) -> pd.DataFrame:
+    required = [
+        "date",
+        "gold_close",
+        "mm_long",
+        "mm_short",
+        "mm_net",
+        "mm_long_percentile_156w",
+        "mm_short_percentile_156w",
+        "mm_net_percentile_156w",
+        "mm_long_velocity_8w",
+        "mm_short_velocity_8w",
+        "mm_net_velocity_8w",
+        "mm_structure_state",
+    ]
+    missing = missing_columns(structure, required)
+    if missing:
+        raise ValueError("Missing structure columns: " + ", ".join(missing))
+    frame = structure[required].copy().dropna(
+        subset=[
+            "date",
+            "gold_close",
+            "mm_long_percentile_156w",
+            "mm_short_percentile_156w",
+            "mm_net_percentile_156w",
+        ]
+    )
+    if frame.empty:
+        raise ValueError("No valid structure rows for interactive chart.")
+    first_gold = frame["gold_close"].dropna().iloc[0]
+    frame["gold_normalized_index"] = frame["gold_close"] / first_gold * 100
+    for column in [
+        "mm_long_percentile_156w",
+        "mm_short_percentile_156w",
+        "mm_net_percentile_156w",
+        "mm_long_velocity_8w",
+        "mm_short_velocity_8w",
+        "mm_net_velocity_8w",
+    ]:
+        frame[f"{column}_pct"] = frame[column] * 100
+    return frame
+
+
+def structure_customdata(frame: pd.DataFrame) -> pd.DataFrame:
+    return frame[
+        [
+            "gold_close",
+            "gold_normalized_index",
+            "mm_long",
+            "mm_short",
+            "mm_net",
+            "mm_long_percentile_156w_pct",
+            "mm_short_percentile_156w_pct",
+            "mm_net_percentile_156w_pct",
+            "mm_long_velocity_8w_pct",
+            "mm_short_velocity_8w_pct",
+            "mm_net_velocity_8w_pct",
+            "mm_structure_state",
+        ]
+    ]
+
+
+def structure_hover_template(trace_name: str) -> str:
+    return (
+        "Date: %{x|%Y-%m-%d}<br>"
+        "gold_close: %{customdata[0]:,.2f}<br>"
+        "gold_normalized_index: %{customdata[1]:.2f}<br>"
+        "mm_long: %{customdata[2]:,.0f}<br>"
+        "mm_short: %{customdata[3]:,.0f}<br>"
+        "mm_net: %{customdata[4]:,.0f}<br>"
+        "mm_long_percentile_156w: %{customdata[5]:.2f}%<br>"
+        "mm_short_percentile_156w: %{customdata[6]:.2f}%<br>"
+        "mm_net_percentile_156w: %{customdata[7]:.2f}%<br>"
+        "mm_long_velocity_8w: %{customdata[8]:.2f} pct points<br>"
+        "mm_short_velocity_8w: %{customdata[9]:.2f} pct points<br>"
+        "mm_net_velocity_8w: %{customdata[10]:.2f} pct points<br>"
+        "mm_structure_state: %{customdata[11]}<extra>" + trace_name + "</extra>"
+    )
+
+
+def build_interactive_structure_core_chart(structure: pd.DataFrame) -> go.Figure:
+    frame = structure_plot_frame(structure)
+    customdata = structure_customdata(frame).to_numpy()
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    fig.add_trace(
+        go.Scatter(
+            x=frame["date"],
+            y=frame["gold_normalized_index"],
+            mode="lines",
+            name="Gold normalized index",
+            line={"color": "#111827", "width": 2},
+            customdata=customdata,
+            hovertemplate=structure_hover_template("Gold normalized index"),
+        ),
+        secondary_y=False,
+    )
+    for name, column, color in [
+        ("MM Long Percentile", "mm_long_percentile_156w_pct", "#16a34a"),
+        ("MM Short Percentile", "mm_short_percentile_156w_pct", "#ef4444"),
+        ("MM Net Percentile", "mm_net_percentile_156w_pct", "#2563eb"),
+    ]:
+        fig.add_trace(
+            go.Scatter(
+                x=frame["date"],
+                y=frame[column],
+                mode="lines",
+                name=name,
+                line={"color": color, "width": 2},
+                customdata=customdata,
+                hovertemplate=structure_hover_template(name),
+            ),
+            secondary_y=True,
+        )
+    fig.update_layout(
+        title="Interactive Gold vs MM Long / Short / Net Structure",
+        height=540,
+        margin={"l": 40, "r": 52, "t": 58, "b": 35},
+        hovermode="x unified",
+        dragmode="pan",
+        legend={"orientation": "h", "y": 1.08, "x": 0},
+        xaxis=lifecycle_range_controls(),
+    )
+    fig.update_yaxes(title_text="Gold normalized index", secondary_y=False)
+    fig.update_yaxes(title_text="MM percentile", range=[0, 100], secondary_y=True)
+    return fig
+
+
+def build_interactive_structure_velocity_chart(structure: pd.DataFrame) -> go.Figure:
+    frame = structure_plot_frame(structure)
+    customdata = structure_customdata(frame).to_numpy()
+    fig = go.Figure()
+    for name, column, color in [
+        ("Long velocity 8W", "mm_long_velocity_8w_pct", "#16a34a"),
+        ("Short velocity 8W", "mm_short_velocity_8w_pct", "#ef4444"),
+        ("Net velocity 8W", "mm_net_velocity_8w_pct", "#2563eb"),
+    ]:
+        fig.add_trace(
+            go.Scatter(
+                x=frame["date"],
+                y=frame[column],
+                mode="lines",
+                name=name,
+                line={"color": color, "width": 2},
+                customdata=customdata,
+                hovertemplate=structure_hover_template(name),
+            )
+        )
+    fig.add_hline(y=0, line_color="#111827", line_width=1)
+    fig.update_layout(
+        title="Interactive MM Structure Velocity",
+        height=430,
+        margin={"l": 40, "r": 40, "t": 58, "b": 35},
+        hovermode="x unified",
+        dragmode="pan",
+        legend={"orientation": "h", "y": 1.08, "x": 0},
+        xaxis=lifecycle_range_controls(),
+        yaxis={"title": "Percentile point change"},
     )
     return fig
 
@@ -2723,6 +2896,37 @@ def page_mm_structure_lifecycle() -> None:
         c11.metric("Long Velocity 8W", fmt_percent(latest.get("mm_long_velocity_8w"), input_scale="fraction"))
         c12.metric("Short Velocity 8W", fmt_percent(latest.get("mm_short_velocity_8w"), input_scale="fraction"))
         c13.metric("Net Velocity 8W", fmt_percent(latest.get("mm_net_velocity_8w"), input_scale="fraction"))
+
+    st.subheader("Interactive MM Structure Lifecycle")
+    st.caption(
+        "此圖用來觀察 Gold、MM Long、MM Short、MM Net 的長期結構生命週期，"
+        "並檢查 Long / Short / Net 誰在推動 MM Net 變化。"
+    )
+    st.markdown("**Interactive Gold vs MM Long / Short / Net Structure**")
+    if structure.empty:
+        st.warning("N/A: structure data unavailable for interactive chart.")
+    else:
+        try:
+            st.plotly_chart(
+                build_interactive_structure_core_chart(structure),
+                use_container_width=True,
+                config=PLOTLY_STRUCTURE_CONFIG,
+            )
+        except ValueError as error:
+            st.warning(f"N/A: {error}")
+
+    st.subheader("Interactive MM Structure Velocity")
+    if structure.empty:
+        st.warning("N/A: structure velocity data unavailable for interactive chart.")
+    else:
+        try:
+            st.plotly_chart(
+                build_interactive_structure_velocity_chart(structure),
+                use_container_width=True,
+                config=PLOTLY_STRUCTURE_CONFIG,
+            )
+        except ValueError as error:
+            st.warning(f"N/A: {error}")
 
     st.subheader("MM Structure Charts")
     for title, path in MM_STRUCTURE_CHARTS:

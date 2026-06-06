@@ -138,6 +138,7 @@ def build_update_commands(no_download: bool = True) -> list[tuple[str, list[str]
         ("Run historical similarity engine", [python, "src/historical_similarity_engine.py"]),
         ("Run MM lifecycle research", [python, "src/mm_lifecycle_research.py"]),
         ("Run MM structure lifecycle research", [python, "src/mm_structure_lifecycle_research.py"]),
+        ("Run MM velocity window discovery", [python, "src/mm_velocity_window_discovery.py"]),
         ("Export hub summary", [python, "src/export_hub_summary.py"]),
     ]
 

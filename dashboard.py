@@ -65,6 +65,21 @@ MM_STRUCTURE_STATE_ANALYSIS_PATH = (
 MM_STRUCTURE_CONTRIBUTION_ANALYSIS_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "mm_structure_contribution_analysis.csv"
 )
+MM_VELOCITY_WINDOW_DATASET_PATH = (
+    PROJECT_ROOT / "data" / "processed" / "mm_velocity_window_dataset.csv"
+)
+MM_VELOCITY_WINDOW_SCORECARD_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_velocity_window_scorecard.csv"
+)
+MM_VELOCITY_WINDOW_BUCKET_ANALYSIS_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_velocity_window_bucket_analysis.csv"
+)
+MM_VELOCITY_WINDOW_TRAIN_TEST_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_velocity_window_train_test.csv"
+)
+MM_VELOCITY_WINDOW_SUMMARY_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_velocity_window_summary.md"
+)
 HISTORICAL_SIMILARITY_REPORT_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_report.csv"
 )
@@ -156,6 +171,32 @@ MM_STRUCTURE_CHARTS = [
     (
         "MM Structure State Outcomes",
         PROJECT_ROOT / "outputs" / "charts" / "mm_structure_state_outcomes.png",
+    ),
+]
+MM_VELOCITY_WINDOW_CHARTS = [
+    (
+        "Velocity Window Scorecard",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_velocity_window_scorecard.png",
+    ),
+    (
+        "MM Long Velocity Windows",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_long_velocity_windows.png",
+    ),
+    (
+        "MM Short Velocity Windows",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_short_velocity_windows.png",
+    ),
+    (
+        "MM Net Velocity Windows",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_net_velocity_windows.png",
+    ),
+    (
+        "Velocity Window vs 8W Following Return",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_velocity_window_forward_8w.png",
+    ),
+    (
+        "Velocity Window Lead-Lag",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_velocity_window_lead_lag.png",
     ),
 ]
 
@@ -465,6 +506,72 @@ def load_mm_structure_summary() -> str:
     if not MM_STRUCTURE_SUMMARY_PATH.exists():
         return "N/A"
     return MM_STRUCTURE_SUMMARY_PATH.read_text(encoding="utf-8", errors="replace")
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_velocity_window_dataset() -> pd.DataFrame:
+    if not MM_VELOCITY_WINDOW_DATASET_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_VELOCITY_WINDOW_DATASET_PATH)
+    if "date" in frame.columns:
+        frame["date"] = pd.to_datetime(frame["date"], errors="coerce")
+    for column in frame.columns:
+        if column != "date":
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame.sort_values("date").reset_index(drop=True) if "date" in frame.columns else frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_velocity_window_scorecard() -> pd.DataFrame:
+    if not MM_VELOCITY_WINDOW_SCORECARD_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_VELOCITY_WINDOW_SCORECARD_PATH)
+    text_columns = {"feature_group", "window", "feature_name", "horizon", "reason"}
+    for column in frame.columns:
+        if column not in text_columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    if "recommended" in frame.columns:
+        frame["recommended"] = frame["recommended"].astype(str).str.lower().isin({"true", "1", "yes"})
+    if "direction_consistency" in frame.columns:
+        frame["direction_consistency"] = frame["direction_consistency"].astype(str).str.lower().isin(
+            {"true", "1", "yes"}
+        )
+    return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_velocity_window_bucket_analysis() -> pd.DataFrame:
+    if not MM_VELOCITY_WINDOW_BUCKET_ANALYSIS_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_VELOCITY_WINDOW_BUCKET_ANALYSIS_PATH)
+    text_columns = {"feature_group", "window", "feature_name", "bucket"}
+    for column in frame.columns:
+        if column not in text_columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_velocity_window_train_test() -> pd.DataFrame:
+    if not MM_VELOCITY_WINDOW_TRAIN_TEST_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_VELOCITY_WINDOW_TRAIN_TEST_PATH)
+    text_columns = {"feature_group", "window", "feature_name", "horizon"}
+    for column in frame.columns:
+        if column not in text_columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    if "direction_consistency" in frame.columns:
+        frame["direction_consistency"] = frame["direction_consistency"].astype(str).str.lower().isin(
+            {"true", "1", "yes"}
+        )
+    return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_velocity_window_summary() -> str:
+    if not MM_VELOCITY_WINDOW_SUMMARY_PATH.exists():
+        return "N/A"
+    return MM_VELOCITY_WINDOW_SUMMARY_PATH.read_text(encoding="utf-8", errors="replace")
 
 
 @st.cache_data(show_spinner=False)
@@ -3009,6 +3116,97 @@ def page_mm_structure_lifecycle() -> None:
         st.markdown(summary)
 
 
+def page_mm_velocity_window_discovery() -> None:
+    st.header("MM Velocity Window Discovery")
+    render_research_banner()
+    st.info(
+        "Historical Structure Research only. This page compares MM Long / Short / Net velocity windows "
+        "without replacing the current 8W definition on the dashboard."
+    )
+
+    scorecard = load_mm_velocity_window_scorecard()
+    train_test = load_mm_velocity_window_train_test()
+    bucket = load_mm_velocity_window_bucket_analysis()
+
+    st.subheader("Recommendation Summary")
+    if scorecard.empty:
+        st.warning(f"N/A: missing velocity window scorecard: {MM_VELOCITY_WINDOW_SCORECARD_PATH}")
+    else:
+        recommended = scorecard[scorecard["recommended"]].copy() if "recommended" in scorecard.columns else pd.DataFrame()
+        if recommended.empty:
+            st.info("N/A: no recommended rows in velocity window scorecard.")
+        else:
+            summary = (
+                recommended.groupby(["feature_group", "window"], as_index=False)
+                .agg(
+                    avg_total_score=("total_score", "mean"),
+                    avg_information_score=("information_score", "mean"),
+                    avg_stability_score=("stability_score", "mean"),
+                    avg_train_test_score=("train_test_score", "mean"),
+                )
+                .sort_values(["feature_group", "avg_total_score"], ascending=[True, False])
+            )
+            st.dataframe(format_lifecycle_table(summary), width="stretch", hide_index=True)
+        st.caption("Current dashboard velocity definitions are unchanged; v0.6.2 is research only.")
+
+    st.subheader("Scorecard")
+    if scorecard.empty:
+        st.warning(f"N/A: missing scorecard data: {MM_VELOCITY_WINDOW_SCORECARD_PATH}")
+    else:
+        c1, c2, c3 = st.columns(3)
+        group_options = ["All", *sorted(scorecard["feature_group"].dropna().astype(str).unique())]
+        window_options = ["All", *sorted(scorecard["window"].dropna().astype(str).unique(), key=lambda value: int(value.replace("W", "")))]
+        horizon_options = ["All", *sorted(scorecard["horizon"].dropna().astype(str).unique())]
+        selected_group = c1.selectbox("Feature group", group_options)
+        selected_window = c2.selectbox("Window", window_options)
+        selected_horizon = c3.selectbox("Horizon", horizon_options)
+        filtered = scorecard.copy()
+        if selected_group != "All":
+            filtered = filtered[filtered["feature_group"].astype(str) == selected_group]
+        if selected_window != "All":
+            filtered = filtered[filtered["window"].astype(str) == selected_window]
+        if selected_horizon != "All":
+            filtered = filtered[filtered["horizon"].astype(str) == selected_horizon]
+        st.dataframe(format_lifecycle_table(filtered), width="stretch", hide_index=True)
+
+    st.subheader("Train / Test Validation")
+    if train_test.empty:
+        st.warning(f"N/A: missing train/test data: {MM_VELOCITY_WINDOW_TRAIN_TEST_PATH}")
+    else:
+        st.dataframe(format_lifecycle_table(train_test), width="stretch", hide_index=True)
+
+    st.subheader("Bucket Analysis")
+    if bucket.empty:
+        st.warning(f"N/A: missing bucket analysis: {MM_VELOCITY_WINDOW_BUCKET_ANALYSIS_PATH}")
+    else:
+        c1, c2 = st.columns(2)
+        bucket_group_options = ["All", *sorted(bucket["feature_group"].dropna().astype(str).unique())]
+        bucket_window_options = ["All", *sorted(bucket["window"].dropna().astype(str).unique(), key=lambda value: int(value.replace("W", "")))]
+        selected_bucket_group = c1.selectbox("Bucket feature group", bucket_group_options)
+        selected_bucket_window = c2.selectbox("Bucket window", bucket_window_options)
+        bucket_view = bucket.copy()
+        if selected_bucket_group != "All":
+            bucket_view = bucket_view[bucket_view["feature_group"].astype(str) == selected_bucket_group]
+        if selected_bucket_window != "All":
+            bucket_view = bucket_view[bucket_view["window"].astype(str) == selected_bucket_window]
+        st.dataframe(format_lifecycle_table(bucket_view), width="stretch", hide_index=True)
+
+    st.subheader("Charts")
+    for title, path in MM_VELOCITY_WINDOW_CHARTS:
+        if path.exists():
+            st.markdown(f"**{title}**")
+            st.image(str(path), width="stretch")
+        else:
+            st.warning(f"N/A: missing chart: {path.name}")
+
+    st.subheader("MM Velocity Window Summary Markdown")
+    summary_md = load_mm_velocity_window_summary()
+    if summary_md == "N/A":
+        st.warning(f"N/A: missing velocity window summary: {MM_VELOCITY_WINDOW_SUMMARY_PATH}")
+    else:
+        st.markdown(summary_md)
+
+
 def page_update_log() -> None:
     st.header("Update Log")
     render_research_banner()
@@ -3050,6 +3248,7 @@ def main() -> None:
             "MM Definition Audit",
             "MM Lifecycle Research",
             "MM Structure Lifecycle",
+            "MM Velocity Window Discovery",
             "Historical Similarity Engine",
             "Update Log",
         ],
@@ -3080,6 +3279,8 @@ def main() -> None:
         page_mm_lifecycle_research()
     elif page == "MM Structure Lifecycle":
         page_mm_structure_lifecycle()
+    elif page == "MM Velocity Window Discovery":
+        page_mm_velocity_window_discovery()
     elif page == "Historical Similarity Engine":
         page_historical_similarity_engine(
             historical_similarity_report,

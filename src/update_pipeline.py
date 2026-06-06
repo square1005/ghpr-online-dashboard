@@ -136,6 +136,7 @@ def build_update_commands(no_download: bool = True) -> list[tuple[str, list[str]
         ("Regenerate charts", [python, "src/plot_engine.py"]),
         ("Generate factor research report", [python, "src/report_engine.py"]),
         ("Run historical similarity engine", [python, "src/historical_similarity_engine.py"]),
+        ("Run MM lifecycle research", [python, "src/mm_lifecycle_research.py"]),
         ("Export hub summary", [python, "src/export_hub_summary.py"]),
     ]
 

@@ -19,6 +19,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 MASTER_PATH = PROJECT_ROOT / "data" / "processed" / "ghpr_master_weekly.csv"
 HSE_REPORT_PATH = PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_report.csv"
 HSE_STATS_PATH = PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_stats.csv"
+MM_LIFECYCLE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_lifecycle_dataset.csv"
+MM_LIFECYCLE_LEAD_LAG_PATH = PROJECT_ROOT / "outputs" / "reports" / "mm_lifecycle_lead_lag.csv"
 HUB_SUMMARY_PATH = PROJECT_ROOT / "outputs" / "reports" / "ghpr_summary_for_hub.json"
 DASHBOARD_URL = "https://square1005.github.io/ghpr-online-dashboard/"
 
@@ -232,6 +234,37 @@ def read_csv_or_empty(path: Path) -> pd.DataFrame:
     return pd.read_csv(path)
 
 
+def latest_lifecycle_row(lifecycle: pd.DataFrame) -> pd.Series | None:
+    required = ["date", "mm_lifecycle_state", "mm_velocity_8w", "mm_acceleration_8w"]
+    if lifecycle.empty or any(column not in lifecycle.columns for column in required):
+        return None
+    data = lifecycle.copy()
+    data["date"] = pd.to_datetime(data["date"], errors="coerce")
+    data = data.dropna(subset=["date"]).sort_values("date")
+    if data.empty:
+        return None
+    return data.iloc[-1]
+
+
+def build_lifecycle_lead_lag_note(lead_lag: pd.DataFrame) -> str | None:
+    required = ["mm_feature", "lag_weeks", "rank_correlation", "interpretation"]
+    if lead_lag.empty or any(column not in lead_lag.columns for column in required):
+        return None
+    data = lead_lag.copy()
+    data["rank_correlation"] = pd.to_numeric(data["rank_correlation"], errors="coerce")
+    data["lag_weeks"] = pd.to_numeric(data["lag_weeks"], errors="coerce")
+    positive_lag = data[data["lag_weeks"] > 0].dropna(subset=["rank_correlation"])
+    if positive_lag.empty:
+        return "No positive-lag lifecycle relationship available."
+    top = positive_lag.assign(abs_rank=positive_lag["rank_correlation"].abs()).sort_values(
+        "abs_rank", ascending=False
+    ).iloc[0]
+    return (
+        f"{top['mm_feature']} at +{int(top['lag_weeks'])}W has rank correlation "
+        f"{top['rank_correlation']:.3f}; historical lifecycle research only."
+    )
+
+
 def build_hub_summary() -> dict[str, Any]:
     master = read_csv_or_empty(MASTER_PATH)
     if master.empty:
@@ -239,7 +272,10 @@ def build_hub_summary() -> dict[str, Any]:
     latest = latest_valid_master_row(master)
     report = read_csv_or_empty(HSE_REPORT_PATH)
     stats = read_csv_or_empty(HSE_STATS_PATH)
+    lifecycle = read_csv_or_empty(MM_LIFECYCLE_DATASET_PATH)
+    lifecycle_lead_lag = read_csv_or_empty(MM_LIFECYCLE_LEAD_LAG_PATH)
     top20 = top20_stats_row(stats)
+    latest_lifecycle = latest_lifecycle_row(lifecycle)
 
     mm_percentile = percent_points(latest.get("mm_net_percentile_156w"))
     producer_percentile = percent_points(latest.get("producer_net_percentile_156w"))
@@ -263,6 +299,16 @@ def build_hub_summary() -> dict[str, Any]:
         "data_health": build_data_health(master, latest, report, stats),
         "last_update_time": datetime.now(timezone.utc).isoformat(),
         "dashboard_url": DASHBOARD_URL,
+        "mm_lifecycle_state": json_value(
+            None if latest_lifecycle is None else latest_lifecycle.get("mm_lifecycle_state")
+        ),
+        "mm_velocity_8w": json_value(
+            None if latest_lifecycle is None else latest_lifecycle.get("mm_velocity_8w"), 6
+        ),
+        "mm_acceleration_8w": json_value(
+            None if latest_lifecycle is None else latest_lifecycle.get("mm_acceleration_8w"), 6
+        ),
+        "mm_lead_lag_note": build_lifecycle_lead_lag_note(lifecycle_lead_lag),
     }
     return summary
 

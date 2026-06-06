@@ -45,6 +45,15 @@ MM_DEFINITION_AUDIT_REPORT_PATH = (
 MM_DEFINITION_SCORECARD_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "mm_percentile_definition_scorecard.csv"
 )
+MM_LIFECYCLE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_lifecycle_dataset.csv"
+MM_LIFECYCLE_SUMMARY_PATH = PROJECT_ROOT / "outputs" / "reports" / "mm_lifecycle_summary.md"
+MM_LIFECYCLE_LEAD_LAG_PATH = PROJECT_ROOT / "outputs" / "reports" / "mm_lifecycle_lead_lag.csv"
+MM_LIFECYCLE_STATE_ANALYSIS_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_lifecycle_state_analysis.csv"
+)
+MM_TRAJECTORY_SIMILARITY_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_trajectory_similarity.csv"
+)
 HISTORICAL_SIMILARITY_REPORT_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_report.csv"
 )
@@ -92,6 +101,28 @@ MM_DEFINITION_AUDIT_CHARTS = [
     (
         "MM Definition Train / Test Comparison",
         PROJECT_ROOT / "outputs" / "charts" / "mm_definition_train_test_comparison.png",
+    ),
+]
+MM_LIFECYCLE_CHARTS = [
+    (
+        "Gold vs MM Lifecycle",
+        PROJECT_ROOT / "outputs" / "charts" / "gold_vs_mm_lifecycle.png",
+    ),
+    (
+        "MM Velocity / Acceleration",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_velocity_acceleration.png",
+    ),
+    (
+        "MM Lead-Lag Correlation",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_lead_lag_correlation.png",
+    ),
+    (
+        "MM Lifecycle State Outcomes",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_lifecycle_state_outcomes.png",
+    ),
+    (
+        "MM Trajectory Similarity Cases",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_trajectory_similarity_cases.png",
     ),
 ]
 
@@ -287,6 +318,65 @@ def load_mm_definition_scorecard() -> pd.DataFrame:
             {"true", "1", "yes"}
         )
     return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_lifecycle_dataset() -> pd.DataFrame:
+    if not MM_LIFECYCLE_DATASET_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_LIFECYCLE_DATASET_PATH)
+    if "date" in frame.columns:
+        frame["date"] = pd.to_datetime(frame["date"], errors="coerce")
+    text_columns = {"mm_lifecycle_state"}
+    for column in frame.columns:
+        if column != "date" and column not in text_columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame.sort_values("date").reset_index(drop=True) if "date" in frame.columns else frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_lifecycle_state_analysis() -> pd.DataFrame:
+    if not MM_LIFECYCLE_STATE_ANALYSIS_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_LIFECYCLE_STATE_ANALYSIS_PATH)
+    for column in frame.columns:
+        if column != "mm_lifecycle_state":
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_lifecycle_lead_lag() -> pd.DataFrame:
+    if not MM_LIFECYCLE_LEAD_LAG_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_LIFECYCLE_LEAD_LAG_PATH)
+    text_columns = {"mm_feature", "gold_horizon", "interpretation"}
+    for column in frame.columns:
+        if column not in text_columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_trajectory_similarity() -> pd.DataFrame:
+    if not MM_TRAJECTORY_SIMILARITY_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_TRAJECTORY_SIMILARITY_PATH)
+    for column in ["historical_start_date", "historical_end_date"]:
+        if column in frame.columns:
+            frame[column] = pd.to_datetime(frame[column], errors="coerce")
+    text_columns = {"window", "current_path", "historical_path"}
+    for column in frame.columns:
+        if column not in text_columns and not column.endswith("_date"):
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_lifecycle_summary() -> str:
+    if not MM_LIFECYCLE_SUMMARY_PATH.exists():
+        return "N/A"
+    return MM_LIFECYCLE_SUMMARY_PATH.read_text(encoding="utf-8", errors="replace")
 
 
 @st.cache_data(show_spinner=False)
@@ -2030,6 +2120,20 @@ def format_scorecard_table(frame: pd.DataFrame) -> pd.DataFrame:
     return display
 
 
+def format_lifecycle_table(frame: pd.DataFrame) -> pd.DataFrame:
+    if frame.empty:
+        return frame
+    display = frame.copy()
+    for column in display.columns:
+        if column == "count" or column.endswith("_count") or column == "sample_count":
+            display[column] = display[column].map(lambda value: "N/A" if pd.isna(value) else f"{int(float(value)):,}")
+        elif "return" in column or "win_rate" in column or "velocity" in column or "acceleration" in column:
+            display[column] = display[column].map(lambda value: fmt_percent(value, input_scale="fraction"))
+        elif "correlation" in column or "score" in column:
+            display[column] = display[column].map(lambda value: "N/A" if pd.isna(value) else f"{float(value):.3f}")
+    return display
+
+
 def page_percentile_definition_audit() -> None:
     st.header("Percentile Definition Audit")
     render_research_banner()
@@ -2183,6 +2287,118 @@ def page_mm_definition_audit() -> None:
             st.warning(f"N/A: missing chart: {path.name}")
 
 
+def page_mm_lifecycle_research() -> None:
+    st.header("MM Lifecycle Research")
+    render_research_banner()
+    st.info(
+        "Historical Lifecycle Research only. This page adds MM velocity, acceleration, lifecycle state, "
+        "lead-lag correlation, and trajectory similarity context around the existing 156W MM percentile."
+    )
+
+    lifecycle = load_mm_lifecycle_dataset()
+    state_analysis = load_mm_lifecycle_state_analysis()
+    lead_lag = load_mm_lifecycle_lead_lag()
+    trajectories = load_mm_trajectory_similarity()
+
+    st.subheader("Current MM Lifecycle State")
+    if lifecycle.empty:
+        st.warning(f"N/A: missing MM lifecycle dataset: {MM_LIFECYCLE_DATASET_PATH}")
+    else:
+        latest = lifecycle.dropna(subset=["date"]).sort_values("date").iloc[-1]
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric("Date", latest["date"].strftime("%Y-%m-%d") if pd.notna(latest["date"]) else "N/A")
+        c2.metric("MM Lifecycle State", latest.get("mm_lifecycle_state", "N/A"))
+        c3.metric("MM Velocity 8W", fmt_percent(latest.get("mm_velocity_8w"), input_scale="fraction"))
+        c4.metric("MM Acceleration 8W", fmt_percent(latest.get("mm_acceleration_8w"), input_scale="fraction"))
+        c5, c6, c7 = st.columns(3)
+        c5.metric("MM Percentile", fmt_percent(latest.get("mm_percentile"), input_scale="fraction"))
+        c6.metric("MM Velocity 4W", fmt_percent(latest.get("mm_velocity_4w"), input_scale="fraction"))
+        c7.metric("MM Velocity 26W", fmt_percent(latest.get("mm_velocity_26w"), input_scale="fraction"))
+
+    st.subheader("MM Velocity / Acceleration")
+    if lifecycle.empty:
+        st.warning("N/A: lifecycle velocity data unavailable.")
+    else:
+        required = ["date", "mm_percentile", "mm_velocity_4w", "mm_velocity_8w", "mm_velocity_12w", "mm_velocity_26w", "mm_acceleration_4w", "mm_acceleration_8w"]
+        missing = missing_columns(lifecycle, required)
+        if missing:
+            st.warning("N/A: missing lifecycle columns: " + ", ".join(missing))
+        else:
+            view = lifecycle[required + ["mm_lifecycle_state"]].tail(52).copy()
+            st.dataframe(format_lifecycle_table(view), width="stretch", hide_index=True)
+
+    st.subheader("Lead-Lag Summary")
+    if lead_lag.empty:
+        st.warning(f"N/A: missing lead-lag data: {MM_LIFECYCLE_LEAD_LAG_PATH}")
+    else:
+        c1, c2 = st.columns(2)
+        features = ["All", *sorted(lead_lag["mm_feature"].dropna().astype(str).unique())]
+        horizons = ["All", *sorted(lead_lag["gold_horizon"].dropna().astype(str).unique())]
+        selected_feature = c1.selectbox("MM feature", features)
+        selected_horizon = c2.selectbox("Gold horizon", horizons)
+        filtered = lead_lag.copy()
+        if selected_feature != "All":
+            filtered = filtered[filtered["mm_feature"].astype(str) == selected_feature]
+        if selected_horizon != "All":
+            filtered = filtered[filtered["gold_horizon"].astype(str) == selected_horizon]
+        filtered = filtered.assign(abs_rank=filtered["rank_correlation"].abs()).sort_values(
+            "abs_rank", ascending=False
+        )
+        preferred = [
+            "mm_feature",
+            "gold_horizon",
+            "lag_weeks",
+            "correlation",
+            "rank_correlation",
+            "sample_count",
+            "interpretation",
+        ]
+        st.dataframe(format_lifecycle_table(filtered[preferred].head(30)), width="stretch", hide_index=True)
+
+    st.subheader("Lifecycle State Outcomes")
+    if state_analysis.empty:
+        st.warning(f"N/A: missing lifecycle state analysis: {MM_LIFECYCLE_STATE_ANALYSIS_PATH}")
+    else:
+        st.dataframe(format_lifecycle_table(state_analysis), width="stretch", hide_index=True)
+
+    st.subheader("Top Similar MM Trajectories")
+    if trajectories.empty:
+        st.warning(f"N/A: missing trajectory similarity data: {MM_TRAJECTORY_SIMILARITY_PATH}")
+    else:
+        window_options = sorted(trajectories["window"].dropna().astype(str).unique())
+        default_index = window_options.index("8W") if "8W" in window_options else 0
+        selected_window = st.selectbox("Trajectory window", window_options, index=default_index)
+        view = trajectories[trajectories["window"].astype(str) == selected_window].head(20).copy()
+        preferred = [
+            "window",
+            "historical_start_date",
+            "historical_end_date",
+            "similarity_score",
+            "historical_gold_return_1w",
+            "historical_gold_return_2w",
+            "historical_gold_return_4w",
+            "historical_gold_return_8w",
+        ]
+        available = [column for column in preferred if column in view.columns]
+        st.caption("Recent 52 weeks are excluded from trajectory similarity by default.")
+        st.dataframe(format_lifecycle_table(view[available]), width="stretch", hide_index=True)
+
+    st.subheader("Lifecycle Charts")
+    for title, path in MM_LIFECYCLE_CHARTS:
+        if path.exists():
+            st.markdown(f"**{title}**")
+            st.image(str(path), width="stretch")
+        else:
+            st.warning(f"N/A: missing chart: {path.name}")
+
+    st.subheader("MM Lifecycle Summary Markdown")
+    summary = load_mm_lifecycle_summary()
+    if summary == "N/A":
+        st.warning(f"N/A: missing lifecycle summary: {MM_LIFECYCLE_SUMMARY_PATH}")
+    else:
+        st.markdown(summary)
+
+
 def page_update_log() -> None:
     st.header("Update Log")
     render_research_banner()
@@ -2222,6 +2438,7 @@ def main() -> None:
             "Research Report",
             "Percentile Definition Audit",
             "MM Definition Audit",
+            "MM Lifecycle Research",
             "Historical Similarity Engine",
             "Update Log",
         ],
@@ -2248,6 +2465,8 @@ def main() -> None:
         page_percentile_definition_audit()
     elif page == "MM Definition Audit":
         page_mm_definition_audit()
+    elif page == "MM Lifecycle Research":
+        page_mm_lifecycle_research()
     elif page == "Historical Similarity Engine":
         page_historical_similarity_engine(
             historical_similarity_report,

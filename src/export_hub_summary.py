@@ -21,6 +21,7 @@ HSE_REPORT_PATH = PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_
 HSE_STATS_PATH = PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_stats.csv"
 MM_LIFECYCLE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_lifecycle_dataset.csv"
 MM_LIFECYCLE_LEAD_LAG_PATH = PROJECT_ROOT / "outputs" / "reports" / "mm_lifecycle_lead_lag.csv"
+MM_STRUCTURE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_structure_lifecycle_dataset.csv"
 HUB_SUMMARY_PATH = PROJECT_ROOT / "outputs" / "reports" / "ghpr_summary_for_hub.json"
 DASHBOARD_URL = "https://square1005.github.io/ghpr-online-dashboard/"
 
@@ -246,6 +247,49 @@ def latest_lifecycle_row(lifecycle: pd.DataFrame) -> pd.Series | None:
     return data.iloc[-1]
 
 
+def latest_structure_row(structure: pd.DataFrame) -> pd.Series | None:
+    required = [
+        "date",
+        "mm_long_percentile_156w",
+        "mm_short_percentile_156w",
+        "mm_net_percentile_156w",
+        "mm_long_velocity_8w",
+        "mm_short_velocity_8w",
+        "mm_net_velocity_8w",
+        "mm_structure_state",
+    ]
+    if structure.empty or any(column not in structure.columns for column in required):
+        return None
+    data = structure.copy()
+    data["date"] = pd.to_datetime(data["date"], errors="coerce")
+    data = data.dropna(subset=["date"]).sort_values("date")
+    if data.empty:
+        return None
+    return data.iloc[-1]
+
+
+def build_structure_note(row: pd.Series | None) -> str | None:
+    if row is None:
+        return None
+    state = json_value(row.get("mm_structure_state"))
+    contribution = json_value(row.get("mm_structure_contribution_state"))
+    long_velocity = scalar_float(row.get("mm_long_velocity_8w"))
+    short_velocity = scalar_float(row.get("mm_short_velocity_8w"))
+    net_velocity = scalar_float(row.get("mm_net_velocity_8w"))
+    if state is None:
+        return None
+    parts = [f"Current MM structure state: {state}"]
+    if contribution:
+        parts.append(f"contribution: {contribution}")
+    if all(value is not None for value in [long_velocity, short_velocity, net_velocity]):
+        parts.append(
+            "8W velocities long/short/net: "
+            f"{long_velocity:.4f}/{short_velocity:.4f}/{net_velocity:.4f}"
+        )
+    parts.append("historical structure research only")
+    return "; ".join(parts)
+
+
 def build_lifecycle_lead_lag_note(lead_lag: pd.DataFrame) -> str | None:
     required = ["mm_feature", "lag_weeks", "rank_correlation", "interpretation"]
     if lead_lag.empty or any(column not in lead_lag.columns for column in required):
@@ -274,8 +318,10 @@ def build_hub_summary() -> dict[str, Any]:
     stats = read_csv_or_empty(HSE_STATS_PATH)
     lifecycle = read_csv_or_empty(MM_LIFECYCLE_DATASET_PATH)
     lifecycle_lead_lag = read_csv_or_empty(MM_LIFECYCLE_LEAD_LAG_PATH)
+    structure = read_csv_or_empty(MM_STRUCTURE_DATASET_PATH)
     top20 = top20_stats_row(stats)
     latest_lifecycle = latest_lifecycle_row(lifecycle)
+    latest_structure = latest_structure_row(structure)
 
     mm_percentile = percent_points(latest.get("mm_net_percentile_156w"))
     producer_percentile = percent_points(latest.get("producer_net_percentile_156w"))
@@ -309,6 +355,31 @@ def build_hub_summary() -> dict[str, Any]:
             None if latest_lifecycle is None else latest_lifecycle.get("mm_acceleration_8w"), 6
         ),
         "mm_lead_lag_note": build_lifecycle_lead_lag_note(lifecycle_lead_lag),
+        "mm_long_percentile": json_value(
+            None if latest_structure is None else percent_points(latest_structure.get("mm_long_percentile_156w")),
+            4,
+        ),
+        "mm_short_percentile": json_value(
+            None if latest_structure is None else percent_points(latest_structure.get("mm_short_percentile_156w")),
+            4,
+        ),
+        "mm_net_percentile": json_value(
+            None if latest_structure is None else percent_points(latest_structure.get("mm_net_percentile_156w")),
+            4,
+        ),
+        "mm_long_velocity_8w": json_value(
+            None if latest_structure is None else latest_structure.get("mm_long_velocity_8w"), 6
+        ),
+        "mm_short_velocity_8w": json_value(
+            None if latest_structure is None else latest_structure.get("mm_short_velocity_8w"), 6
+        ),
+        "mm_net_velocity_8w": json_value(
+            None if latest_structure is None else latest_structure.get("mm_net_velocity_8w"), 6
+        ),
+        "mm_structure_state": json_value(
+            None if latest_structure is None else latest_structure.get("mm_structure_state")
+        ),
+        "mm_structure_note": build_structure_note(latest_structure),
     }
     return summary
 

@@ -25,10 +25,18 @@
     "gold_price_source": "COMEX GC futures proxy via Yahoo Finance GC=F",
     "scope": "historical statistics / research reference only"
   },
-  "last_update_time": "2026-06-06T10:40:31.317009+00:00",
+  "last_update_time": "2026-06-06T12:47:36.435710+00:00",
   "dashboard_url": "https://square1005.github.io/ghpr-online-dashboard/",
   "mm_lifecycle_state": "MM_ACCUMULATION",
   "mm_velocity_8w": 0.070513,
   "mm_acceleration_8w": 0.083333,
-  "mm_lead_lag_note": "mm_velocity_8w at +2W has rank correlation 0.412; historical lifecycle research only."
+  "mm_lead_lag_note": "mm_velocity_8w at +2W has rank correlation 0.412; historical lifecycle research only.",
+  "mm_long_percentile": 23.7179,
+  "mm_short_percentile": 22.4359,
+  "mm_net_percentile": 30.1282,
+  "mm_long_velocity_8w": 0.108974,
+  "mm_short_velocity_8w": -0.025641,
+  "mm_net_velocity_8w": 0.070513,
+  "mm_structure_state": "MM_STRUCTURE_LOW_PARTICIPATION",
+  "mm_structure_note": "Current MM structure state: MM_STRUCTURE_LOW_PARTICIPATION; contribution: LONG_BUILDING; 8W velocities long/short/net: 0.1090/-0.0256/0.0705; historical structure research only"
 }

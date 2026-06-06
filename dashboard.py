@@ -54,6 +54,17 @@ MM_LIFECYCLE_STATE_ANALYSIS_PATH = (
 MM_TRAJECTORY_SIMILARITY_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "mm_trajectory_similarity.csv"
 )
+MM_STRUCTURE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_structure_lifecycle_dataset.csv"
+MM_STRUCTURE_SUMMARY_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_structure_lifecycle_summary.md"
+)
+MM_STRUCTURE_LEAD_LAG_PATH = PROJECT_ROOT / "outputs" / "reports" / "mm_structure_lead_lag.csv"
+MM_STRUCTURE_STATE_ANALYSIS_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_structure_state_analysis.csv"
+)
+MM_STRUCTURE_CONTRIBUTION_ANALYSIS_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_structure_contribution_analysis.csv"
+)
 HISTORICAL_SIMILARITY_REPORT_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_report.csv"
 )
@@ -123,6 +134,28 @@ MM_LIFECYCLE_CHARTS = [
     (
         "MM Trajectory Similarity Cases",
         PROJECT_ROOT / "outputs" / "charts" / "mm_trajectory_similarity_cases.png",
+    ),
+]
+MM_STRUCTURE_CHARTS = [
+    (
+        "Gold vs MM Long / Short / Net",
+        PROJECT_ROOT / "outputs" / "charts" / "gold_vs_mm_long_short_net.png",
+    ),
+    (
+        "MM Long / Short / Net Percentiles",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_long_short_net_percentiles.png",
+    ),
+    (
+        "MM Structure Velocity",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_structure_velocity.png",
+    ),
+    (
+        "MM Structure Lead-Lag Correlation",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_structure_lead_lag_correlation.png",
+    ),
+    (
+        "MM Structure State Outcomes",
+        PROJECT_ROOT / "outputs" / "charts" / "mm_structure_state_outcomes.png",
     ),
 ]
 
@@ -377,6 +410,61 @@ def load_mm_lifecycle_summary() -> str:
     if not MM_LIFECYCLE_SUMMARY_PATH.exists():
         return "N/A"
     return MM_LIFECYCLE_SUMMARY_PATH.read_text(encoding="utf-8", errors="replace")
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_structure_dataset() -> pd.DataFrame:
+    if not MM_STRUCTURE_DATASET_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_STRUCTURE_DATASET_PATH)
+    if "date" in frame.columns:
+        frame["date"] = pd.to_datetime(frame["date"], errors="coerce")
+    text_columns = {"mm_structure_state", "mm_structure_contribution_state"}
+    for column in frame.columns:
+        if column != "date" and column not in text_columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame.sort_values("date").reset_index(drop=True) if "date" in frame.columns else frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_structure_state_analysis() -> pd.DataFrame:
+    if not MM_STRUCTURE_STATE_ANALYSIS_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_STRUCTURE_STATE_ANALYSIS_PATH)
+    for column in frame.columns:
+        if column != "mm_structure_state":
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_structure_contribution_analysis() -> pd.DataFrame:
+    if not MM_STRUCTURE_CONTRIBUTION_ANALYSIS_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_STRUCTURE_CONTRIBUTION_ANALYSIS_PATH)
+    for column in frame.columns:
+        if column != "mm_structure_contribution_state":
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_structure_lead_lag() -> pd.DataFrame:
+    if not MM_STRUCTURE_LEAD_LAG_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_STRUCTURE_LEAD_LAG_PATH)
+    text_columns = {"mm_feature", "gold_horizon", "interpretation"}
+    for column in frame.columns:
+        if column not in text_columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_structure_summary() -> str:
+    if not MM_STRUCTURE_SUMMARY_PATH.exists():
+        return "N/A"
+    return MM_STRUCTURE_SUMMARY_PATH.read_text(encoding="utf-8", errors="replace")
 
 
 @st.cache_data(show_spinner=False)
@@ -2127,7 +2215,13 @@ def format_lifecycle_table(frame: pd.DataFrame) -> pd.DataFrame:
     for column in display.columns:
         if column == "count" or column.endswith("_count") or column == "sample_count":
             display[column] = display[column].map(lambda value: "N/A" if pd.isna(value) else f"{int(float(value)):,}")
-        elif "return" in column or "win_rate" in column or "velocity" in column or "acceleration" in column:
+        elif (
+            "return" in column
+            or "win_rate" in column
+            or "velocity" in column
+            or "acceleration" in column
+            or "percentile" in column
+        ):
             display[column] = display[column].map(lambda value: fmt_percent(value, input_scale="fraction"))
         elif "correlation" in column or "score" in column:
             display[column] = display[column].map(lambda value: "N/A" if pd.isna(value) else f"{float(value):.3f}")
@@ -2591,6 +2685,126 @@ def page_mm_lifecycle_research() -> None:
         st.markdown(summary)
 
 
+def page_mm_structure_lifecycle() -> None:
+    st.header("MM Structure Lifecycle")
+    render_research_banner()
+    st.info(
+        "Historical Structure Lifecycle Research only. This page decomposes MM Net into Long, Short, "
+        "and Net structure, without changing the existing Current Position definition."
+    )
+
+    structure = load_mm_structure_dataset()
+    state_analysis = load_mm_structure_state_analysis()
+    contribution_analysis = load_mm_structure_contribution_analysis()
+    lead_lag = load_mm_structure_lead_lag()
+
+    st.subheader("Current MM Structure Snapshot")
+    if structure.empty:
+        st.warning(f"N/A: missing MM structure dataset: {MM_STRUCTURE_DATASET_PATH}")
+    else:
+        latest = structure.dropna(subset=["date"]).sort_values("date").iloc[-1]
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric("Date", latest["date"].strftime("%Y-%m-%d") if pd.notna(latest["date"]) else "N/A")
+        c2.metric("Gold Close", fmt_number(latest.get("gold_close")))
+        c3.metric("Structure State", latest.get("mm_structure_state", "N/A"))
+        c4.metric("Contribution State", latest.get("mm_structure_contribution_state", "N/A"))
+
+        c5, c6, c7 = st.columns(3)
+        c5.metric("MM Long", fmt_int(latest.get("mm_long")))
+        c6.metric("MM Short", fmt_int(latest.get("mm_short")))
+        c7.metric("MM Net", fmt_int(latest.get("mm_net")))
+
+        c8, c9, c10 = st.columns(3)
+        c8.metric("Long Percentile", fmt_percent(latest.get("mm_long_percentile_156w"), input_scale="fraction"))
+        c9.metric("Short Percentile", fmt_percent(latest.get("mm_short_percentile_156w"), input_scale="fraction"))
+        c10.metric("Net Percentile", fmt_percent(latest.get("mm_net_percentile_156w"), input_scale="fraction"))
+
+        c11, c12, c13 = st.columns(3)
+        c11.metric("Long Velocity 8W", fmt_percent(latest.get("mm_long_velocity_8w"), input_scale="fraction"))
+        c12.metric("Short Velocity 8W", fmt_percent(latest.get("mm_short_velocity_8w"), input_scale="fraction"))
+        c13.metric("Net Velocity 8W", fmt_percent(latest.get("mm_net_velocity_8w"), input_scale="fraction"))
+
+    st.subheader("MM Structure Charts")
+    for title, path in MM_STRUCTURE_CHARTS:
+        if path.exists():
+            st.markdown(f"**{title}**")
+            st.image(str(path), width="stretch")
+        else:
+            st.warning(f"N/A: missing chart: {path.name}")
+
+    st.subheader("Long / Short / Net Structure Table")
+    if structure.empty:
+        st.warning("N/A: structure table unavailable.")
+    else:
+        required = [
+            "date",
+            "mm_long_percentile_156w",
+            "mm_short_percentile_156w",
+            "mm_net_percentile_156w",
+            "mm_long_velocity_8w",
+            "mm_short_velocity_8w",
+            "mm_net_velocity_8w",
+            "mm_structure_state",
+            "mm_structure_contribution_state",
+        ]
+        missing = missing_columns(structure, required)
+        if missing:
+            st.warning("N/A: missing structure columns: " + ", ".join(missing))
+        else:
+            st.dataframe(
+                format_lifecycle_table(structure[required].tail(52)),
+                width="stretch",
+                hide_index=True,
+            )
+
+    st.subheader("MM Structure State Analysis")
+    if state_analysis.empty:
+        st.warning(f"N/A: missing structure state analysis: {MM_STRUCTURE_STATE_ANALYSIS_PATH}")
+    else:
+        st.dataframe(format_lifecycle_table(state_analysis), width="stretch", hide_index=True)
+
+    st.subheader("MM Structure Contribution Analysis")
+    if contribution_analysis.empty:
+        st.warning(f"N/A: missing contribution analysis: {MM_STRUCTURE_CONTRIBUTION_ANALYSIS_PATH}")
+    else:
+        st.dataframe(format_lifecycle_table(contribution_analysis), width="stretch", hide_index=True)
+
+    st.subheader("Long / Short / Net Lead-Lag Summary")
+    if lead_lag.empty:
+        st.warning(f"N/A: missing structure lead-lag data: {MM_STRUCTURE_LEAD_LAG_PATH}")
+    else:
+        c1, c2 = st.columns(2)
+        features = ["All", *sorted(lead_lag["mm_feature"].dropna().astype(str).unique())]
+        horizons = ["All", *sorted(lead_lag["gold_horizon"].dropna().astype(str).unique())]
+        selected_feature = c1.selectbox("Structure feature", features)
+        selected_horizon = c2.selectbox("Following return horizon", horizons)
+        filtered = lead_lag.copy()
+        if selected_feature != "All":
+            filtered = filtered[filtered["mm_feature"].astype(str) == selected_feature]
+        if selected_horizon != "All":
+            filtered = filtered[filtered["gold_horizon"].astype(str) == selected_horizon]
+        filtered = filtered.assign(abs_rank=filtered["rank_correlation"].abs()).sort_values(
+            "abs_rank", ascending=False
+        )
+        preferred = [
+            "mm_feature",
+            "gold_horizon",
+            "lag_weeks",
+            "correlation",
+            "rank_correlation",
+            "sample_count",
+            "interpretation",
+        ]
+        st.dataframe(format_lifecycle_table(filtered[preferred].head(40)), width="stretch", hide_index=True)
+
+    st.subheader("MM Structure Lifecycle Summary Markdown")
+    summary = load_mm_structure_summary()
+    if summary == "N/A":
+        st.warning(f"N/A: missing structure summary: {MM_STRUCTURE_SUMMARY_PATH}")
+    else:
+        st.markdown(summary)
+
+
 def page_update_log() -> None:
     st.header("Update Log")
     render_research_banner()
@@ -2631,6 +2845,7 @@ def main() -> None:
             "Percentile Definition Audit",
             "MM Definition Audit",
             "MM Lifecycle Research",
+            "MM Structure Lifecycle",
             "Historical Similarity Engine",
             "Update Log",
         ],
@@ -2659,6 +2874,8 @@ def main() -> None:
         page_mm_definition_audit()
     elif page == "MM Lifecycle Research":
         page_mm_lifecycle_research()
+    elif page == "MM Structure Lifecycle":
+        page_mm_structure_lifecycle()
     elif page == "Historical Similarity Engine":
         page_historical_similarity_engine(
             historical_similarity_report,

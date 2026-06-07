@@ -25,7 +25,7 @@
     "gold_price_source": "COMEX GC futures proxy via Yahoo Finance GC=F",
     "scope": "historical statistics / research reference only"
   },
-  "last_update_time": "2026-06-06T19:00:34.584715+00:00",
+  "last_update_time": "2026-06-07T00:48:10.390495+00:00",
   "dashboard_url": "https://square1005.github.io/ghpr-online-dashboard/",
   "mm_lifecycle_state": "MM_ACCUMULATION",
   "mm_velocity_8w": 0.070513,
@@ -48,5 +48,21 @@
     "net_research_candidate": "26W",
     "status": "research_candidate_not_replaced",
     "scope": "historical research definition layer only"
+  },
+  "velocity_reading_layer": {
+    "date": "2026-05-26",
+    "long_baseline_8w": 0.108974,
+    "long_candidate_26w": -0.108974,
+    "long_alignment_status": "BASELINE_POSITIVE_CANDIDATE_NEGATIVE",
+    "short_baseline_8w": -0.025641,
+    "short_candidate_2w": -0.070513,
+    "short_candidate_4w": -0.153846,
+    "short_candidate_fast_avg": -0.112179,
+    "short_alignment_status": "SAME_DIRECTION_NEGATIVE",
+    "net_baseline_8w": 0.070513,
+    "net_candidate_26w": -0.147436,
+    "net_alignment_status": "BASELINE_POSITIVE_CANDIDATE_NEGATIVE",
+    "overall_velocity_reading": "MEDIUM_TERM_STRUCTURE_WEAKENING",
+    "note": "historical structure research only; not a trading signal"
   }
 }

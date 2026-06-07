@@ -22,6 +22,7 @@ HSE_STATS_PATH = PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_s
 MM_LIFECYCLE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_lifecycle_dataset.csv"
 MM_LIFECYCLE_LEAD_LAG_PATH = PROJECT_ROOT / "outputs" / "reports" / "mm_lifecycle_lead_lag.csv"
 MM_STRUCTURE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_structure_lifecycle_dataset.csv"
+MM_VELOCITY_READING_LAYER_PATH = PROJECT_ROOT / "data" / "processed" / "mm_velocity_reading_layer.csv"
 HUB_SUMMARY_PATH = PROJECT_ROOT / "outputs" / "reports" / "ghpr_summary_for_hub.json"
 DASHBOARD_URL = "https://square1005.github.io/ghpr-online-dashboard/"
 
@@ -268,6 +269,32 @@ def latest_structure_row(structure: pd.DataFrame) -> pd.Series | None:
     return data.iloc[-1]
 
 
+def latest_velocity_reading_row(reading: pd.DataFrame) -> pd.Series | None:
+    required = [
+        "date",
+        "long_baseline_8w",
+        "long_candidate_26w",
+        "long_alignment_status",
+        "short_baseline_8w",
+        "short_candidate_2w",
+        "short_candidate_4w",
+        "short_candidate_fast_avg",
+        "short_alignment_status",
+        "net_baseline_8w",
+        "net_candidate_26w",
+        "net_alignment_status",
+        "overall_velocity_reading",
+    ]
+    if reading.empty or any(column not in reading.columns for column in required):
+        return None
+    data = reading.copy()
+    data["date"] = pd.to_datetime(data["date"], errors="coerce")
+    data = data.dropna(subset=["date"]).sort_values("date")
+    if data.empty:
+        return None
+    return data.iloc[-1]
+
+
 def build_structure_note(row: pd.Series | None) -> str | None:
     if row is None:
         return None
@@ -303,6 +330,27 @@ def velocity_window_review_metadata() -> dict[str, str]:
     }
 
 
+def velocity_reading_layer_metadata(row: pd.Series | None) -> dict[str, Any] | None:
+    if row is None:
+        return None
+    return {
+        "date": json_value(row.get("date")),
+        "long_baseline_8w": json_value(row.get("long_baseline_8w"), 6),
+        "long_candidate_26w": json_value(row.get("long_candidate_26w"), 6),
+        "long_alignment_status": json_value(row.get("long_alignment_status")),
+        "short_baseline_8w": json_value(row.get("short_baseline_8w"), 6),
+        "short_candidate_2w": json_value(row.get("short_candidate_2w"), 6),
+        "short_candidate_4w": json_value(row.get("short_candidate_4w"), 6),
+        "short_candidate_fast_avg": json_value(row.get("short_candidate_fast_avg"), 6),
+        "short_alignment_status": json_value(row.get("short_alignment_status")),
+        "net_baseline_8w": json_value(row.get("net_baseline_8w"), 6),
+        "net_candidate_26w": json_value(row.get("net_candidate_26w"), 6),
+        "net_alignment_status": json_value(row.get("net_alignment_status")),
+        "overall_velocity_reading": json_value(row.get("overall_velocity_reading")),
+        "note": "historical structure research only; not a trading signal",
+    }
+
+
 def build_lifecycle_lead_lag_note(lead_lag: pd.DataFrame) -> str | None:
     required = ["mm_feature", "lag_weeks", "rank_correlation", "interpretation"]
     if lead_lag.empty or any(column not in lead_lag.columns for column in required):
@@ -332,9 +380,11 @@ def build_hub_summary() -> dict[str, Any]:
     lifecycle = read_csv_or_empty(MM_LIFECYCLE_DATASET_PATH)
     lifecycle_lead_lag = read_csv_or_empty(MM_LIFECYCLE_LEAD_LAG_PATH)
     structure = read_csv_or_empty(MM_STRUCTURE_DATASET_PATH)
+    velocity_reading = read_csv_or_empty(MM_VELOCITY_READING_LAYER_PATH)
     top20 = top20_stats_row(stats)
     latest_lifecycle = latest_lifecycle_row(lifecycle)
     latest_structure = latest_structure_row(structure)
+    latest_velocity_reading = latest_velocity_reading_row(velocity_reading)
 
     mm_percentile = percent_points(latest.get("mm_net_percentile_156w"))
     producer_percentile = percent_points(latest.get("producer_net_percentile_156w"))
@@ -394,6 +444,7 @@ def build_hub_summary() -> dict[str, Any]:
         ),
         "mm_structure_note": build_structure_note(latest_structure),
         "velocity_window_review": velocity_window_review_metadata(),
+        "velocity_reading_layer": velocity_reading_layer_metadata(latest_velocity_reading),
     }
     return summary
 

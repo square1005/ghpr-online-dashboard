@@ -83,6 +83,12 @@ MM_VELOCITY_WINDOW_SUMMARY_PATH = (
 MM_VELOCITY_WINDOW_REVIEW_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "mm_velocity_window_review.md"
 )
+MM_VELOCITY_READING_LAYER_PATH = (
+    PROJECT_ROOT / "data" / "processed" / "mm_velocity_reading_layer.csv"
+)
+MM_VELOCITY_READING_REPORT_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_velocity_reading_layer.md"
+)
 HISTORICAL_SIMILARITY_REPORT_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_report.csv"
 )
@@ -240,6 +246,21 @@ VELOCITY_WINDOW_DEFINITION_ROWS = [
         "Research Candidate": "26W",
         "Interpretation": "綜合中期資金週期",
     },
+]
+VELOCITY_READING_SNAPSHOT_COLUMNS = [
+    "date",
+    "long_baseline_8w",
+    "long_candidate_26w",
+    "long_alignment_status",
+    "short_baseline_8w",
+    "short_candidate_2w",
+    "short_candidate_4w",
+    "short_candidate_fast_avg",
+    "short_alignment_status",
+    "net_baseline_8w",
+    "net_candidate_26w",
+    "net_alignment_status",
+    "overall_velocity_reading",
 ]
 TEXT_COLUMNS = {
     "gold_price_source",
@@ -602,6 +623,33 @@ def load_mm_velocity_window_review() -> str:
     if not MM_VELOCITY_WINDOW_REVIEW_PATH.exists():
         return "N/A"
     return MM_VELOCITY_WINDOW_REVIEW_PATH.read_text(encoding="utf-8", errors="replace")
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_velocity_reading_layer() -> pd.DataFrame:
+    if not MM_VELOCITY_READING_LAYER_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_VELOCITY_READING_LAYER_PATH)
+    if "date" in frame.columns:
+        frame["date"] = pd.to_datetime(frame["date"], errors="coerce")
+    text_columns = {
+        "long_alignment_status",
+        "short_alignment_status",
+        "net_alignment_status",
+        "overall_velocity_reading",
+        "mm_structure_state",
+    }
+    for column in frame.columns:
+        if column != "date" and column not in text_columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame.sort_values("date").reset_index(drop=True) if "date" in frame.columns else frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_velocity_reading_report() -> str:
+    if not MM_VELOCITY_READING_REPORT_PATH.exists():
+        return "N/A"
+    return MM_VELOCITY_READING_REPORT_PATH.read_text(encoding="utf-8", errors="replace")
 
 
 @st.cache_data(show_spinner=False)
@@ -2389,6 +2437,18 @@ PLOTLY_STRUCTURE_CONFIG = {
     },
 }
 
+PLOTLY_VELOCITY_READING_CONFIG = {
+    "displayModeBar": True,
+    "displaylogo": False,
+    "scrollZoom": True,
+    "modeBarButtonsToAdd": ["select2d"],
+    "toImageButtonOptions": {
+        "format": "png",
+        "filename": "ghpr_mm_velocity_reading_layer",
+        "scale": 2,
+    },
+}
+
 
 def lifecycle_plot_frame(lifecycle: pd.DataFrame) -> pd.DataFrame:
     required = [
@@ -2697,6 +2757,208 @@ def build_interactive_structure_velocity_chart(structure: pd.DataFrame) -> go.Fi
         legend={"orientation": "h", "y": 1.08, "x": 0},
         xaxis=lifecycle_range_controls(),
         yaxis={"title": "Percentile point change"},
+    )
+    return fig
+
+
+def format_velocity_reading_table(frame: pd.DataFrame) -> pd.DataFrame:
+    if frame.empty:
+        return frame
+    display = frame.copy()
+    for column in display.columns:
+        if column == "date":
+            display[column] = display[column].map(lambda value: fmt_date(value))
+        elif column == "gold_close":
+            display[column] = display[column].map(lambda value: fmt_number(value, digits=2))
+        elif column.endswith("_8w") or column.endswith("_26w") or column.endswith("_2w") or column.endswith("_4w") or "delta" in column or "fast_avg" in column:
+            display[column] = display[column].map(
+                lambda value: "N/A" if pd.isna(value) else f"{float(value) * 100:.2f} pct points"
+            )
+    return display
+
+
+def velocity_reading_description(reading: object) -> str:
+    descriptions = {
+        "MEDIUM_TERM_PARTICIPATION_BUILDING": (
+            "Long 26W and Net 26W are both above zero, so the medium-term historical structure "
+            "is showing participation building."
+        ),
+        "SHORT_TERM_ONLY_REACTION": (
+            "The fast Short window is active while Long 26W and Net 26W are near zero. "
+            "This is mainly a short-term structure reading."
+        ),
+        "SHORT_TERM_RECOVERY_MEDIUM_TERM_UNCONFIRMED": (
+            "The 8W baseline has moved above zero, but the 26W candidate has not aligned. "
+            "The swing reading is not yet confirmed by the medium-term candidate window."
+        ),
+        "MEDIUM_TERM_STRUCTURE_WEAKENING": (
+            "Long 26W and Net 26W are both below zero, so the medium-term historical structure "
+            "is showing participation easing."
+        ),
+        "MIXED_STRUCTURE": (
+            "Long, Short, and Net readings are mixed or incomplete. Treat this as a research "
+            "context state rather than a directional conclusion."
+        ),
+    }
+    return descriptions.get(str(reading), "N/A: no reading description available.")
+
+
+def velocity_reading_plot_frame(reading: pd.DataFrame) -> pd.DataFrame:
+    required = [
+        "date",
+        "gold_close",
+        "long_baseline_8w",
+        "long_candidate_26w",
+        "long_baseline_candidate_delta",
+        "short_baseline_8w",
+        "short_candidate_2w",
+        "short_candidate_4w",
+        "short_candidate_fast_avg",
+        "short_baseline_candidate_delta",
+        "net_baseline_8w",
+        "net_candidate_26w",
+        "net_baseline_candidate_delta",
+        "long_alignment_status",
+        "short_alignment_status",
+        "net_alignment_status",
+        "overall_velocity_reading",
+    ]
+    missing = missing_columns(reading, required)
+    if missing:
+        raise ValueError("Missing velocity reading columns: " + ", ".join(missing))
+    frame = reading[required].copy().dropna(subset=["date"])
+    if frame.empty:
+        raise ValueError("No valid velocity reading rows for interactive chart.")
+    numeric_columns = [
+        "long_baseline_8w",
+        "long_candidate_26w",
+        "long_baseline_candidate_delta",
+        "short_baseline_8w",
+        "short_candidate_2w",
+        "short_candidate_4w",
+        "short_candidate_fast_avg",
+        "short_baseline_candidate_delta",
+        "net_baseline_8w",
+        "net_candidate_26w",
+        "net_baseline_candidate_delta",
+    ]
+    for column in numeric_columns:
+        frame[f"{column}_pct_points"] = pd.to_numeric(frame[column], errors="coerce") * 100
+    return frame
+
+
+def velocity_reading_customdata(frame: pd.DataFrame) -> pd.DataFrame:
+    return frame[
+        [
+            "gold_close",
+            "long_baseline_8w_pct_points",
+            "long_candidate_26w_pct_points",
+            "long_baseline_candidate_delta_pct_points",
+            "short_baseline_8w_pct_points",
+            "short_candidate_2w_pct_points",
+            "short_candidate_4w_pct_points",
+            "short_candidate_fast_avg_pct_points",
+            "short_baseline_candidate_delta_pct_points",
+            "net_baseline_8w_pct_points",
+            "net_candidate_26w_pct_points",
+            "net_baseline_candidate_delta_pct_points",
+            "long_alignment_status",
+            "short_alignment_status",
+            "net_alignment_status",
+            "overall_velocity_reading",
+        ]
+    ]
+
+
+def velocity_reading_hover_template(trace_name: str) -> str:
+    return (
+        "Date: %{x|%Y-%m-%d}<br>"
+        "gold_close: %{customdata[0]:,.2f}<br>"
+        "long_baseline_8w: %{customdata[1]:.2f} pct points<br>"
+        "long_candidate_26w: %{customdata[2]:.2f} pct points<br>"
+        "long_delta: %{customdata[3]:.2f} pct points<br>"
+        "short_baseline_8w: %{customdata[4]:.2f} pct points<br>"
+        "short_candidate_2w: %{customdata[5]:.2f} pct points<br>"
+        "short_candidate_4w: %{customdata[6]:.2f} pct points<br>"
+        "short_candidate_fast_avg: %{customdata[7]:.2f} pct points<br>"
+        "short_delta: %{customdata[8]:.2f} pct points<br>"
+        "net_baseline_8w: %{customdata[9]:.2f} pct points<br>"
+        "net_candidate_26w: %{customdata[10]:.2f} pct points<br>"
+        "net_delta: %{customdata[11]:.2f} pct points<br>"
+        "long_status: %{customdata[12]}<br>"
+        "short_status: %{customdata[13]}<br>"
+        "net_status: %{customdata[14]}<br>"
+        "overall_reading: %{customdata[15]}<extra>" + trace_name + "</extra>"
+    )
+
+
+def build_interactive_velocity_baseline_candidate_chart(reading: pd.DataFrame) -> go.Figure:
+    frame = velocity_reading_plot_frame(reading)
+    customdata = velocity_reading_customdata(frame).to_numpy()
+    fig = go.Figure()
+    for name, column, color, dash in [
+        ("Long 8W baseline", "long_baseline_8w_pct_points", "#16a34a", "solid"),
+        ("Long 26W candidate", "long_candidate_26w_pct_points", "#166534", "dash"),
+        ("Short 8W baseline", "short_baseline_8w_pct_points", "#ef4444", "solid"),
+        ("Short 2W / 4W average", "short_candidate_fast_avg_pct_points", "#991b1b", "dash"),
+        ("Net 8W baseline", "net_baseline_8w_pct_points", "#2563eb", "solid"),
+        ("Net 26W candidate", "net_candidate_26w_pct_points", "#1e3a8a", "dash"),
+    ]:
+        fig.add_trace(
+            go.Scatter(
+                x=frame["date"],
+                y=frame[column],
+                mode="lines",
+                name=name,
+                line={"color": color, "width": 2, "dash": dash},
+                customdata=customdata,
+                hovertemplate=velocity_reading_hover_template(name),
+            )
+        )
+    fig.add_hline(y=0, line_color="#111827", line_width=1)
+    fig.update_layout(
+        title="Interactive Velocity Baseline vs Candidate",
+        height=500,
+        margin={"l": 40, "r": 40, "t": 58, "b": 35},
+        hovermode="x unified",
+        dragmode="pan",
+        legend={"orientation": "h", "y": 1.10, "x": 0},
+        xaxis=lifecycle_range_controls(),
+        yaxis={"title": "Percentile point change"},
+    )
+    return fig
+
+
+def build_interactive_velocity_delta_chart(reading: pd.DataFrame) -> go.Figure:
+    frame = velocity_reading_plot_frame(reading)
+    customdata = velocity_reading_customdata(frame).to_numpy()
+    fig = go.Figure()
+    for name, column, color in [
+        ("Long baseline - candidate", "long_baseline_candidate_delta_pct_points", "#16a34a"),
+        ("Short baseline - candidate", "short_baseline_candidate_delta_pct_points", "#ef4444"),
+        ("Net baseline - candidate", "net_baseline_candidate_delta_pct_points", "#2563eb"),
+    ]:
+        fig.add_trace(
+            go.Scatter(
+                x=frame["date"],
+                y=frame[column],
+                mode="lines",
+                name=name,
+                line={"color": color, "width": 2},
+                customdata=customdata,
+                hovertemplate=velocity_reading_hover_template(name),
+            )
+        )
+    fig.add_hline(y=0, line_color="#111827", line_width=1)
+    fig.update_layout(
+        title="Interactive Velocity Delta",
+        height=420,
+        margin={"l": 40, "r": 40, "t": 58, "b": 35},
+        hovermode="x unified",
+        dragmode="pan",
+        legend={"orientation": "h", "y": 1.10, "x": 0},
+        xaxis=lifecycle_range_controls(),
+        yaxis={"title": "Baseline minus candidate, pct points"},
     )
     return fig
 
@@ -3153,6 +3415,113 @@ def page_mm_velocity_window_discovery() -> None:
         "Historical Structure Research only. This page compares MM Long / Short / Net velocity windows "
         "without replacing the current 8W definition on the dashboard."
     )
+
+    reading = load_mm_velocity_reading_layer()
+    st.subheader("Velocity Reading Layer")
+    st.caption(
+        "This layer compares the current 8W baseline with research candidate windows. "
+        "Historical structure research only."
+    )
+    if reading.empty:
+        st.warning(f"N/A: missing velocity reading layer dataset: {MM_VELOCITY_READING_LAYER_PATH}")
+    else:
+        if "date" not in reading.columns:
+            st.warning("N/A: missing velocity reading columns: date")
+            latest_reading = pd.DataFrame()
+        else:
+            latest_reading = reading.dropna(subset=["date"]).sort_values("date").tail(1)
+        snapshot_columns = [
+            column for column in VELOCITY_READING_SNAPSHOT_COLUMNS if column in latest_reading.columns
+        ]
+        missing_snapshot = [
+            column for column in VELOCITY_READING_SNAPSHOT_COLUMNS if column not in reading.columns
+        ]
+        if missing_snapshot:
+            st.warning("N/A: missing velocity reading columns: " + ", ".join(missing_snapshot))
+        if snapshot_columns:
+            st.subheader("Current Velocity Reading Snapshot")
+            st.dataframe(
+                format_velocity_reading_table(latest_reading[snapshot_columns]),
+                width="stretch",
+                hide_index=True,
+            )
+
+        latest_row = latest_reading.iloc[0] if not latest_reading.empty else None
+        card_cols = st.columns(3)
+        reading_cards = [
+            {
+                "title": "Long Velocity Reading",
+                "baseline": "8W",
+                "candidate": "26W",
+                "status": "long_alignment_status",
+                "explanation": (
+                    "Long 8W shows the current swing movement. Long 26W shows the medium-term "
+                    "positioning lifecycle candidate."
+                ),
+            },
+            {
+                "title": "Short Velocity Reading",
+                "baseline": "8W",
+                "candidate": "2W / 4W",
+                "status": "short_alignment_status",
+                "explanation": (
+                    "Short 2W / 4W tracks faster event reaction, stress, or covering-window movement."
+                ),
+            },
+            {
+                "title": "Net Velocity Reading",
+                "baseline": "8W",
+                "candidate": "26W",
+                "status": "net_alignment_status",
+                "explanation": (
+                    "Net 26W checks whether Long and Short component movement is visible in the "
+                    "medium-term net structure."
+                ),
+            },
+        ]
+        for column, card in zip(card_cols, reading_cards):
+            status_value = "N/A" if latest_row is None else latest_row.get(card["status"], "N/A")
+            with column.container(border=True):
+                st.markdown(f"**{card['title']}**")
+                st.metric("Current Baseline", card["baseline"])
+                st.metric("Research Candidate", card["candidate"])
+                st.markdown(f"**Status:** `{status_value}`")
+                st.markdown(card["explanation"])
+
+        st.subheader("Current Historical Structure Reading")
+        if latest_row is None:
+            st.info("N/A: no current velocity reading row available.")
+        else:
+            overall = latest_row.get("overall_velocity_reading", "N/A")
+            st.info(f"`{overall}`\n\n{velocity_reading_description(overall)}")
+            st.caption("Historical structure research only. Not a trading signal. Not financial advice.")
+
+        st.subheader("Interactive Velocity Baseline vs Candidate")
+        try:
+            st.plotly_chart(
+                build_interactive_velocity_baseline_candidate_chart(reading),
+                config=PLOTLY_VELOCITY_READING_CONFIG,
+                width="stretch",
+            )
+        except Exception as error:
+            st.warning(f"N/A: unable to render velocity baseline/candidate chart: {error}")
+
+        st.subheader("Interactive Velocity Delta")
+        try:
+            st.plotly_chart(
+                build_interactive_velocity_delta_chart(reading),
+                config=PLOTLY_VELOCITY_READING_CONFIG,
+                width="stretch",
+            )
+        except Exception as error:
+            st.warning(f"N/A: unable to render velocity delta chart: {error}")
+
+        st.subheader("MM Velocity Reading Layer Markdown")
+        reading_report = load_mm_velocity_reading_report()
+        if reading_report == "N/A":
+            st.warning(f"N/A: missing velocity reading layer report: {MM_VELOCITY_READING_REPORT_PATH}")
+        else:
+            st.markdown(reading_report)
 
     st.subheader("Velocity Window Review")
     st.caption(

@@ -33,6 +33,7 @@ Thumbs.db
 data/raw/**
 !data/raw/**/
 !data/raw/**/.gitkeep
+!data/raw/cot/fut_disagg_txt_current.csv
 
 # Keep deployable research outputs tracked
 !data/processed/

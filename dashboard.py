@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from datetime import datetime
 from pathlib import Path
 
@@ -23,7 +24,13 @@ from src.historical_similarity_engine import (
     build_historical_similarity_stats,
     compute_current_similarity,
 )
-from src.update_pipeline import UPDATE_LOG_PATH, run_update_pipeline
+from src.update_pipeline import (
+    UPDATE_LOG_PATH,
+    build_freshness_status,
+    latest_cftc_available_date_from_current_file,
+    latest_dataset_date,
+    run_update_pipeline,
+)
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -94,6 +101,10 @@ HISTORICAL_SIMILARITY_REPORT_PATH = (
 )
 HISTORICAL_SIMILARITY_STATS_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_stats.csv"
+)
+HUB_SUMMARY_PATH = PROJECT_ROOT / "outputs" / "reports" / "ghpr_summary_for_hub.json"
+DATA_FRESHNESS_DIAGNOSTICS_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "data_freshness_diagnostics.json"
 )
 HISTORICAL_SIMILARITY_CASES_CHART_PATH = (
     PROJECT_ROOT / "outputs" / "charts" / "historical_similarity_cases.png"
@@ -332,6 +343,26 @@ def load_historical_similarity_stats() -> pd.DataFrame:
         if column != "group":
             frame[column] = pd.to_numeric(frame[column], errors="coerce")
     return frame
+
+
+@st.cache_data(show_spinner=False)
+def load_hub_summary() -> dict:
+    if not HUB_SUMMARY_PATH.exists():
+        return {}
+    try:
+        return json.loads(HUB_SUMMARY_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+@st.cache_data(show_spinner=False)
+def load_data_freshness_diagnostics() -> dict:
+    if not DATA_FRESHNESS_DIAGNOSTICS_PATH.exists():
+        return {}
+    try:
+        return json.loads(DATA_FRESHNESS_DIAGNOSTICS_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
 
 
 @st.cache_data(show_spinner=False)
@@ -1016,23 +1047,65 @@ def render_how_to_read_dashboard() -> None:
         st.markdown(f"**{label}：** {body}")
 
 
-def render_current_market_snapshot(latest: pd.Series) -> None:
+def summary_or_latest(summary: dict, summary_key: str, latest: pd.Series, latest_key: str) -> object:
+    value = summary.get(summary_key)
+    if value is not None:
+        return value
+    return latest.get(latest_key)
+
+
+def fmt_snapshot_percent(summary: dict, summary_key: str, latest: pd.Series, latest_key: str) -> str:
+    value = summary.get(summary_key)
+    if value is not None:
+        return fmt_percent(value, input_scale="points")
+    return fmt_percent(latest.get(latest_key), input_scale="fraction")
+
+
+def render_current_market_snapshot(
+    latest: pd.Series,
+    hub_summary: dict,
+    diagnostics: dict,
+) -> None:
     st.subheader("Current Market Snapshot")
-    state = market_state(latest.get(MM_FACTOR), latest.get("oi_percentile_156w"))
+    state = hub_summary.get("market_state") or market_state(
+        latest.get(MM_FACTOR),
+        latest.get("oi_percentile_156w"),
+    )
 
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Date", fmt_date(latest.get("date")))
-    c2.metric("Gold Close", fmt_number(latest.get("gold_close")))
+    c1.metric("Date", fmt_date(summary_or_latest(hub_summary, "date", latest, "date")))
+    c2.metric("Gold Close", fmt_number(summary_or_latest(hub_summary, "gold_close", latest, "gold_close")))
     c3.metric("Market State", state)
     c4.metric("MM Net", fmt_int(latest.get("mm_net")))
 
     c1, c2, c3 = st.columns(3)
-    c1.metric("MM Percentile", fmt_percent(latest.get(MM_FACTOR), input_scale="fraction"))
+    c1.metric("MM Percentile", fmt_snapshot_percent(hub_summary, "mm_percentile", latest, MM_FACTOR))
     c2.metric(
         "Producer Percentile",
-        fmt_percent(latest.get("producer_net_percentile_156w"), input_scale="fraction"),
+        fmt_snapshot_percent(
+            hub_summary,
+            "producer_percentile",
+            latest,
+            "producer_net_percentile_156w",
+        ),
     )
-    c3.metric("OI Percentile", fmt_percent(latest.get("oi_percentile_156w"), input_scale="fraction"))
+    c3.metric(
+        "OI Percentile",
+        fmt_snapshot_percent(hub_summary, "oi_percentile", latest, "oi_percentile_156w"),
+    )
+
+    master_date = fmt_date(latest.get("date"))
+    hub_date = fmt_date(hub_summary.get("date")) if hub_summary else "N/A"
+    diagnostics_status = diagnostics.get("overall_status") or hub_summary.get(
+        "data_health",
+        {},
+    ).get("overall_freshness_status")
+    st.caption(
+        f"hub date: `{hub_date}` | master latest date: `{master_date}` | "
+        f"data freshness status: `{diagnostics_status or 'N/A'}`"
+    )
+    if hub_summary and hub_date != "N/A" and master_date != "N/A" and hub_date != master_date:
+        st.warning("Dashboard summary 尚未同步到最新 master dataset，請重新執行完整更新。")
 
 
 def render_historical_positioning_explanation(latest: pd.Series) -> None:
@@ -1232,6 +1305,103 @@ def render_data_health(latest_row: pd.Series | None) -> None:
     st.dataframe(pd.DataFrame([build_data_health(latest_row)]), width="stretch", hide_index=True)
 
 
+def diagnostics_component_map(diagnostics: dict) -> dict[str, dict]:
+    components = diagnostics.get("components") if isinstance(diagnostics, dict) else None
+    if not isinstance(components, list):
+        return {}
+    return {
+        str(component.get("component")): component
+        for component in components
+        if isinstance(component, dict) and component.get("component")
+    }
+
+
+def component_date_from_sources(
+    component_name: str,
+    component_map: dict[str, dict],
+    hub_summary: dict,
+) -> str:
+    component = component_map.get(component_name, {})
+    if component.get("latest_date"):
+        return str(component["latest_date"])
+    component_dates = hub_summary.get("data_health", {}).get("component_dates", {})
+    if isinstance(component_dates, dict) and component_dates.get(component_name):
+        return str(component_dates[component_name])
+    return "N/A"
+
+
+def dashboard_freshness_status(
+    master_date: str,
+    hub_date: str,
+    diagnostics: dict,
+    hub_summary: dict,
+) -> str:
+    diagnostics_status = diagnostics.get("overall_status") if isinstance(diagnostics, dict) else None
+    if diagnostics_status:
+        return str(diagnostics_status)
+    hub_status = hub_summary.get("data_health", {}).get("overall_freshness_status")
+    if hub_status:
+        return str(hub_status)
+    if master_date == "N/A" or hub_date == "N/A":
+        return "ERROR"
+    if master_date != hub_date:
+        return "STALE"
+    return "OK"
+
+
+def render_dashboard_data_freshness(
+    master: pd.DataFrame,
+    hub_summary: dict,
+    diagnostics: dict,
+) -> None:
+    st.subheader("Data Freshness")
+    latest = latest_row(master)
+    master_date = fmt_date(latest.get("date")) if latest is not None else "N/A"
+    hub_date = fmt_date(hub_summary.get("date")) if hub_summary else "N/A"
+    component_map = diagnostics_component_map(diagnostics)
+    status = dashboard_freshness_status(master_date, hub_date, diagnostics, hub_summary)
+
+    rows = [
+        {"Source": "Master Dataset Date", "Latest Date": master_date},
+        {"Source": "Hub Summary Date", "Latest Date": hub_date},
+        {
+            "Source": "HSE Date",
+            "Latest Date": component_date_from_sources(
+                "historical_similarity",
+                component_map,
+                hub_summary,
+            ),
+        },
+        {
+            "Source": "MM Lifecycle Date",
+            "Latest Date": component_date_from_sources("mm_lifecycle", component_map, hub_summary),
+        },
+        {
+            "Source": "MM Structure Date",
+            "Latest Date": component_date_from_sources("mm_structure", component_map, hub_summary),
+        },
+        {
+            "Source": "Velocity Reading Date",
+            "Latest Date": component_date_from_sources("velocity_reading", component_map, hub_summary),
+        },
+        {"Source": "Overall Freshness Status", "Latest Date": status},
+    ]
+    st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
+
+    stale_components = diagnostics.get("stale_components") or hub_summary.get(
+        "data_health",
+        {},
+    ).get("stale_components", [])
+    if status == "OK":
+        st.success("Data freshness OK: all tracked modules match the master dataset date.")
+    elif status == "STALE":
+        st.warning("Dashboard summary 尚未同步到最新 master dataset，請重新執行完整更新。")
+    elif status == "PARTIAL_STALE":
+        st.warning("Some modules are stale: " + ", ".join(map(str, stale_components)))
+    else:
+        st.error("Data freshness check has missing or unreadable files.")
+
+
 def render_how_to_use_ghpr() -> None:
     st.subheader("如何使用 GHPR")
     st.markdown(
@@ -1290,6 +1460,28 @@ def build_update_failure_summary(result: object) -> dict[str, str]:
     }
 
 
+def build_update_freshness_summary(result: object | None = None) -> dict[str, object]:
+    if result is not None:
+        return {
+            "mode": getattr(result, "mode", "N/A"),
+            "latest_dataset_date": getattr(result, "latest_dataset_date_after", None) or "N/A",
+            "latest_cftc_available_date": getattr(result, "latest_cftc_available_date", None) or "N/A",
+            "data_is_current": bool(getattr(result, "data_is_current", False)),
+            "stale_reason": getattr(result, "stale_reason", "") or "N/A",
+        }
+
+    dataset_date = latest_dataset_date()
+    cftc_date = latest_cftc_available_date_from_current_file()
+    data_is_current, stale_reason = build_freshness_status(dataset_date, cftc_date)
+    return {
+        "mode": "N/A",
+        "latest_dataset_date": dataset_date or "N/A",
+        "latest_cftc_available_date": cftc_date or "N/A",
+        "data_is_current": data_is_current,
+        "stale_reason": stale_reason or "N/A",
+    }
+
+
 def render_update_failure_summary(summary: dict[str, str]) -> None:
     with st.sidebar.expander("Update failure details", expanded=True):
         st.markdown(f"**Failed step:** `{summary.get('failed_step', 'N/A')}`")
@@ -1300,6 +1492,18 @@ def render_update_failure_summary(summary: dict[str, str]) -> None:
         st.code(summary.get("stderr", "N/A"), language="text")
         st.markdown("**Update log path**")
         st.code(summary.get("update_log_path", "N/A"), language="text")
+
+
+def render_freshness_summary(summary: dict[str, object]) -> None:
+    st.sidebar.caption("Data freshness")
+    st.sidebar.write(f"latest_dataset_date: `{summary.get('latest_dataset_date', 'N/A')}`")
+    st.sidebar.write(f"latest_cftc_available_date: `{summary.get('latest_cftc_available_date', 'N/A')}`")
+    st.sidebar.write(f"data_is_current: `{str(summary.get('data_is_current', False)).lower()}`")
+    if summary.get("data_is_current"):
+        st.sidebar.success("Data is current with the latest available CFTC date.")
+    else:
+        st.sidebar.warning("資料尚未更新到最新 CFTC 報告日期。")
+        st.sidebar.caption(str(summary.get("stale_reason", "N/A")))
 
 
 def render_update_controls() -> None:
@@ -1315,20 +1519,39 @@ For stable production data, refresh locally/VPS, commit updated data and outputs
 若要穩定保存資料，建議在本機或 VPS 更新後，將 data/ 與 outputs/ 提交回 GitHub。
 """
     )
-    if st.sidebar.button("一鍵更新 GHPR 資料", width="stretch"):
-        with st.spinner("Running GHPR update pipeline..."):
-            result = run_update_pipeline(no_download=True)
+
+    if st.sidebar.button("快速重建本地資料", width="stretch"):
+        st.sidebar.caption("不下載新 COT，只用目前本地資料重算報告與圖表。")
+        with st.spinner("Rebuilding GHPR outputs from local data..."):
+            result = run_update_pipeline(mode="local")
             st.cache_data.clear()
         st.session_state["last_update_status"] = result.status_text
+        st.session_state["last_update_mode"] = result.mode
         st.session_state["last_update_log"] = str(result.log_path)
         st.session_state["last_update_error"] = result.error_message
+        st.session_state["last_update_freshness"] = build_update_freshness_summary(result)
+        st.session_state["last_update_failure_summary"] = (
+            build_update_failure_summary(result) if not result.success else None
+        )
+
+    if st.sidebar.button("完整更新最新資料", width="stretch"):
+        st.sidebar.caption("嘗試下載最新 CFTC / Gold price，再重建報告與圖表。")
+        with st.spinner("Running full GHPR data refresh..."):
+            result = run_update_pipeline(mode="full")
+            st.cache_data.clear()
+        st.session_state["last_update_status"] = result.status_text
+        st.session_state["last_update_mode"] = result.mode
+        st.session_state["last_update_log"] = str(result.log_path)
+        st.session_state["last_update_error"] = result.error_message
+        st.session_state["last_update_freshness"] = build_update_freshness_summary(result)
         st.session_state["last_update_failure_summary"] = (
             build_update_failure_summary(result) if not result.success else None
         )
 
     status = st.session_state.get("last_update_status")
     if status == "success":
-        st.sidebar.success("Update completed successfully")
+        mode = st.session_state.get("last_update_mode", "N/A")
+        st.sidebar.success(f"Update completed successfully ({mode}). 資料已更新並重新載入。")
     elif status == "fail":
         st.sidebar.error("Update failed")
         error = st.session_state.get("last_update_error")
@@ -1342,6 +1565,9 @@ For stable production data, refresh locally/VPS, commit updated data and outputs
     if log_path:
         st.sidebar.caption(f"Update log: {log_path}")
 
+    render_freshness_summary(
+        st.session_state.get("last_update_freshness") or build_update_freshness_summary()
+    )
 
 def render_sidebar_metadata(master: pd.DataFrame) -> None:
     st.sidebar.subheader("Status")
@@ -1415,6 +1641,8 @@ def page_current_position(
     historical_report: pd.DataFrame,
     historical_stats: pd.DataFrame,
     hse_exclude_recent_weeks: int,
+    hub_summary: dict,
+    diagnostics: dict,
 ) -> None:
     st.header("GHPR Executive Summary")
     st.caption(RESEARCH_WARNING_EN)
@@ -1437,7 +1665,8 @@ def page_current_position(
 
     tendency_summary = build_historical_tendency_summary(latest, historical_stats)
     render_how_to_read_dashboard()
-    render_current_market_snapshot(latest)
+    render_current_market_snapshot(latest, hub_summary, diagnostics)
+    render_dashboard_data_freshness(master, hub_summary, diagnostics)
     render_historical_positioning_explanation(latest)
     render_indicator_dictionary_cards(latest)
 
@@ -1446,7 +1675,6 @@ def page_current_position(
     render_historical_tendency_summary(tendency_summary)
     render_top20_following_explanation(tendency_summary)
     render_not_signal_explanation()
-    render_data_health(latest)
     render_how_to_use_ghpr()
 
     st.subheader("Current Metrics")
@@ -3687,6 +3915,8 @@ def main() -> None:
 
     master = load_master_dataset()
     factor_result = load_factor_dataset()
+    hub_summary = load_hub_summary()
+    data_freshness_diagnostics = load_data_freshness_diagnostics()
 
     render_sidebar_metadata(master)
     hse_exclude_recent_weeks = render_hse_exclusion_control()
@@ -3726,6 +3956,8 @@ def main() -> None:
             historical_similarity_report,
             historical_similarity_stats,
             hse_exclude_recent_weeks,
+            hub_summary,
+            data_freshness_diagnostics,
         )
     elif page == "Historical Database":
         page_historical_database(master)

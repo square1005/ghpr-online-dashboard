@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import os
 import re
 import subprocess
@@ -17,6 +18,9 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPORTS_DIR = PROJECT_ROOT / "outputs" / "reports"
 UPDATE_LOG_PATH = REPORTS_DIR / "update_log.md"
 FALLBACK_LOG_PATH = Path(tempfile.gettempdir()) / "ghpr_outputs" / "reports" / "update_log.md"
+MASTER_PATH = PROJECT_ROOT / "data" / "processed" / "ghpr_master_weekly.csv"
+CURRENT_COT_PATH = PROJECT_ROOT / "data" / "raw" / "cot" / "fut_disagg_txt_current.csv"
+VALID_UPDATE_MODES = {"local", "full"}
 
 
 @dataclass
@@ -39,6 +43,12 @@ class UpdatePipelineResult:
     started_at_utc: datetime
     finished_at_utc: datetime
     log_path: Path
+    mode: str = "local"
+    latest_dataset_date_before: str | None = None
+    latest_dataset_date_after: str | None = None
+    latest_cftc_available_date: str | None = None
+    data_is_current: bool = False
+    stale_reason: str = "not_checked"
     steps: list[UpdateStepResult] = field(default_factory=list)
     error_message: str = ""
 
@@ -51,13 +61,19 @@ class UpdatePipelineResult:
         return next((step for step in self.steps if not step.success), None)
 
 
-def run_update_pipeline(no_download: bool = True) -> UpdatePipelineResult:
+def run_update_pipeline(mode: str = "local", no_download: bool | None = None) -> UpdatePipelineResult:
     """Run all GHPR refresh steps and write a markdown update log."""
+    if no_download is not None:
+        mode = "local" if no_download else "full"
+    if mode not in VALID_UPDATE_MODES:
+        raise ValueError(f"Invalid update mode: {mode}. Expected one of: {sorted(VALID_UPDATE_MODES)}")
+
     started_at = datetime.now(timezone.utc)
     steps: list[UpdateStepResult] = []
     error_message = ""
+    latest_dataset_date_before = latest_dataset_date()
 
-    commands = build_update_commands(no_download=no_download)
+    commands = build_update_commands(mode=mode)
     env = os.environ.copy()
     env["PYTHONUTF8"] = "1"
     env["PYTHONIOENCODING"] = "utf-8:replace"
@@ -111,11 +127,23 @@ def run_update_pipeline(no_download: bool = True) -> UpdatePipelineResult:
             break
 
     finished_at = datetime.now(timezone.utc)
+    latest_dataset_date_after = latest_dataset_date()
+    latest_cftc_available_date = latest_cftc_available_date_from_current_file()
+    data_is_current, stale_reason = build_freshness_status(
+        latest_dataset_date_after,
+        latest_cftc_available_date,
+    )
     pipeline_result = UpdatePipelineResult(
         success=not error_message,
         started_at_utc=started_at,
         finished_at_utc=finished_at,
         log_path=UPDATE_LOG_PATH,
+        mode=mode,
+        latest_dataset_date_before=latest_dataset_date_before,
+        latest_dataset_date_after=latest_dataset_date_after,
+        latest_cftc_available_date=latest_cftc_available_date,
+        data_is_current=data_is_current,
+        stale_reason=stale_reason,
         steps=steps,
         error_message=error_message,
     )
@@ -123,14 +151,18 @@ def run_update_pipeline(no_download: bool = True) -> UpdatePipelineResult:
     return pipeline_result
 
 
-def build_update_commands(no_download: bool = True) -> list[tuple[str, list[str]]]:
+def build_update_commands(mode: str = "local", no_download: bool | None = None) -> list[tuple[str, list[str]]]:
+    if no_download is not None:
+        mode = "local" if no_download else "full"
+    if mode not in VALID_UPDATE_MODES:
+        raise ValueError(f"Invalid update mode: {mode}. Expected one of: {sorted(VALID_UPDATE_MODES)}")
+
     python = sys.executable
     build_master = [python, "src/build_master_dataset.py"]
-    if no_download:
+    if mode == "local":
         build_master.append("--no-download")
 
     return [
-        ("Fetch daily gold OHLC", [python, "src/fetch_gold_daily_ohlc.py"]),
         ("Build master weekly dataset", build_master),
         ("Run single-factor analysis", [python, "src/factor_analysis.py"]),
         ("Regenerate charts", [python, "src/plot_engine.py"]),
@@ -141,7 +173,60 @@ def build_update_commands(no_download: bool = True) -> list[tuple[str, list[str]
         ("Run MM velocity window discovery", [python, "src/mm_velocity_window_discovery.py"]),
         ("Run MM velocity reading layer", [python, "src/mm_velocity_reading_layer.py"]),
         ("Export hub summary", [python, "src/export_hub_summary.py"]),
+        ("Run data freshness diagnostics", [python, "src/data_freshness_diagnostics.py"]),
     ]
+
+
+def latest_dataset_date() -> str | None:
+    if not MASTER_PATH.exists():
+        return None
+    try:
+        import pandas as pd
+
+        frame = pd.read_csv(MASTER_PATH, usecols=["date"])
+        dates = pd.to_datetime(frame["date"], errors="coerce").dropna()
+    except Exception:
+        return None
+    if dates.empty:
+        return None
+    return dates.max().strftime("%Y-%m-%d")
+
+
+def latest_cftc_available_date_from_current_file() -> str | None:
+    if not CURRENT_COT_PATH.exists():
+        return None
+    try:
+        import pandas as pd
+
+        frame = pd.read_csv(
+            CURRENT_COT_PATH,
+            encoding="latin1",
+            usecols=["Report_Date_as_YYYY-MM-DD"],
+        )
+        dates = pd.to_datetime(frame["Report_Date_as_YYYY-MM-DD"], errors="coerce").dropna()
+    except Exception:
+        return None
+    if dates.empty:
+        return None
+    return dates.max().strftime("%Y-%m-%d")
+
+
+def build_freshness_status(
+    latest_dataset_date_value: str | None,
+    latest_cftc_available_date_value: str | None,
+) -> tuple[bool, str]:
+    if latest_dataset_date_value is None:
+        return False, "missing latest dataset date"
+    if latest_cftc_available_date_value is None:
+        return False, "latest CFTC available date unavailable"
+    dataset_date = datetime.fromisoformat(latest_dataset_date_value)
+    cftc_date = datetime.fromisoformat(latest_cftc_available_date_value)
+    if dataset_date >= cftc_date:
+        return True, ""
+    return (
+        False,
+        f"latest_dataset_date {latest_dataset_date_value} is before latest_cftc_available_date {latest_cftc_available_date_value}",
+    )
 
 
 def write_update_log(result: UpdatePipelineResult) -> Path:
@@ -161,8 +246,14 @@ def render_update_log(result: UpdatePipelineResult) -> str:
         "# GHPR Update Log",
         "",
         f"- Status: `{result.status_text}`",
+        f"- Update mode: `{result.mode}`",
         f"- Started UTC: `{result.started_at_utc.isoformat()}`",
         f"- Finished UTC: `{result.finished_at_utc.isoformat()}`",
+        f"- Latest dataset date before update: `{result.latest_dataset_date_before or 'N/A'}`",
+        f"- Latest dataset date after update: `{result.latest_dataset_date_after or 'N/A'}`",
+        f"- Latest CFTC available date: `{result.latest_cftc_available_date or 'N/A'}`",
+        f"- Data is current: `{str(result.data_is_current).lower()}`",
+        f"- Stale reason: `{result.stale_reason or 'N/A'}`",
         f"- Runtime note: `Cloud runtime file writes may be ephemeral; commit refreshed outputs to GitHub for durable deployment data.`",
         f"- Scope: `Historical statistics / research reference only.`",
         "",
@@ -229,8 +320,30 @@ def sanitize_output(output: str) -> str:
     )
 
 
-if __name__ == "__main__":
-    outcome = run_update_pipeline()
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Run GHPR update pipeline.")
+    parser.add_argument(
+        "--mode",
+        choices=sorted(VALID_UPDATE_MODES),
+        default="local",
+        help="local uses existing raw files; full downloads latest data then rebuilds.",
+    )
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    outcome = run_update_pipeline(mode=args.mode)
     print(f"Update pipeline status: {outcome.status_text}")
+    print(f"Update mode: {outcome.mode}")
+    print(f"Latest dataset date before update: {outcome.latest_dataset_date_before or 'N/A'}")
+    print(f"Latest dataset date after update: {outcome.latest_dataset_date_after or 'N/A'}")
+    print(f"Latest CFTC available date: {outcome.latest_cftc_available_date or 'N/A'}")
+    print(f"Data is current: {str(outcome.data_is_current).lower()}")
+    print(f"Stale reason: {outcome.stale_reason or 'N/A'}")
     print(f"Update log: {outcome.log_path}")
-    raise SystemExit(0 if outcome.success else 1)
+    return 0 if outcome.success else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -131,6 +131,15 @@ def top20_similarity_average(report: pd.DataFrame) -> float | None:
     return float(values.mean())
 
 
+def latest_frame_date(frame: pd.DataFrame, column: str = "date") -> str | None:
+    if frame.empty or column not in frame.columns:
+        return None
+    dates = pd.to_datetime(frame[column], errors="coerce").dropna()
+    if dates.empty:
+        return None
+    return dates.max().strftime("%Y-%m-%d")
+
+
 def same_return_direction(left: object, right: object) -> bool:
     left_number = scalar_float(left)
     right_number = scalar_float(right)
@@ -184,16 +193,27 @@ def build_data_health(
     latest: pd.Series,
     report: pd.DataFrame,
     stats: pd.DataFrame,
+    lifecycle: pd.DataFrame,
+    structure: pd.DataFrame,
+    velocity_reading: pd.DataFrame,
 ) -> dict[str, Any]:
     missing_master_columns = [
         column for column in MASTER_REQUIRED_COLUMNS if column not in master.columns
     ]
     missing_files = [
         str(path.relative_to(PROJECT_ROOT))
-        for path in [MASTER_PATH, HSE_REPORT_PATH, HSE_STATS_PATH]
+        for path in [
+            MASTER_PATH,
+            HSE_REPORT_PATH,
+            HSE_STATS_PATH,
+            MM_LIFECYCLE_DATASET_PATH,
+            MM_STRUCTURE_DATASET_PATH,
+            MM_VELOCITY_READING_LAYER_PATH,
+        ]
         if not path.exists()
     ]
     latest_date = pd.to_datetime(latest.get("date"), errors="coerce")
+    master_latest_date = latest_date.strftime("%Y-%m-%d") if pd.notna(latest_date) else None
     hse_current_date = None
     if not report.empty and "current_date" in report.columns:
         hse_current_date = pd.to_datetime(report["current_date"].iloc[0], errors="coerce")
@@ -202,6 +222,21 @@ def build_data_health(
         if hse_current_date is not None
         else None
     )
+    component_dates = {
+        "master": master_latest_date,
+        "hub_summary": master_latest_date,
+        "historical_similarity": hse_current_date.strftime("%Y-%m-%d")
+        if pd.notna(hse_current_date)
+        else None,
+        "mm_lifecycle": latest_frame_date(lifecycle),
+        "mm_structure": latest_frame_date(structure),
+        "velocity_reading": latest_frame_date(velocity_reading),
+    }
+    stale_components = [
+        component
+        for component, component_date in component_dates.items()
+        if component != "master" and component_date != master_latest_date
+    ]
 
     warnings = []
     if missing_files:
@@ -210,15 +245,29 @@ def build_data_health(
         warnings.append("missing_master_columns")
     if current_date_matches_hse is False:
         warnings.append("hse_current_date_mismatch")
+    if stale_components:
+        warnings.append("stale_components")
     if report.empty:
         warnings.append("historical_similarity_report_empty")
     if stats.empty:
         warnings.append("historical_similarity_stats_empty")
 
-    status = "ok" if not warnings else "warning"
+    if missing_files or missing_master_columns or master_latest_date is None:
+        status = "error"
+        overall_freshness_status = "ERROR"
+    elif stale_components:
+        status = "partial_stale"
+        overall_freshness_status = "PARTIAL_STALE"
+    else:
+        status = "ok"
+        overall_freshness_status = "OK"
     return {
         "status": status,
+        "overall_freshness_status": overall_freshness_status,
         "warnings": warnings,
+        "expected_latest_date": master_latest_date,
+        "component_dates": component_dates,
+        "stale_components": stale_components,
         "master_rows": int(len(master)),
         "historical_similarity_cases": int(len(report)),
         "historical_similarity_stats_rows": int(len(stats)),
@@ -405,7 +454,15 @@ def build_hub_summary() -> dict[str, Any]:
         "top20_median_return_4w": json_value(None if top20 is None else top20.get("median_return_4w"), 6),
         "top20_median_return_8w": json_value(None if top20 is None else top20.get("median_return_8w"), 6),
         "top20_win_rate_8w": json_value(None if top20 is None else top20.get("win_rate_8w"), 6),
-        "data_health": build_data_health(master, latest, report, stats),
+        "data_health": build_data_health(
+            master,
+            latest,
+            report,
+            stats,
+            lifecycle,
+            structure,
+            velocity_reading,
+        ),
         "last_update_time": datetime.now(timezone.utc).isoformat(),
         "dashboard_url": DASHBOARD_URL,
         "mm_lifecycle_state": json_value(

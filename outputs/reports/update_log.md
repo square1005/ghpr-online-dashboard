@@ -1,42 +1,29 @@
 # GHPR Update Log
 
 - Status: `success`
-- Started UTC: `2026-06-06T12:55:30.166388+00:00`
-- Finished UTC: `2026-06-06T12:56:36.920638+00:00`
+- Update mode: `full`
+- Started UTC: `2026-06-07T17:37:33.545310+00:00`
+- Finished UTC: `2026-06-07T17:38:58.925093+00:00`
+- Latest dataset date before update: `2026-06-02`
+- Latest dataset date after update: `2026-06-02`
+- Latest CFTC available date: `2026-06-02`
+- Data is current: `true`
+- Stale reason: `N/A`
 - Runtime note: `Cloud runtime file writes may be ephemeral; commit refreshed outputs to GitHub for durable deployment data.`
 - Scope: `Historical statistics / research reference only.`
 
 ## Steps
 
-### Fetch daily gold OHLC
-
-- Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/fetch_gold_daily_ohlc.py`
-- Exit code: `0`
-- Elapsed seconds: `3.47`
-
-#### stdout
-
-```text
-Wrote 4,382 daily OHLC rows to PROJECT_ROOT/data\processed\gold_daily_ohlc.csv
-Source: Yahoo Finance GC=F futures proxy
-```
-
-#### stderr
-
-```text
-N/A
-```
-
 ### Build master weekly dataset
 
-- Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/build_master_dataset.py --no-download`
+- Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/build_master_dataset.py`
 - Exit code: `0`
-- Elapsed seconds: `15.20`
+- Elapsed seconds: `22.79`
 
 #### stdout
 
 ```text
-Built 874 rows
+Built 875 rows
 Output: PROJECT_ROOT/data\processed\ghpr_master_weekly.csv
 ```
 
@@ -50,7 +37,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/factor_analysis.py`
 - Exit code: `0`
-- Elapsed seconds: `17.61`
+- Elapsed seconds: `20.29`
 
 #### stdout
 
@@ -72,7 +59,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/plot_engine.py`
 - Exit code: `0`
-- Elapsed seconds: `4.13`
+- Elapsed seconds: `3.72`
 
 #### stdout
 
@@ -96,7 +83,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/report_engine.py`
 - Exit code: `0`
-- Elapsed seconds: `4.07`
+- Elapsed seconds: `3.60`
 
 #### stdout
 
@@ -114,7 +101,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/historical_similarity_engine.py`
 - Exit code: `0`
-- Elapsed seconds: `2.90`
+- Elapsed seconds: `2.30`
 
 #### stdout
 
@@ -133,14 +120,14 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_lifecycle_research.py`
 - Exit code: `0`
-- Elapsed seconds: `9.98`
+- Elapsed seconds: `12.27`
 
 #### stdout
 
 ```text
 Wrote MM lifecycle dataset: PROJECT_ROOT/data\processed\mm_lifecycle_dataset.csv
 Wrote MM lifecycle summary: PROJECT_ROOT/outputs\reports\mm_lifecycle_summary.md
-Rows: 874
+Rows: 875
 Scope: historical statistics / research reference only
 ```
 
@@ -154,14 +141,57 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_structure_lifecycle_research.py`
 - Exit code: `0`
-- Elapsed seconds: `7.96`
+- Elapsed seconds: `7.75`
 
 #### stdout
 
 ```text
 Wrote MM structure lifecycle dataset: PROJECT_ROOT/data\processed\mm_structure_lifecycle_dataset.csv
 Wrote MM structure lifecycle summary: PROJECT_ROOT/outputs\reports\mm_structure_lifecycle_summary.md
-Rows: 874
+Rows: 875
+Scope: historical structure research only
+```
+
+#### stderr
+
+```text
+N/A
+```
+
+### Run MM velocity window discovery
+
+- Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_velocity_window_discovery.py`
+- Exit code: `0`
+- Elapsed seconds: `8.17`
+
+#### stdout
+
+```text
+Wrote velocity window dataset: PROJECT_ROOT/data\processed\mm_velocity_window_dataset.csv
+Wrote velocity window summary: PROJECT_ROOT/outputs\reports\mm_velocity_window_summary.md
+Rows: 875
+Scope: historical structure research only
+```
+
+#### stderr
+
+```text
+N/A
+```
+
+### Run MM velocity reading layer
+
+- Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_velocity_reading_layer.py`
+- Exit code: `0`
+- Elapsed seconds: `1.24`
+
+#### stdout
+
+```text
+Wrote velocity reading layer dataset: PROJECT_ROOT/data\processed\mm_velocity_reading_layer.csv
+Wrote velocity reading layer report: PROJECT_ROOT/outputs\reports\mm_velocity_reading_layer.md
+Rows: 875
+Latest date: 2026-06-02
 Scope: historical structure research only
 ```
 
@@ -175,14 +205,35 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/export_hub_summary.py`
 - Exit code: `0`
-- Elapsed seconds: `1.42`
+- Elapsed seconds: `1.22`
 
 #### stdout
 
 ```text
 Wrote hub summary: PROJECT_ROOT/outputs\reports\ghpr_summary_for_hub.json
-Summary date: 2026-05-26
+Summary date: 2026-06-02
 Scope: historical statistics / research reference only
+```
+
+#### stderr
+
+```text
+N/A
+```
+
+### Run data freshness diagnostics
+
+- Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/data_freshness_diagnostics.py`
+- Exit code: `0`
+- Elapsed seconds: `1.08`
+
+#### stdout
+
+```text
+Wrote diagnostics: PROJECT_ROOT/outputs\reports\data_freshness_diagnostics.json
+Wrote diagnostics: PROJECT_ROOT/outputs\reports\data_freshness_diagnostics.md
+Overall freshness status: OK
+Expected latest date: 2026-06-02
 ```
 
 #### stderr

@@ -1,0 +1,57 @@
+{
+  "generated_at_utc": "2026-06-07T17:38:58.811256+00:00",
+  "expected_latest_date": "2026-06-02",
+  "overall_status": "OK",
+  "stale_components": [],
+  "components": [
+    {
+      "component": "master",
+      "file": "data/processed/ghpr_master_weekly.csv",
+      "latest_date": "2026-06-02",
+      "expected_latest_date": "2026-06-02",
+      "is_current": true,
+      "stale_reason": ""
+    },
+    {
+      "component": "hub_summary",
+      "file": "outputs/reports/ghpr_summary_for_hub.json",
+      "latest_date": "2026-06-02",
+      "expected_latest_date": "2026-06-02",
+      "is_current": true,
+      "stale_reason": ""
+    },
+    {
+      "component": "historical_similarity",
+      "file": "outputs/reports/historical_similarity_report.csv",
+      "latest_date": "2026-06-02",
+      "expected_latest_date": "2026-06-02",
+      "is_current": true,
+      "stale_reason": ""
+    },
+    {
+      "component": "mm_lifecycle",
+      "file": "data/processed/mm_lifecycle_dataset.csv",
+      "latest_date": "2026-06-02",
+      "expected_latest_date": "2026-06-02",
+      "is_current": true,
+      "stale_reason": ""
+    },
+    {
+      "component": "mm_structure",
+      "file": "data/processed/mm_structure_lifecycle_dataset.csv",
+      "latest_date": "2026-06-02",
+      "expected_latest_date": "2026-06-02",
+      "is_current": true,
+      "stale_reason": ""
+    },
+    {
+      "component": "velocity_reading",
+      "file": "data/processed/mm_velocity_reading_layer.csv",
+      "latest_date": "2026-06-02",
+      "expected_latest_date": "2026-06-02",
+      "is_current": true,
+      "stale_reason": ""
+    }
+  ],
+  "scope": "Historical statistics / research reference only. Not a trading signal."
+}

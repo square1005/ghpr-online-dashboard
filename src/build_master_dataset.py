@@ -62,6 +62,8 @@ CFTC_BASE_URLS = (
 )
 CFTC_HISTORY_BUNDLE = "fut_disagg_txt_hist_2006_2016.zip"
 CFTC_YEARLY_TEMPLATE = "fut_disagg_txt_{year}.zip"
+CFTC_CURRENT_URL = "https://www.cftc.gov/dea/newcot/f_disagg.txt"
+CFTC_CURRENT_FILE = "fut_disagg_txt_current.csv"
 
 FRED_SERIES_ID = "GOLDPMGBD228NLBM"
 FRED_URL = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={FRED_SERIES_ID}"
@@ -139,6 +141,7 @@ def build_master_dataset(
 
     if download:
         ensure_cot_archives(end_year=end_year, force=force)
+        ensure_current_cot_report(force=True)
         ensure_gold_price_csv(end_year=end_year, force=force)
 
     cot_archives = find_cot_archives()
@@ -202,9 +205,73 @@ def ensure_cot_archives(end_year: int, force: bool = False) -> None:
             raise RuntimeError("Could not download required CFTC history bundle.\n" + "\n".join(errors))
 
 
+def ensure_current_cot_report(force: bool = False) -> Path:
+    output = COT_RAW_DIR / CFTC_CURRENT_FILE
+    if output.exists() and not force:
+        return output
+
+    try:
+        response = requests.get(CFTC_CURRENT_URL, timeout=60, headers=REQUEST_HEADERS)
+        response.raise_for_status()
+    except requests.RequestException as exc:
+        if output.exists():
+            return output
+        raise RuntimeError(f"Could not download current CFTC report: {exc}") from exc
+
+    content = response.content
+    if not content.strip() or b"<html" in content[:512].lower():
+        if output.exists():
+            return output
+        raise RuntimeError(f"Current CFTC report did not look like text data: {CFTC_CURRENT_URL}")
+
+    header = current_cot_header()
+    text = content.decode("latin1", errors="replace")
+    rows = [line.rstrip() for line in text.replace("\r\n", "\n").replace("\r", "\n").splitlines()]
+    rows = [line for line in rows if line.strip()]
+    output.write_text(",".join(header) + "\n" + "\n".join(rows) + "\n", encoding="latin1")
+    return output
+
+
+def current_cot_header() -> list[str]:
+    archive_candidates = sorted(
+        COT_RAW_DIR.glob("fut_disagg_txt*.zip"),
+        key=cot_archive_sort_key,
+        reverse=True,
+    )
+    if not archive_candidates:
+        fallback_dir = PROJECT_ROOT.parent / "data" / "raw" / "cftc"
+        archive_candidates = sorted(
+            fallback_dir.glob("fut_disagg_txt*.zip"),
+            key=cot_archive_sort_key,
+            reverse=True,
+        )
+    for archive_path in archive_candidates:
+        try:
+            with ZipFile(archive_path) as zf:
+                members = [
+                    name
+                    for name in zf.namelist()
+                    if name.lower().endswith((".txt", ".csv")) and not name.endswith("/")
+                ]
+                if not members:
+                    continue
+                with zf.open(members[0]) as fh:
+                    columns = pd.read_csv(fh, encoding="latin1", nrows=0).columns
+                    if len(columns) > 0:
+                        return [str(column).strip() for column in columns]
+        except Exception:
+            continue
+    raise RuntimeError("Could not infer current CFTC report header from historical archives.")
+
+
 def ensure_gold_price_csv(end_year: int, force: bool = False) -> Path:
     output = GOLD_RAW_DIR / "gold_price.csv"
-    if output.exists() and not force and csv_is_daily_enough(output, end_year=end_year):
+    if (
+        output.exists()
+        and not force
+        and csv_is_daily_enough(output, end_year=end_year)
+        and csv_has_recent_date(output)
+    ):
         return output
 
     errors = []
@@ -213,6 +280,9 @@ def ensure_gold_price_csv(end_year: int, force: bool = False) -> Path:
     if download_csv(STOOQ_URL, output, errors) and csv_is_daily_enough(output, end_year=end_year):
         return output
     if download_yahoo_chart(output, end_year=end_year, errors=errors):
+        return output
+
+    if output.exists() and csv_is_daily_enough(output, end_year=end_year):
         return output
 
     fallback = PROJECT_ROOT.parent / "data" / "raw" / "fred" / "gold_price.csv"
@@ -286,6 +356,9 @@ def download_yahoo_chart(output: Path, end_year: int, errors: list[str]) -> bool
 
 def find_cot_archives() -> list[Path]:
     local = sorted(COT_RAW_DIR.glob("fut_disagg_txt*.zip"), key=cot_archive_sort_key)
+    current = COT_RAW_DIR / CFTC_CURRENT_FILE
+    if current.exists():
+        local.append(current)
     if local:
         return local
     fallback_dir = PROJECT_ROOT.parent / "data" / "raw" / "cftc"
@@ -325,6 +398,11 @@ def load_gold_cot(archive_paths: list[Path]) -> pd.DataFrame:
 
 
 def read_cot_archive(path: Path) -> pd.DataFrame:
+    if path.suffix.lower() == ".csv":
+        frame = pd.read_csv(path, encoding="latin1", low_memory=False)
+        frame.columns = [str(column).strip() for column in frame.columns]
+        return frame
+
     with ZipFile(path) as zf:
         members = [
             name
@@ -569,6 +647,20 @@ def csv_is_daily_enough(path: Path, end_year: int) -> bool:
     rows = dates[(dates >= start) & (dates <= end)].shape[0]
     expected_min = max(30, (end - start).days // 10)
     return rows >= expected_min
+
+
+def csv_has_recent_date(path: Path, max_age_days: int = 14) -> bool:
+    try:
+        frame = pd.read_csv(path)
+        date_col = pick_column(frame, ("DATE", "Date", "date", "observation_date"))
+        dates = pd.to_datetime(frame[date_col], errors="coerce").dropna()
+    except Exception:
+        return False
+    if dates.empty:
+        return False
+    latest = dates.max().normalize()
+    cutoff = pd.Timestamp(date.today() - pd.Timedelta(days=max_age_days))
+    return latest >= cutoff
 
 
 def build_parser() -> argparse.ArgumentParser:

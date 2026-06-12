@@ -130,7 +130,7 @@ def build_candlestick_figure(frame: pd.DataFrame, window: CandlestickWindow) -> 
             annotation_position="top",
         )
     fig.update_layout(
-        title=candlestick_title(window),
+        title=None,
         xaxis_title="date",
         yaxis_title="GC=F futures proxy price",
         height=520,

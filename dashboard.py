@@ -14,10 +14,12 @@ from src.candlestick_viewer import (
     CANDLESTICK_SOURCE_NOTE_ZH,
     VIEW_RANGE_OPTIONS,
     build_candlestick_figure,
+    candlestick_title,
     load_gold_daily_ohlc,
     ohlc_for_window,
     week_window_for_event,
 )
+from src.chart_layout import apply_ghpr_plotly_layout
 from src.historical_similarity_engine import (
     DEFAULT_EXCLUDE_RECENT_WEEKS,
     build_historical_similarity_report,
@@ -288,6 +290,40 @@ st.set_page_config(
     page_icon="GHPR",
     layout="wide",
 )
+
+st.markdown(
+    """
+<style>
+.ghpr-chart-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: 1.25rem;
+  margin-bottom: 0.6rem;
+  color: #111827;
+}
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
+
+def render_interactive_chart(
+    title: str,
+    fig: go.Figure,
+    height: int = 520,
+    config: dict | None = None,
+    show_legend: bool = True,
+    has_range_slider: bool = False,
+) -> None:
+    st.markdown(f"<div class='ghpr-chart-title'>{title}</div>", unsafe_allow_html=True)
+    apply_ghpr_plotly_layout(
+        fig,
+        title=None,
+        height=height,
+        show_legend=show_legend,
+        has_range_slider=has_range_slider,
+    )
+    st.plotly_chart(fig, use_container_width=True, config=config)
 
 
 @st.cache_data(show_spinner=False)
@@ -1894,7 +1930,12 @@ def page_historical_database(master: pd.DataFrame) -> None:
         st.info("N/A: no rows match the selected filters.")
         return
 
-    st.plotly_chart(gold_mm_plot(filtered), width="stretch")
+    render_interactive_chart(
+        "Gold Price vs MM Net Percentile",
+        gold_mm_plot(filtered),
+        height=620,
+        has_range_slider=True,
+    )
     with st.expander("Filtered rows", expanded=False):
         display = filtered[["date", "gold_close", "mm_net", MM_FACTOR, "mm_state"]].copy()
         display["date"] = display["date"].dt.strftime("%Y-%m-%d")
@@ -1971,11 +2012,11 @@ def gold_mm_plot(frame: pd.DataFrame) -> go.Figure:
         secondary_y=True,
     )
     fig.update_layout(
-        title="Gold Price vs MM Net Percentile",
+        title=None,
         hovermode="x unified",
         height=620,
         margin=dict(l=30, r=30, t=70, b=30),
-        xaxis=dict(rangeslider=dict(visible=True), type="date"),
+        xaxis=lifecycle_range_controls(),
     )
     fig.update_yaxes(title_text="gold_close", secondary_y=False)
     fig.update_yaxes(title_text="MM percentile (%)", range=[0, 100], secondary_y=True)
@@ -2107,8 +2148,8 @@ def render_single_event_study(master: pd.DataFrame, similar: pd.DataFrame) -> No
         st.info("N/A")
         return
 
-    st.plotly_chart(event_gold_path_plot(window), width="stretch")
-    st.plotly_chart(event_mm_percentile_plot(window), width="stretch")
+    render_interactive_chart("Event Study: Gold Indexed Path", event_gold_path_plot(window), height=520)
+    render_interactive_chart("Event Study: MM Percentile Path", event_mm_percentile_plot(window), height=500)
 
 
 def event_window(
@@ -2158,7 +2199,7 @@ def event_gold_path_plot(window: pd.DataFrame) -> go.Figure:
     )
     fig.add_vline(x=0, line_width=2, line_dash="dash", line_color="#111827")
     fig.update_layout(
-        title="Event Study: Gold Indexed Path",
+        title=None,
         xaxis_title="week_offset",
         yaxis_title="gold_indexed_return",
         height=500,
@@ -2188,7 +2229,7 @@ def event_mm_percentile_plot(window: pd.DataFrame) -> go.Figure:
     )
     fig.add_vline(x=0, line_width=2, line_dash="dash", line_color="#111827")
     fig.update_layout(
-        title="Event Study: MM Percentile Path",
+        title=None,
         xaxis_title="week_offset",
         yaxis_title="mm_net_percentile_156w (%)",
         yaxis=dict(range=[0, 100]),
@@ -2217,7 +2258,7 @@ def render_group_event_study(master: pd.DataFrame) -> None:
         st.warning("Insufficient history around selected event")
         return
 
-    st.plotly_chart(group_event_path_plot(paths), width="stretch")
+    render_interactive_chart("Average Gold Event Path", group_event_path_plot(paths), height=540)
 
 
 def filter_events_by_mm_condition(master: pd.DataFrame, condition: str) -> pd.DataFrame:
@@ -2323,7 +2364,7 @@ def group_event_path_plot(paths: pd.DataFrame) -> go.Figure:
     )
     fig.add_vline(x=0, line_width=2, line_dash="dash", line_color="#111827")
     fig.update_layout(
-        title="Average Gold Event Path",
+        title=None,
         xaxis_title="week_offset",
         yaxis_title="gold_indexed_return",
         height=540,
@@ -2358,12 +2399,27 @@ def page_forward_statistics(factor_result: pd.DataFrame) -> None:
     view["avg_forward_return_pct"] = view["avg_forward_return"] * 100
     view["win_rate_pct"] = view["win_rate"] * 100
 
-    st.plotly_chart(bucket_line_chart(view, "avg_forward_return_pct", "Average Historical Following Return (%)"), width="stretch")
+    render_interactive_chart(
+        "Average Historical Following Return (%)",
+        bucket_line_chart(view, "avg_forward_return_pct", "Average Historical Following Return (%)"),
+        height=500,
+        show_legend=False,
+    )
     c1, c2 = st.columns(2)
     with c1:
-        st.plotly_chart(bucket_bar_chart(view, "win_rate_pct", "Win Rate (%)"), width="stretch")
+        render_interactive_chart(
+            "Win Rate (%)",
+            bucket_bar_chart(view, "win_rate_pct", "Win Rate (%)"),
+            height=500,
+            show_legend=False,
+        )
     with c2:
-        st.plotly_chart(bucket_bar_chart(view, "count", "Count"), width="stretch")
+        render_interactive_chart(
+            "Count",
+            bucket_bar_chart(view, "count", "Count"),
+            height=500,
+            show_legend=False,
+        )
 
     st.dataframe(view, width="stretch", hide_index=True)
 
@@ -2381,7 +2437,7 @@ def bucket_line_chart(frame: pd.DataFrame, y_column: str, title: str) -> go.Figu
         )
     )
     fig.add_hline(y=0, line_color="#6b7280", line_width=1)
-    fig.update_layout(title=title, height=420, margin=dict(l=30, r=30, t=60, b=60))
+    fig.update_layout(title=None, height=420, margin=dict(l=30, r=30, t=60, b=60))
     return fig
 
 
@@ -2395,7 +2451,7 @@ def bucket_bar_chart(frame: pd.DataFrame, y_column: str, title: str) -> go.Figur
             hovertemplate="bucket=%{x}<br>value=%{y:.2f}<extra></extra>",
         )
     )
-    fig.update_layout(title=title, height=420, margin=dict(l=30, r=30, t=60, b=60))
+    fig.update_layout(title=None, height=420, margin=dict(l=30, r=30, t=60, b=60))
     return fig
 
 
@@ -2593,7 +2649,11 @@ def render_historical_weekly_candlestick(historical_report: pd.DataFrame) -> Non
         st.caption(CANDLESTICK_SOURCE_NOTE_ZH)
         return
 
-    st.plotly_chart(build_candlestick_figure(window_ohlc, window), width="stretch")
+    render_interactive_chart(
+        candlestick_title(window).replace("<br>", " / "),
+        build_candlestick_figure(window_ohlc, window),
+        height=560,
+    )
     st.caption(CANDLESTICK_SOURCE_NOTE_EN)
     st.caption(CANDLESTICK_SOURCE_NOTE_ZH)
 
@@ -2717,6 +2777,8 @@ def lifecycle_range_controls() -> dict[str, object]:
     return {
         "rangeslider": {"visible": True},
         "rangeselector": {
+            "x": 0,
+            "y": 1.18,
             "buttons": [
                 {"count": 1, "label": "1Y", "step": "year", "stepmode": "backward"},
                 {"count": 3, "label": "3Y", "step": "year", "stepmode": "backward"},
@@ -2766,7 +2828,7 @@ def build_interactive_lifecycle_core_chart(lifecycle: pd.DataFrame) -> go.Figure
         secondary_y=True,
     )
     fig.update_layout(
-        title="Interactive Gold vs MM Lifecycle Core Chart",
+        title=None,
         height=520,
         margin={"l": 40, "r": 48, "t": 58, "b": 35},
         hovermode="x unified",
@@ -2816,7 +2878,7 @@ def build_interactive_velocity_acceleration_chart(lifecycle: pd.DataFrame) -> go
     )
     fig.add_hline(y=0, line_color="#111827", line_width=1)
     fig.update_layout(
-        title="Interactive MM Velocity / Acceleration",
+        title=None,
         height=420,
         margin={"l": 40, "r": 40, "t": 58, "b": 35},
         hovermode="x unified",
@@ -2942,7 +3004,7 @@ def build_interactive_structure_core_chart(structure: pd.DataFrame) -> go.Figure
             secondary_y=True,
         )
     fig.update_layout(
-        title="Interactive Gold vs MM Long / Short / Net Structure",
+        title=None,
         height=540,
         margin={"l": 40, "r": 52, "t": 58, "b": 35},
         hovermode="x unified",
@@ -2977,7 +3039,7 @@ def build_interactive_structure_velocity_chart(structure: pd.DataFrame) -> go.Fi
         )
     fig.add_hline(y=0, line_color="#111827", line_width=1)
     fig.update_layout(
-        title="Interactive MM Structure Velocity",
+        title=None,
         height=430,
         margin={"l": 40, "r": 40, "t": 58, "b": 35},
         hovermode="x unified",
@@ -3145,7 +3207,7 @@ def build_interactive_velocity_baseline_candidate_chart(reading: pd.DataFrame) -
         )
     fig.add_hline(y=0, line_color="#111827", line_width=1)
     fig.update_layout(
-        title="Interactive Velocity Baseline vs Candidate",
+        title=None,
         height=500,
         margin={"l": 40, "r": 40, "t": 58, "b": 35},
         hovermode="x unified",
@@ -3179,7 +3241,7 @@ def build_interactive_velocity_delta_chart(reading: pd.DataFrame) -> go.Figure:
         )
     fig.add_hline(y=0, line_color="#111827", line_width=1)
     fig.update_layout(
-        title="Interactive Velocity Delta",
+        title=None,
         height=420,
         margin={"l": 40, "r": 40, "t": 58, "b": 35},
         hovermode="x unified",
@@ -3380,10 +3442,12 @@ def page_mm_lifecycle_research() -> None:
         st.warning("N/A: lifecycle data unavailable for interactive chart.")
     else:
         try:
-            st.plotly_chart(
+            render_interactive_chart(
+                "Interactive Gold vs MM Lifecycle",
                 build_interactive_lifecycle_core_chart(lifecycle),
-                use_container_width=True,
+                height=560,
                 config=PLOTLY_LIFECYCLE_CONFIG,
+                has_range_slider=True,
             )
         except ValueError as error:
             st.warning(f"N/A: {error}")
@@ -3393,10 +3457,12 @@ def page_mm_lifecycle_research() -> None:
         st.warning("N/A: lifecycle velocity data unavailable for interactive chart.")
     else:
         try:
-            st.plotly_chart(
+            render_interactive_chart(
+                "Interactive MM Velocity / Acceleration",
                 build_interactive_velocity_acceleration_chart(lifecycle),
-                use_container_width=True,
+                height=540,
                 config=PLOTLY_LIFECYCLE_CONFIG,
+                has_range_slider=True,
             )
         except ValueError as error:
             st.warning(f"N/A: {error}")
@@ -3534,10 +3600,12 @@ def page_mm_structure_lifecycle() -> None:
         st.warning("N/A: structure data unavailable for interactive chart.")
     else:
         try:
-            st.plotly_chart(
+            render_interactive_chart(
+                "Interactive Gold vs MM Long / Short / Net Structure",
                 build_interactive_structure_core_chart(structure),
-                use_container_width=True,
+                height=580,
                 config=PLOTLY_STRUCTURE_CONFIG,
+                has_range_slider=True,
             )
         except ValueError as error:
             st.warning(f"N/A: {error}")
@@ -3547,10 +3615,12 @@ def page_mm_structure_lifecycle() -> None:
         st.warning("N/A: structure velocity data unavailable for interactive chart.")
     else:
         try:
-            st.plotly_chart(
+            render_interactive_chart(
+                "Interactive MM Structure Velocity",
                 build_interactive_structure_velocity_chart(structure),
-                use_container_width=True,
+                height=540,
                 config=PLOTLY_STRUCTURE_CONFIG,
+                has_range_slider=True,
             )
         except ValueError as error:
             st.warning(f"N/A: {error}")
@@ -3726,20 +3796,24 @@ def page_mm_velocity_window_discovery() -> None:
 
         st.subheader("Interactive Velocity Baseline vs Candidate")
         try:
-            st.plotly_chart(
+            render_interactive_chart(
+                "Interactive Velocity Baseline vs Candidate",
                 build_interactive_velocity_baseline_candidate_chart(reading),
+                height=580,
                 config=PLOTLY_VELOCITY_READING_CONFIG,
-                width="stretch",
+                has_range_slider=True,
             )
         except Exception as error:
             st.warning(f"N/A: unable to render velocity baseline/candidate chart: {error}")
 
         st.subheader("Interactive Velocity Delta")
         try:
-            st.plotly_chart(
+            render_interactive_chart(
+                "Interactive Velocity Delta",
                 build_interactive_velocity_delta_chart(reading),
+                height=540,
                 config=PLOTLY_VELOCITY_READING_CONFIG,
-                width="stretch",
+                has_range_slider=True,
             )
         except Exception as error:
             st.warning(f"N/A: unable to render velocity delta chart: {error}")

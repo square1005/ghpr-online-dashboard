@@ -1,6 +1,6 @@
 # GHPR Data Freshness Diagnostics
 
-- Generated UTC: `2026-06-07T17:38:58.811256+00:00`
+- Generated UTC: `2026-06-12T00:21:56.056618+00:00`
 - Expected latest date: `2026-06-02`
 - Overall freshness status: `OK`
 - Scope: Historical statistics / research reference only.

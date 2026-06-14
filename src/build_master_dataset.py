@@ -178,7 +178,8 @@ def ensure_cot_archives(end_year: int, force: bool = False) -> None:
 
     for archive in archives:
         output = COT_RAW_DIR / archive
-        if output.exists() and not force:
+        current_year_archive = archive == CFTC_YEARLY_TEMPLATE.format(year=end_year)
+        if output.exists() and not force and not current_year_archive:
             continue
         errors = []
         downloaded = False

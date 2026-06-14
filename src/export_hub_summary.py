@@ -19,10 +19,12 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 MASTER_PATH = PROJECT_ROOT / "data" / "processed" / "ghpr_master_weekly.csv"
 HSE_REPORT_PATH = PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_report.csv"
 HSE_STATS_PATH = PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_stats.csv"
+HSE_FEATURE_VECTOR_PATH = PROJECT_ROOT / "outputs" / "reports" / "hse_current_feature_vector.csv"
 MM_LIFECYCLE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_lifecycle_dataset.csv"
 MM_LIFECYCLE_LEAD_LAG_PATH = PROJECT_ROOT / "outputs" / "reports" / "mm_lifecycle_lead_lag.csv"
 MM_STRUCTURE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_structure_lifecycle_dataset.csv"
 MM_VELOCITY_READING_LAYER_PATH = PROJECT_ROOT / "data" / "processed" / "mm_velocity_reading_layer.csv"
+MM_VELOCITY_WINDOW_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_velocity_window_dataset.csv"
 HUB_SUMMARY_PATH = PROJECT_ROOT / "outputs" / "reports" / "ghpr_summary_for_hub.json"
 DASHBOARD_URL = "https://square1005.github.io/ghpr-online-dashboard/"
 
@@ -193,9 +195,11 @@ def build_data_health(
     latest: pd.Series,
     report: pd.DataFrame,
     stats: pd.DataFrame,
+    hse_feature_vector: pd.DataFrame,
     lifecycle: pd.DataFrame,
     structure: pd.DataFrame,
     velocity_reading: pd.DataFrame,
+    velocity_window: pd.DataFrame,
 ) -> dict[str, Any]:
     missing_master_columns = [
         column for column in MASTER_REQUIRED_COLUMNS if column not in master.columns
@@ -206,9 +210,11 @@ def build_data_health(
             MASTER_PATH,
             HSE_REPORT_PATH,
             HSE_STATS_PATH,
+            HSE_FEATURE_VECTOR_PATH,
             MM_LIFECYCLE_DATASET_PATH,
             MM_STRUCTURE_DATASET_PATH,
             MM_VELOCITY_READING_LAYER_PATH,
+            MM_VELOCITY_WINDOW_DATASET_PATH,
         ]
         if not path.exists()
     ]
@@ -228,9 +234,11 @@ def build_data_health(
         "historical_similarity": hse_current_date.strftime("%Y-%m-%d")
         if pd.notna(hse_current_date)
         else None,
+        "hse_current_feature_vector": latest_frame_date(hse_feature_vector),
         "mm_lifecycle": latest_frame_date(lifecycle),
         "mm_structure": latest_frame_date(structure),
         "velocity_reading": latest_frame_date(velocity_reading),
+        "velocity_window": latest_frame_date(velocity_window),
     }
     stale_components = [
         component
@@ -426,10 +434,12 @@ def build_hub_summary() -> dict[str, Any]:
     latest = latest_valid_master_row(master)
     report = read_csv_or_empty(HSE_REPORT_PATH)
     stats = read_csv_or_empty(HSE_STATS_PATH)
+    hse_feature_vector = read_csv_or_empty(HSE_FEATURE_VECTOR_PATH)
     lifecycle = read_csv_or_empty(MM_LIFECYCLE_DATASET_PATH)
     lifecycle_lead_lag = read_csv_or_empty(MM_LIFECYCLE_LEAD_LAG_PATH)
     structure = read_csv_or_empty(MM_STRUCTURE_DATASET_PATH)
     velocity_reading = read_csv_or_empty(MM_VELOCITY_READING_LAYER_PATH)
+    velocity_window = read_csv_or_empty(MM_VELOCITY_WINDOW_DATASET_PATH)
     top20 = top20_stats_row(stats)
     latest_lifecycle = latest_lifecycle_row(lifecycle)
     latest_structure = latest_structure_row(structure)
@@ -459,9 +469,11 @@ def build_hub_summary() -> dict[str, Any]:
             latest,
             report,
             stats,
+            hse_feature_vector,
             lifecycle,
             structure,
             velocity_reading,
+            velocity_window,
         ),
         "last_update_time": datetime.now(timezone.utc).isoformat(),
         "dashboard_url": DASHBOARD_URL,

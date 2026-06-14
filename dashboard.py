@@ -799,6 +799,39 @@ def fmt_date(value: object) -> str:
     return pd.Timestamp(value).strftime("%Y-%m-%d")
 
 
+def latest_dataset_date_from_master(master: pd.DataFrame) -> str:
+    latest = latest_row(master)
+    if latest is None:
+        return "N/A"
+    return fmt_date(latest.get("date"))
+
+
+def latest_cftc_available_date() -> str:
+    return latest_cftc_available_date_from_current_file() or "N/A"
+
+
+def date_semantics_note() -> str:
+    return (
+        "Last updated time is when GHPR files were refreshed. "
+        "Dataset/COT date is the latest weekly report date available in the research dataset."
+    )
+
+
+def render_component_date_context(component_name: str, component_date: str) -> None:
+    master_date = latest_dataset_date() or "N/A"
+    cftc_date = latest_cftc_available_date()
+    st.caption(
+        f"{component_name} data date: `{component_date}` | "
+        f"Master dataset date: `{master_date}` | Latest CFTC available date: `{cftc_date}`"
+    )
+    st.caption(date_semantics_note())
+    if component_date != "N/A" and master_date != "N/A" and component_date != master_date:
+        st.warning(
+            f"{component_name} is not aligned with the master dataset date. "
+            "Please rerun a full refresh if this persists."
+        )
+
+
 def fmt_number(value: object, digits: int = 2) -> str:
     if pd.isna(value):
         return "N/A"
@@ -1109,7 +1142,7 @@ def render_current_market_snapshot(
     )
 
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Date", fmt_date(summary_or_latest(hub_summary, "date", latest, "date")))
+    c1.metric("Dataset / COT Date", fmt_date(summary_or_latest(hub_summary, "date", latest, "date")))
     c2.metric("Gold Close", fmt_number(summary_or_latest(hub_summary, "gold_close", latest, "gold_close")))
     c3.metric("Market State", state)
     c4.metric("MM Net", fmt_int(latest.get("mm_net")))
@@ -1138,8 +1171,12 @@ def render_current_market_snapshot(
     ).get("overall_freshness_status")
     st.caption(
         f"hub date: `{hub_date}` | master latest date: `{master_date}` | "
+        f"latest CFTC available date: `{latest_cftc_available_date()}` | "
         f"data freshness status: `{diagnostics_status or 'N/A'}`"
     )
+    st.caption(date_semantics_note())
+    if hub_summary.get("last_update_time"):
+        st.caption(f"Hub summary last refresh UTC: `{hub_summary.get('last_update_time')}`")
     if hub_summary and hub_date != "N/A" and master_date != "N/A" and hub_date != master_date:
         st.warning("Dashboard summary 尚未同步到最新 master dataset，請重新執行完整更新。")
 
@@ -1397,31 +1434,98 @@ def render_dashboard_data_freshness(
     component_map = diagnostics_component_map(diagnostics)
     status = dashboard_freshness_status(master_date, hub_date, diagnostics, hub_summary)
 
-    rows = [
-        {"Source": "Master Dataset Date", "Latest Date": master_date},
-        {"Source": "Hub Summary Date", "Latest Date": hub_date},
-        {
-            "Source": "HSE Date",
-            "Latest Date": component_date_from_sources(
-                "historical_similarity",
-                component_map,
-                hub_summary,
-            ),
-        },
-        {
-            "Source": "MM Lifecycle Date",
-            "Latest Date": component_date_from_sources("mm_lifecycle", component_map, hub_summary),
-        },
-        {
-            "Source": "MM Structure Date",
-            "Latest Date": component_date_from_sources("mm_structure", component_map, hub_summary),
-        },
-        {
-            "Source": "Velocity Reading Date",
-            "Latest Date": component_date_from_sources("velocity_reading", component_map, hub_summary),
-        },
-        {"Source": "Overall Freshness Status", "Latest Date": status},
-    ]
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Output File Updated Time", latest_update_time())
+    c2.metric("Master Dataset / COT Date", master_date)
+    c3.metric("Latest CFTC Available Date", latest_cftc_available_date())
+    st.caption(date_semantics_note())
+
+    if component_map:
+        rows = []
+        for component in component_map.values():
+            rows.append(
+                {
+                    "Component": component.get("component", "N/A"),
+                    "File": component.get("file", "N/A"),
+                    "Latest Data Date": component.get("latest_date") or "N/A",
+                    "Expected Master Date": component.get("expected_latest_date") or "N/A",
+                    "Current": str(component.get("is_current", False)).lower(),
+                    "Stale Reason": component.get("stale_reason") or "",
+                }
+            )
+        rows.append(
+            {
+                "Component": "overall_status",
+                "File": "",
+                "Latest Data Date": status,
+                "Expected Master Date": master_date,
+                "Current": str(status == "OK").lower(),
+                "Stale Reason": "",
+            }
+        )
+    else:
+        rows = [
+            {
+                "Component": "master",
+                "File": "data/processed/ghpr_master_weekly.csv",
+                "Latest Data Date": master_date,
+                "Expected Master Date": master_date,
+                "Current": str(master_date != "N/A").lower(),
+                "Stale Reason": "",
+            },
+            {
+                "Component": "hub_summary",
+                "File": "outputs/reports/ghpr_summary_for_hub.json",
+                "Latest Data Date": hub_date,
+                "Expected Master Date": master_date,
+                "Current": str(hub_date == master_date and hub_date != "N/A").lower(),
+                "Stale Reason": "" if hub_date == master_date else "hub date differs from master date",
+            },
+            {
+                "Component": "historical_similarity",
+                "File": "outputs/reports/historical_similarity_report.csv",
+                "Latest Data Date": component_date_from_sources(
+                    "historical_similarity",
+                    component_map,
+                    hub_summary,
+                ),
+                "Expected Master Date": master_date,
+                "Current": "N/A",
+                "Stale Reason": "diagnostics file unavailable",
+            },
+            {
+                "Component": "mm_lifecycle",
+                "File": "data/processed/mm_lifecycle_dataset.csv",
+                "Latest Data Date": component_date_from_sources("mm_lifecycle", component_map, hub_summary),
+                "Expected Master Date": master_date,
+                "Current": "N/A",
+                "Stale Reason": "diagnostics file unavailable",
+            },
+            {
+                "Component": "mm_structure",
+                "File": "data/processed/mm_structure_lifecycle_dataset.csv",
+                "Latest Data Date": component_date_from_sources("mm_structure", component_map, hub_summary),
+                "Expected Master Date": master_date,
+                "Current": "N/A",
+                "Stale Reason": "diagnostics file unavailable",
+            },
+            {
+                "Component": "velocity_reading",
+                "File": "data/processed/mm_velocity_reading_layer.csv",
+                "Latest Data Date": component_date_from_sources("velocity_reading", component_map, hub_summary),
+                "Expected Master Date": master_date,
+                "Current": "N/A",
+                "Stale Reason": "diagnostics file unavailable",
+            },
+            {
+                "Component": "overall_status",
+                "File": "",
+                "Latest Data Date": status,
+                "Expected Master Date": master_date,
+                "Current": str(status == "OK").lower(),
+                "Stale Reason": "",
+            },
+        ]
     st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
 
     stale_components = diagnostics.get("stale_components") or hub_summary.get(
@@ -1605,9 +1709,14 @@ For stable production data, refresh locally/VPS, commit updated data and outputs
         st.session_state.get("last_update_freshness") or build_update_freshness_summary()
     )
 
-def render_sidebar_metadata(master: pd.DataFrame) -> None:
+def render_sidebar_metadata(master: pd.DataFrame, hub_summary: dict) -> None:
     st.sidebar.subheader("Status")
-    st.sidebar.metric("Last updated time", latest_update_time())
+    st.sidebar.metric("Output file updated time", latest_update_time())
+    st.sidebar.metric("Latest dataset / COT date", latest_dataset_date_from_master(master))
+    st.sidebar.metric("Latest CFTC available date", latest_cftc_available_date())
+    if hub_summary.get("last_update_time"):
+        st.sidebar.caption(f"Hub summary refresh UTC: `{hub_summary.get('last_update_time')}`")
+    st.sidebar.caption(date_semantics_note())
     st.sidebar.caption("Gold price source:")
     st.sidebar.code(GOLD_SOURCE_TEXT)
     st.sidebar.warning(FUTURES_PROXY_NOTE)
@@ -2474,6 +2583,11 @@ def page_historical_similarity_engine(
     if historical_report.empty:
         st.info(f"N/A: HSE output not found. Run `python src/historical_similarity_engine.py` from `{PROJECT_ROOT}`.")
         return
+
+    current_snapshot_date = "N/A"
+    if "current_date" in historical_report.columns and not historical_report.empty:
+        current_snapshot_date = fmt_date(historical_report["current_date"].iloc[0])
+    render_component_date_context("Historical Similarity", current_snapshot_date)
 
     required_report = [
         "current_date",
@@ -3424,8 +3538,9 @@ def page_mm_lifecycle_research() -> None:
         st.warning(f"N/A: missing MM lifecycle dataset: {MM_LIFECYCLE_DATASET_PATH}")
     else:
         latest = lifecycle.dropna(subset=["date"]).sort_values("date").iloc[-1]
+        lifecycle_date = latest["date"].strftime("%Y-%m-%d") if pd.notna(latest["date"]) else "N/A"
         c1, c2, c3, c4 = st.columns(4)
-        c1.metric("Date", latest["date"].strftime("%Y-%m-%d") if pd.notna(latest["date"]) else "N/A")
+        c1.metric("Lifecycle Data Date", lifecycle_date)
         c2.metric("MM Lifecycle State", latest.get("mm_lifecycle_state", "N/A"))
         c3.metric("MM Velocity 8W", fmt_percent(latest.get("mm_velocity_8w"), input_scale="fraction"))
         c4.metric("MM Acceleration 8W", fmt_percent(latest.get("mm_acceleration_8w"), input_scale="fraction"))
@@ -3433,6 +3548,7 @@ def page_mm_lifecycle_research() -> None:
         c5.metric("MM Percentile", fmt_percent(latest.get("mm_percentile"), input_scale="fraction"))
         c6.metric("MM Velocity 4W", fmt_percent(latest.get("mm_velocity_4w"), input_scale="fraction"))
         c7.metric("MM Velocity 26W", fmt_percent(latest.get("mm_velocity_26w"), input_scale="fraction"))
+        render_component_date_context("MM Lifecycle", lifecycle_date)
 
     st.subheader("Interactive Gold vs MM Lifecycle")
     st.caption(
@@ -3569,8 +3685,9 @@ def page_mm_structure_lifecycle() -> None:
         st.warning(f"N/A: missing MM structure dataset: {MM_STRUCTURE_DATASET_PATH}")
     else:
         latest = structure.dropna(subset=["date"]).sort_values("date").iloc[-1]
+        structure_date = latest["date"].strftime("%Y-%m-%d") if pd.notna(latest["date"]) else "N/A"
         c1, c2, c3, c4 = st.columns(4)
-        c1.metric("Date", latest["date"].strftime("%Y-%m-%d") if pd.notna(latest["date"]) else "N/A")
+        c1.metric("Structure Data Date", structure_date)
         c2.metric("Gold Close", fmt_number(latest.get("gold_close")))
         c3.metric("Structure State", latest.get("mm_structure_state", "N/A"))
         c4.metric("Contribution State", latest.get("mm_structure_contribution_state", "N/A"))
@@ -3589,6 +3706,7 @@ def page_mm_structure_lifecycle() -> None:
         c11.metric("Long Velocity 8W", fmt_percent(latest.get("mm_long_velocity_8w"), input_scale="fraction"))
         c12.metric("Short Velocity 8W", fmt_percent(latest.get("mm_short_velocity_8w"), input_scale="fraction"))
         c13.metric("Net Velocity 8W", fmt_percent(latest.get("mm_net_velocity_8w"), input_scale="fraction"))
+        render_component_date_context("MM Structure", structure_date)
 
     st.subheader("Interactive MM Structure Lifecycle")
     st.caption(
@@ -3714,6 +3832,22 @@ def page_mm_velocity_window_discovery() -> None:
         "without replacing the current 8W definition on the dashboard."
     )
 
+    velocity_window_dataset = load_mm_velocity_window_dataset()
+    if velocity_window_dataset.empty:
+        st.warning(f"N/A: missing velocity window dataset: {MM_VELOCITY_WINDOW_DATASET_PATH}")
+    elif "date" not in velocity_window_dataset.columns:
+        st.warning("N/A: missing velocity window dataset columns: date")
+    else:
+        velocity_window_dates = velocity_window_dataset.dropna(subset=["date"]).sort_values("date")
+        if velocity_window_dates.empty:
+            st.warning("N/A: velocity window dataset has no valid date rows.")
+        else:
+            latest_velocity_window = velocity_window_dates.iloc[-1]
+            render_component_date_context(
+                "Velocity Window Dataset",
+                fmt_date(latest_velocity_window.get("date")),
+            )
+
     reading = load_mm_velocity_reading_layer()
     st.subheader("Velocity Reading Layer")
     st.caption(
@@ -3745,6 +3879,8 @@ def page_mm_velocity_window_discovery() -> None:
             )
 
         latest_row = latest_reading.iloc[0] if not latest_reading.empty else None
+        if latest_row is not None:
+            render_component_date_context("Velocity Reading Layer", fmt_date(latest_row.get("date")))
         card_cols = st.columns(3)
         reading_cards = [
             {
@@ -3992,7 +4128,7 @@ def main() -> None:
     hub_summary = load_hub_summary()
     data_freshness_diagnostics = load_data_freshness_diagnostics()
 
-    render_sidebar_metadata(master)
+    render_sidebar_metadata(master, hub_summary)
     hse_exclude_recent_weeks = render_hse_exclusion_control()
     (
         historical_similarity_report,

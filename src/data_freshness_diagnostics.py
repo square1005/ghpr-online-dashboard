@@ -19,6 +19,7 @@ HSE_FEATURE_VECTOR_PATH = PROJECT_ROOT / "outputs" / "reports" / "hse_current_fe
 MM_LIFECYCLE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_lifecycle_dataset.csv"
 MM_STRUCTURE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_structure_lifecycle_dataset.csv"
 MM_VELOCITY_READING_LAYER_PATH = PROJECT_ROOT / "data" / "processed" / "mm_velocity_reading_layer.csv"
+MM_VELOCITY_WINDOW_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_velocity_window_dataset.csv"
 DIAGNOSTICS_JSON_PATH = PROJECT_ROOT / "outputs" / "reports" / "data_freshness_diagnostics.json"
 DIAGNOSTICS_MD_PATH = PROJECT_ROOT / "outputs" / "reports" / "data_freshness_diagnostics.md"
 
@@ -129,11 +130,21 @@ def component_specs() -> list[ComponentSpec]:
             fallback_path=HSE_FEATURE_VECTOR_PATH,
             fallback_reader=lambda path: latest_csv_date(path, "date"),
         ),
+        ComponentSpec(
+            "hse_current_feature_vector",
+            HSE_FEATURE_VECTOR_PATH,
+            lambda path: latest_csv_date(path, "date"),
+        ),
         ComponentSpec("mm_lifecycle", MM_LIFECYCLE_DATASET_PATH, lambda path: latest_csv_date(path, "date")),
         ComponentSpec("mm_structure", MM_STRUCTURE_DATASET_PATH, lambda path: latest_csv_date(path, "date")),
         ComponentSpec(
             "velocity_reading",
             MM_VELOCITY_READING_LAYER_PATH,
+            lambda path: latest_csv_date(path, "date"),
+        ),
+        ComponentSpec(
+            "velocity_window",
+            MM_VELOCITY_WINDOW_DATASET_PATH,
             lambda path: latest_csv_date(path, "date"),
         ),
     ]
@@ -176,6 +187,7 @@ def render_markdown(diagnostics: dict[str, Any]) -> str:
         f"- Generated UTC: `{diagnostics.get('generated_at_utc', 'N/A')}`",
         f"- Expected latest date: `{diagnostics.get('expected_latest_date') or 'N/A'}`",
         f"- Overall freshness status: `{diagnostics.get('overall_status', 'ERROR')}`",
+        "- Date meaning: Expected/latest dates are dataset report dates, not dashboard refresh timestamps.",
         "- Scope: Historical statistics / research reference only.",
         "",
         "| Component | File | Latest Date | Expected Latest Date | Current | Stale Reason |",

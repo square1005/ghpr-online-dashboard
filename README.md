@@ -18,6 +18,13 @@ Open:
 http://localhost:8501
 ```
 
+Browser translation note:
+
+```text
+Please do not use Chrome / Google Translate automatic translation on localhost.
+The dashboard includes Chinese text. Browser translation can mutate the Streamlit/React DOM and cause a removeChild NotFoundError.
+```
+
 Dashboard pages:
 
 - Current Position
@@ -175,6 +182,20 @@ Start command: streamlit run dashboard.py --server.address=0.0.0.0 --server.port
 ```
 
 Reference: Render deploy docs: https://render.com/docs/deploys
+
+## Troubleshooting
+
+Known browser issue:
+
+```text
+NotFoundError: Failed to execute 'removeChild' on 'Node'
+```
+
+If this appears while Chrome / Google Translate is active, turn off automatic translation for the GHPR localhost page and refresh. Details:
+
+```text
+docs/troubleshooting.md
+```
 
 ## Core Outputs
 

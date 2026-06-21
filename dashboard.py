@@ -8,6 +8,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit as st
+import streamlit.components.v1 as components
 
 from src.candlestick_viewer import (
     CANDLESTICK_SOURCE_NOTE_EN,
@@ -293,7 +294,32 @@ st.set_page_config(
 
 st.markdown(
     """
+<meta name="google" content="notranslate">
 <style>
+html,
+body,
+.stApp,
+[data-testid="stAppViewContainer"],
+[data-testid="stSidebar"],
+.block-container {
+  translate: no;
+}
+.notranslate {
+  translate: no;
+}
+.ghpr-translate-warning {
+  border: 1px solid #fde68a;
+  border-left: 6px solid #f59e0b;
+  background: #fffbeb;
+  color: #713f12;
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  margin: 0.8rem 0 1rem 0;
+  line-height: 1.55;
+}
+.ghpr-translate-warning strong {
+  color: #92400e;
+}
 .ghpr-chart-title {
   font-size: 1.05rem;
   font-weight: 700;
@@ -305,6 +331,78 @@ st.markdown(
 """,
     unsafe_allow_html=True,
 )
+
+
+def inject_notranslate_guard() -> None:
+    """Mark the Streamlit parent document as notranslate to avoid DOM mutation errors."""
+    components.html(
+        """
+<script>
+(function () {
+  function applyNoTranslate() {
+    try {
+      const doc = window.parent.document;
+      let meta = doc.querySelector('meta[name="google"]');
+      if (!meta) {
+        meta = doc.createElement("meta");
+        meta.setAttribute("name", "google");
+        doc.head.appendChild(meta);
+      }
+      meta.setAttribute("content", "notranslate");
+
+      const selectors = [
+        "html",
+        "body",
+        ".stApp",
+        "[data-testid='stAppViewContainer']",
+        "[data-testid='stSidebar']",
+        ".block-container",
+        "section.main"
+      ];
+      selectors.forEach(function (selector) {
+        doc.querySelectorAll(selector).forEach(function (node) {
+          node.classList.add("notranslate");
+          node.setAttribute("translate", "no");
+        });
+      });
+    } catch (error) {
+      // Best-effort guard only. The visible dashboard warning remains available.
+    }
+  }
+
+  applyNoTranslate();
+  try {
+    const doc = window.parent.document;
+    const observer = new MutationObserver(applyNoTranslate);
+    observer.observe(doc.body, { childList: true, subtree: true });
+  } catch (error) {
+    // Ignore observer setup failures in restricted browser contexts.
+  }
+})();
+</script>
+""",
+        height=0,
+        width=0,
+    )
+
+
+def render_translate_warning(location: str = "main") -> None:
+    message = (
+        "<strong>瀏覽器翻譯提醒：</strong>"
+        "請不要使用 Chrome / Google Translate 自動翻譯 localhost 或 GHPR Dashboard。"
+        "瀏覽器翻譯外掛可能會改動 Streamlit / React 的頁面節點，造成 "
+        "<code>NotFoundError: removeChild</code> 前端錯誤。"
+        "本 Dashboard 已內建中文說明；若看到該錯誤，請先關閉此頁面的自動翻譯並重新整理。"
+        "<br>"
+        "<strong>Browser translation note:</strong> Please keep automatic translation off for this dashboard."
+    )
+    if location == "sidebar":
+        st.sidebar.warning(
+            "請不要用 Chrome / Google Translate 自動翻譯 localhost。"
+            "Dashboard 已內建中文說明；自動翻譯可能造成 Streamlit 前端 DOM 錯誤。"
+        )
+        return
+    st.markdown(f"<div class='ghpr-translate-warning notranslate'>{message}</div>", unsafe_allow_html=True)
 
 
 def render_interactive_chart(
@@ -1715,6 +1813,7 @@ For stable production data, refresh locally/VPS, commit updated data and outputs
 
 def render_sidebar_metadata(master: pd.DataFrame, hub_summary: dict) -> None:
     st.sidebar.subheader("Status")
+    render_translate_warning(location="sidebar")
     st.sidebar.metric("Output file updated time", latest_update_time())
     st.sidebar.metric("Latest dataset / COT date", latest_dataset_date_from_master(master))
     st.sidebar.metric("Latest CFTC available date", latest_cftc_available_date())
@@ -4148,8 +4247,10 @@ def page_update_log() -> None:
 
 
 def main() -> None:
+    inject_notranslate_guard()
     st.title("GHPR Online Dashboard v0.4")
     st.caption("Cloud-ready historical positioning dashboard with one-click research data refresh.")
+    render_translate_warning()
 
     render_update_controls()
 

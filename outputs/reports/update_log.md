@@ -2,8 +2,8 @@
 
 - Status: `success`
 - Update mode: `local`
-- Started UTC: `2026-06-21T10:08:42.144904+00:00`
-- Finished UTC: `2026-06-21T10:10:04.936681+00:00`
+- Started UTC: `2026-06-21T10:32:23.326613+00:00`
+- Finished UTC: `2026-06-21T10:34:05.427597+00:00`
 - Latest dataset date before update: `2026-06-09`
 - Latest dataset date after update: `2026-06-09`
 - Latest CFTC available date: `2026-06-09`
@@ -18,7 +18,7 @@
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/build_master_dataset.py --no-download`
 - Exit code: `0`
-- Elapsed seconds: `14.65`
+- Elapsed seconds: `17.65`
 
 #### stdout
 
@@ -37,7 +37,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/factor_analysis.py`
 - Exit code: `0`
-- Elapsed seconds: `18.98`
+- Elapsed seconds: `29.18`
 
 #### stdout
 
@@ -59,7 +59,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/plot_engine.py`
 - Exit code: `0`
-- Elapsed seconds: `5.39`
+- Elapsed seconds: `6.67`
 
 #### stdout
 
@@ -83,7 +83,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/report_engine.py`
 - Exit code: `0`
-- Elapsed seconds: `4.42`
+- Elapsed seconds: `5.00`
 
 #### stdout
 
@@ -101,7 +101,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/historical_similarity_engine.py`
 - Exit code: `0`
-- Elapsed seconds: `2.55`
+- Elapsed seconds: `4.94`
 
 #### stdout
 
@@ -120,7 +120,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_lifecycle_research.py`
 - Exit code: `0`
-- Elapsed seconds: `12.94`
+- Elapsed seconds: `11.90`
 
 #### stdout
 
@@ -141,7 +141,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_structure_lifecycle_research.py`
 - Exit code: `0`
-- Elapsed seconds: `8.57`
+- Elapsed seconds: `8.70`
 
 #### stdout
 
@@ -162,7 +162,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_velocity_window_discovery.py`
 - Exit code: `0`
-- Elapsed seconds: `10.19`
+- Elapsed seconds: `11.97`
 
 #### stdout
 
@@ -183,7 +183,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_velocity_reading_layer.py`
 - Exit code: `0`
-- Elapsed seconds: `1.37`
+- Elapsed seconds: `2.34`
 
 #### stdout
 
@@ -205,7 +205,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/export_hub_summary.py`
 - Exit code: `0`
-- Elapsed seconds: `1.24`
+- Elapsed seconds: `1.42`
 
 #### stdout
 
@@ -225,7 +225,7 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/data_freshness_diagnostics.py`
 - Exit code: `0`
-- Elapsed seconds: `1.16`
+- Elapsed seconds: `2.33`
 
 #### stdout
 

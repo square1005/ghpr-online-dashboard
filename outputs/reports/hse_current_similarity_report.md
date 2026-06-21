@@ -11,7 +11,7 @@ Version 0.3 similarity score uses only MM Percentile, Producer Percentile, and O
 ## Current State
 
 - Latest date: `2026-06-09`
-- Latest gold_close: `4,468.10`
+- Latest gold_close: `4,260.00`
 - Master rows: `876`
 - Historical candidates after recent-row exclusion: `824`
 - Complete feature candidates: `773`

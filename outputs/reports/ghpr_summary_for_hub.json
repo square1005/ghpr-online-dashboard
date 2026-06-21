@@ -1,6 +1,6 @@
 {
   "date": "2026-06-09",
-  "gold_close": 4468.1001,
+  "gold_close": 4260.0,
   "mm_percentile": 35.8974,
   "producer_percentile": 94.8718,
   "oi_percentile": 1.2821,
@@ -38,7 +38,7 @@
     "gold_price_source": "COMEX GC futures proxy via Yahoo Finance GC=F",
     "scope": "historical statistics / research reference only"
   },
-  "last_update_time": "2026-06-14T16:27:45.150234+00:00",
+  "last_update_time": "2026-06-21T10:10:03.635197+00:00",
   "dashboard_url": "https://square1005.github.io/ghpr-online-dashboard/",
   "mm_lifecycle_state": "MM_ACCUMULATION",
   "mm_velocity_8w": 0.102564,

@@ -310,20 +310,24 @@ st.markdown(
 def render_interactive_chart(
     title: str,
     fig: go.Figure,
+    key: str,
     height: int = 520,
     config: dict | None = None,
     show_legend: bool = True,
     has_range_slider: bool = False,
 ) -> None:
     st.markdown(f"<div class='ghpr-chart-title'>{title}</div>", unsafe_allow_html=True)
+    render_fig = go.Figure(fig)
     apply_ghpr_plotly_layout(
-        fig,
+        render_fig,
         title=None,
         height=height,
         show_legend=show_legend,
         has_range_slider=has_range_slider,
+        uirevision=key,
     )
-    st.plotly_chart(fig, use_container_width=True, config=config)
+    chart_config = {"responsive": True, **(config or {})}
+    st.plotly_chart(render_fig, use_container_width=True, config=chart_config, key=key)
 
 
 @st.cache_data(show_spinner=False)
@@ -2042,6 +2046,7 @@ def page_historical_database(master: pd.DataFrame) -> None:
     render_interactive_chart(
         "Gold Price vs MM Net Percentile",
         gold_mm_plot(filtered),
+        key="historical_database_gold_mm_percentile",
         height=620,
         has_range_slider=True,
     )
@@ -2257,8 +2262,18 @@ def render_single_event_study(master: pd.DataFrame, similar: pd.DataFrame) -> No
         st.info("N/A")
         return
 
-    render_interactive_chart("Event Study: Gold Indexed Path", event_gold_path_plot(window), height=520)
-    render_interactive_chart("Event Study: MM Percentile Path", event_mm_percentile_plot(window), height=500)
+    render_interactive_chart(
+        "Event Study: Gold Indexed Path",
+        event_gold_path_plot(window),
+        key="event_study_gold_indexed_path",
+        height=520,
+    )
+    render_interactive_chart(
+        "Event Study: MM Percentile Path",
+        event_mm_percentile_plot(window),
+        key="event_study_mm_percentile_path",
+        height=500,
+    )
 
 
 def event_window(
@@ -2367,7 +2382,12 @@ def render_group_event_study(master: pd.DataFrame) -> None:
         st.warning("Insufficient history around selected event")
         return
 
-    render_interactive_chart("Average Gold Event Path", group_event_path_plot(paths), height=540)
+    render_interactive_chart(
+        "Average Gold Event Path",
+        group_event_path_plot(paths),
+        key="event_study_group_average_gold_path",
+        height=540,
+    )
 
 
 def filter_events_by_mm_condition(master: pd.DataFrame, condition: str) -> pd.DataFrame:
@@ -2511,6 +2531,7 @@ def page_forward_statistics(factor_result: pd.DataFrame) -> None:
     render_interactive_chart(
         "Average Historical Following Return (%)",
         bucket_line_chart(view, "avg_forward_return_pct", "Average Historical Following Return (%)"),
+        key="forward_statistics_avg_following_return",
         height=500,
         show_legend=False,
     )
@@ -2519,6 +2540,7 @@ def page_forward_statistics(factor_result: pd.DataFrame) -> None:
         render_interactive_chart(
             "Win Rate (%)",
             bucket_bar_chart(view, "win_rate_pct", "Win Rate (%)"),
+            key="forward_statistics_win_rate",
             height=500,
             show_legend=False,
         )
@@ -2526,6 +2548,7 @@ def page_forward_statistics(factor_result: pd.DataFrame) -> None:
         render_interactive_chart(
             "Count",
             bucket_bar_chart(view, "count", "Count"),
+            key="forward_statistics_count",
             height=500,
             show_legend=False,
         )
@@ -2766,6 +2789,7 @@ def render_historical_weekly_candlestick(historical_report: pd.DataFrame) -> Non
     render_interactive_chart(
         candlestick_title(window).replace("<br>", " / "),
         build_candlestick_figure(window_ohlc, window),
+        key="historical_similarity_weekly_candlestick",
         height=560,
     )
     st.caption(CANDLESTICK_SOURCE_NOTE_EN)
@@ -3561,6 +3585,7 @@ def page_mm_lifecycle_research() -> None:
             render_interactive_chart(
                 "Interactive Gold vs MM Lifecycle",
                 build_interactive_lifecycle_core_chart(lifecycle),
+                key="mm_lifecycle_gold_vs_mm",
                 height=560,
                 config=PLOTLY_LIFECYCLE_CONFIG,
                 has_range_slider=True,
@@ -3576,6 +3601,7 @@ def page_mm_lifecycle_research() -> None:
             render_interactive_chart(
                 "Interactive MM Velocity / Acceleration",
                 build_interactive_velocity_acceleration_chart(lifecycle),
+                key="mm_lifecycle_velocity_acceleration",
                 height=540,
                 config=PLOTLY_LIFECYCLE_CONFIG,
                 has_range_slider=True,
@@ -3721,6 +3747,7 @@ def page_mm_structure_lifecycle() -> None:
             render_interactive_chart(
                 "Interactive Gold vs MM Long / Short / Net Structure",
                 build_interactive_structure_core_chart(structure),
+                key="mm_structure_gold_long_short_net",
                 height=580,
                 config=PLOTLY_STRUCTURE_CONFIG,
                 has_range_slider=True,
@@ -3736,6 +3763,7 @@ def page_mm_structure_lifecycle() -> None:
             render_interactive_chart(
                 "Interactive MM Structure Velocity",
                 build_interactive_structure_velocity_chart(structure),
+                key="mm_structure_velocity",
                 height=540,
                 config=PLOTLY_STRUCTURE_CONFIG,
                 has_range_slider=True,
@@ -3935,6 +3963,7 @@ def page_mm_velocity_window_discovery() -> None:
             render_interactive_chart(
                 "Interactive Velocity Baseline vs Candidate",
                 build_interactive_velocity_baseline_candidate_chart(reading),
+                key="velocity_reading_baseline_candidate",
                 height=580,
                 config=PLOTLY_VELOCITY_READING_CONFIG,
                 has_range_slider=True,
@@ -3947,6 +3976,7 @@ def page_mm_velocity_window_discovery() -> None:
             render_interactive_chart(
                 "Interactive Velocity Delta",
                 build_interactive_velocity_delta_chart(reading),
+                key="velocity_reading_delta",
                 height=540,
                 config=PLOTLY_VELOCITY_READING_CONFIG,
                 has_range_slider=True,

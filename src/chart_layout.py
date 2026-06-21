@@ -19,17 +19,18 @@ def apply_ghpr_plotly_layout(
     height: int = 520,
     show_legend: bool = True,
     has_range_slider: bool | None = None,
+    uirevision: str | None = None,
 ) -> go.Figure:
     """Apply a consistent non-overlapping layout for Streamlit Plotly charts."""
-    margin_top = 148 if has_range_slider else 96
+    margin_top = 115 if has_range_slider else 90
     fig.update_layout(
-        title=None if title is None else dict(text=title, y=0.98, x=0, xanchor="left"),
+        title=dict(text="" if title is None else title, y=0.96, x=0, xanchor="left"),
         height=max(height, 500),
-        margin=dict(l=55, r=35, t=margin_top, b=88 if has_range_slider else 72),
+        margin=dict(l=50, r=30, t=margin_top, b=80 if has_range_slider else 70),
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=1.06,
+            y=1.08 if has_range_slider else 1.02,
             xanchor="left",
             x=0,
             bgcolor="rgba(255,255,255,0)",
@@ -38,6 +39,7 @@ def apply_ghpr_plotly_layout(
         ),
         hovermode="x unified",
         showlegend=show_legend,
+        uirevision=uirevision,
     )
     return fig
 

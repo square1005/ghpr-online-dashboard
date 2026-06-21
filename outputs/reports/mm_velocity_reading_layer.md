@@ -27,7 +27,7 @@ Net 8W is the current swing baseline. Net 26W is the research candidate because 
 | Field | Value |
 |---|---|
 | date | `2026-06-09` |
-| gold_close | `4,468.10` |
+| gold_close | `4,260.00` |
 | long_baseline_8w | `2.56 pct points` |
 | long_candidate_26w | `-14.74 pct points` |
 | long_alignment_status | `BASELINE_POSITIVE_CANDIDATE_NEGATIVE` |

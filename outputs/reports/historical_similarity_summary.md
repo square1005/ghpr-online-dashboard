@@ -21,7 +21,7 @@ Future version candidates: MM Z-score, Producer Z-score, OI Z-score, Options, Ma
 ## Current Market State
 
 - Latest data date: `2026-06-09`
-- Latest gold close: `4,468.10`
+- Latest gold close: `4,260.00`
 - MM Percentile: `35.90%`
 - Producer Percentile: `94.87%`
 - OI Percentile: `1.28%`

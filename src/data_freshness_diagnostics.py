@@ -20,6 +20,7 @@ MM_LIFECYCLE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_lifecycle_
 MM_STRUCTURE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_structure_lifecycle_dataset.csv"
 MM_VELOCITY_READING_LAYER_PATH = PROJECT_ROOT / "data" / "processed" / "mm_velocity_reading_layer.csv"
 MM_VELOCITY_WINDOW_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_velocity_window_dataset.csv"
+MM_WEEKLY_CHANGE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_weekly_change_dataset.csv"
 DIAGNOSTICS_JSON_PATH = PROJECT_ROOT / "outputs" / "reports" / "data_freshness_diagnostics.json"
 DIAGNOSTICS_MD_PATH = PROJECT_ROOT / "outputs" / "reports" / "data_freshness_diagnostics.md"
 
@@ -145,6 +146,11 @@ def component_specs() -> list[ComponentSpec]:
         ComponentSpec(
             "velocity_window",
             MM_VELOCITY_WINDOW_DATASET_PATH,
+            lambda path: latest_csv_date(path, "date"),
+        ),
+        ComponentSpec(
+            "mm_weekly_change",
+            MM_WEEKLY_CHANGE_DATASET_PATH,
             lambda path: latest_csv_date(path, "date"),
         ),
     ]

@@ -7,8 +7,8 @@
 
 ## 2025-2026 Anomaly Flags
 
-- Flagged rows: 49
+- Flagged rows: 51
 - Rules: date >= 2025-01-01 and any of `level>=4000`, `level>=5000`, `abs_1w_return>=5pct`, `abs_return_zscore_52w>=2.5`, `level_zscore_156w>=2.5`.
 - Detail CSV: gold_price_anomalies_2025_2026.csv
 
-- Flagged interval: 2025-02-11 to 2026-06-09
+- Flagged interval: 2025-02-11 to 2026-06-23

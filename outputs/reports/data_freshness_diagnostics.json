@@ -1,70 +1,78 @@
 {
-  "generated_at_utc": "2026-06-21T10:34:05.252635+00:00",
-  "expected_latest_date": "2026-06-09",
+  "generated_at_utc": "2026-06-29T11:08:30.278299+00:00",
+  "expected_latest_date": "2026-06-23",
   "overall_status": "OK",
   "stale_components": [],
   "components": [
     {
       "component": "master",
       "file": "data/processed/ghpr_master_weekly.csv",
-      "latest_date": "2026-06-09",
-      "expected_latest_date": "2026-06-09",
+      "latest_date": "2026-06-23",
+      "expected_latest_date": "2026-06-23",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "hub_summary",
       "file": "outputs/reports/ghpr_summary_for_hub.json",
-      "latest_date": "2026-06-09",
-      "expected_latest_date": "2026-06-09",
+      "latest_date": "2026-06-23",
+      "expected_latest_date": "2026-06-23",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "historical_similarity",
       "file": "outputs/reports/historical_similarity_report.csv",
-      "latest_date": "2026-06-09",
-      "expected_latest_date": "2026-06-09",
+      "latest_date": "2026-06-23",
+      "expected_latest_date": "2026-06-23",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "hse_current_feature_vector",
       "file": "outputs/reports/hse_current_feature_vector.csv",
-      "latest_date": "2026-06-09",
-      "expected_latest_date": "2026-06-09",
+      "latest_date": "2026-06-23",
+      "expected_latest_date": "2026-06-23",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "mm_lifecycle",
       "file": "data/processed/mm_lifecycle_dataset.csv",
-      "latest_date": "2026-06-09",
-      "expected_latest_date": "2026-06-09",
+      "latest_date": "2026-06-23",
+      "expected_latest_date": "2026-06-23",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "mm_structure",
       "file": "data/processed/mm_structure_lifecycle_dataset.csv",
-      "latest_date": "2026-06-09",
-      "expected_latest_date": "2026-06-09",
+      "latest_date": "2026-06-23",
+      "expected_latest_date": "2026-06-23",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "velocity_reading",
       "file": "data/processed/mm_velocity_reading_layer.csv",
-      "latest_date": "2026-06-09",
-      "expected_latest_date": "2026-06-09",
+      "latest_date": "2026-06-23",
+      "expected_latest_date": "2026-06-23",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "velocity_window",
       "file": "data/processed/mm_velocity_window_dataset.csv",
-      "latest_date": "2026-06-09",
-      "expected_latest_date": "2026-06-09",
+      "latest_date": "2026-06-23",
+      "expected_latest_date": "2026-06-23",
+      "is_current": true,
+      "stale_reason": ""
+    },
+    {
+      "component": "mm_weekly_change",
+      "file": "data/processed/mm_weekly_change_dataset.csv",
+      "latest_date": "2026-06-23",
+      "expected_latest_date": "2026-06-23",
       "is_current": true,
       "stale_reason": ""
     }

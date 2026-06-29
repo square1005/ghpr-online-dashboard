@@ -26,18 +26,18 @@ Net 8W is the current swing baseline. Net 26W is the research candidate because 
 
 | Field | Value |
 |---|---|
-| date | `2026-06-09` |
-| gold_close | `4,260.00` |
-| long_baseline_8w | `2.56 pct points` |
-| long_candidate_26w | `-14.74 pct points` |
+| date | `2026-06-23` |
+| gold_close | `4,172.90` |
+| long_baseline_8w | `11.54 pct points` |
+| long_candidate_26w | `-21.15 pct points` |
 | long_alignment_status | `BASELINE_POSITIVE_CANDIDATE_NEGATIVE` |
-| short_baseline_8w | `-21.15 pct points` |
-| short_candidate_2w | `-11.54 pct points` |
-| short_candidate_4w | `-18.59 pct points` |
-| short_candidate_fast_avg | `-15.06 pct points` |
+| short_baseline_8w | `-34.62 pct points` |
+| short_candidate_2w | `-7.69 pct points` |
+| short_candidate_4w | `-19.23 pct points` |
+| short_candidate_fast_avg | `-13.46 pct points` |
 | short_alignment_status | `SAME_DIRECTION_NEGATIVE` |
-| net_baseline_8w | `10.26 pct points` |
-| net_candidate_26w | `-14.74 pct points` |
+| net_baseline_8w | `23.72 pct points` |
+| net_candidate_26w | `-16.03 pct points` |
 | net_alignment_status | `BASELINE_POSITIVE_CANDIDATE_NEGATIVE` |
 | overall_velocity_reading | `MEDIUM_TERM_STRUCTURE_WEAKENING` |
 
@@ -45,7 +45,7 @@ Net 8W is the current swing baseline. Net 26W is the research candidate because 
 
 | Reading | Count |
 |---|---:|
-| MEDIUM_TERM_STRUCTURE_WEAKENING | 386 |
+| MEDIUM_TERM_STRUCTURE_WEAKENING | 388 |
 | MEDIUM_TERM_PARTICIPATION_BUILDING | 323 |
 | MIXED_STRUCTURE | 108 |
 | SHORT_TERM_RECOVERY_MEDIUM_TERM_UNCONFIRMED | 53 |

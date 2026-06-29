@@ -172,6 +172,7 @@ def build_update_commands(mode: str = "local", no_download: bool | None = None) 
         ("Run MM structure lifecycle research", [python, "src/mm_structure_lifecycle_research.py"]),
         ("Run MM velocity window discovery", [python, "src/mm_velocity_window_discovery.py"]),
         ("Run MM velocity reading layer", [python, "src/mm_velocity_reading_layer.py"]),
+        ("Run MM weekly change layer", [python, "src/mm_weekly_change_layer.py"]),
         ("Export hub summary", [python, "src/export_hub_summary.py"]),
         ("Run data freshness diagnostics", [python, "src/data_freshness_diagnostics.py"]),
     ]

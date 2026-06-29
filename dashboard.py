@@ -99,6 +99,12 @@ MM_VELOCITY_READING_LAYER_PATH = (
 MM_VELOCITY_READING_REPORT_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "mm_velocity_reading_layer.md"
 )
+MM_WEEKLY_CHANGE_DATASET_PATH = (
+    PROJECT_ROOT / "data" / "processed" / "mm_weekly_change_dataset.csv"
+)
+MM_WEEKLY_CHANGE_REPORT_PATH = (
+    PROJECT_ROOT / "outputs" / "reports" / "mm_weekly_change_summary.md"
+)
 HISTORICAL_SIMILARITY_REPORT_PATH = (
     PROJECT_ROOT / "outputs" / "reports" / "historical_similarity_report.csv"
 )
@@ -822,6 +828,27 @@ def load_mm_velocity_reading_report() -> str:
 
 
 @st.cache_data(show_spinner=False)
+def load_mm_weekly_change_dataset() -> pd.DataFrame:
+    if not MM_WEEKLY_CHANGE_DATASET_PATH.exists():
+        return pd.DataFrame()
+    frame = pd.read_csv(MM_WEEKLY_CHANGE_DATASET_PATH)
+    if "date" in frame.columns:
+        frame["date"] = pd.to_datetime(frame["date"], errors="coerce")
+    text_columns = {"weekly_structure_state", "net_weekly_state", "weekly_change_state"}
+    for column in frame.columns:
+        if column != "date" and column not in text_columns:
+            frame[column] = pd.to_numeric(frame[column], errors="coerce")
+    return frame.sort_values("date").reset_index(drop=True) if "date" in frame.columns else frame
+
+
+@st.cache_data(show_spinner=False)
+def load_mm_weekly_change_summary() -> str:
+    if not MM_WEEKLY_CHANGE_REPORT_PATH.exists():
+        return "N/A"
+    return MM_WEEKLY_CHANGE_REPORT_PATH.read_text(encoding="utf-8", errors="replace")
+
+
+@st.cache_data(show_spinner=False)
 def load_update_log() -> str:
     if not UPDATE_LOG_PATH.exists():
         return "N/A"
@@ -1282,6 +1309,201 @@ def render_current_market_snapshot(
     if hub_summary and hub_date != "N/A" and master_date != "N/A" and hub_date != master_date:
         st.warning("Dashboard summary 尚未同步到最新 master dataset，請重新執行完整更新。")
 
+
+
+def weekly_change_plot_frame(weekly_change: pd.DataFrame) -> pd.DataFrame:
+    required = [
+        "date",
+        "gold_close",
+        "gold_normalized_index",
+        "mm_long",
+        "mm_short",
+        "mm_net",
+        "mm_net_percentile_156w",
+        "mm_long_change_1w",
+        "mm_short_change_1w",
+        "mm_net_change_1w",
+        "weekly_change_state",
+    ]
+    missing = missing_columns(weekly_change, required)
+    if missing:
+        raise ValueError("Missing weekly change columns: " + ", ".join(missing))
+    frame = weekly_change[required].copy().dropna(subset=["date", "gold_close", "mm_net"])
+    if frame.empty:
+        raise ValueError("No valid weekly change rows for interactive chart.")
+    if "gold_normalized_index" not in frame.columns or frame["gold_normalized_index"].isna().all():
+        first_gold = frame["gold_close"].dropna().iloc[0]
+        frame["gold_normalized_index"] = frame["gold_close"] / first_gold * 100
+    frame["mm_net_percentile_pct"] = frame["mm_net_percentile_156w"] * 100
+    return frame
+
+
+def weekly_change_hover_template(trace_name: str) -> str:
+    return (
+        "Date: %{x|%Y-%m-%d}<br>"
+        "gold_close: %{customdata[0]:,.2f}<br>"
+        "gold_normalized_index: %{customdata[1]:.2f}<br>"
+        "mm_long: %{customdata[2]:,.0f}<br>"
+        "mm_short: %{customdata[3]:,.0f}<br>"
+        "mm_net: %{customdata[4]:,.0f}<br>"
+        "long_change_1w: %{customdata[5]:,.0f}<br>"
+        "short_change_1w: %{customdata[6]:,.0f}<br>"
+        "net_change_1w: %{customdata[7]:,.0f}<br>"
+        "weekly_change_state: %{customdata[8]}<extra>" + trace_name + "</extra>"
+    )
+
+
+def build_weekly_change_gold_net_chart(weekly_change: pd.DataFrame) -> go.Figure:
+    frame = weekly_change_plot_frame(weekly_change)
+    customdata = frame[
+        [
+            "gold_close",
+            "gold_normalized_index",
+            "mm_long",
+            "mm_short",
+            "mm_net",
+            "mm_long_change_1w",
+            "mm_short_change_1w",
+            "mm_net_change_1w",
+            "weekly_change_state",
+        ]
+    ].to_numpy()
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    fig.add_trace(
+        go.Scatter(
+            x=frame["date"],
+            y=frame["gold_normalized_index"],
+            mode="lines",
+            name="Gold normalized index",
+            line={"color": "#111827", "width": 2},
+            customdata=customdata,
+            hovertemplate=weekly_change_hover_template("Gold normalized index"),
+        ),
+        secondary_y=False,
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=frame["date"],
+            y=frame["mm_net"],
+            mode="lines",
+            name="MM Net",
+            line={"color": "#2563eb", "width": 2},
+            customdata=customdata,
+            hovertemplate=weekly_change_hover_template("MM Net"),
+        ),
+        secondary_y=True,
+    )
+    fig.update_layout(title=None, xaxis=lifecycle_range_controls(), dragmode="pan")
+    fig.update_yaxes(title_text="Gold normalized index", secondary_y=False)
+    fig.update_yaxes(title_text="MM Net contracts", secondary_y=True)
+    return fig
+
+
+def build_weekly_change_delta_chart(weekly_change: pd.DataFrame) -> go.Figure:
+    frame = weekly_change_plot_frame(weekly_change)
+    customdata = frame[
+        [
+            "gold_close",
+            "gold_normalized_index",
+            "mm_long",
+            "mm_short",
+            "mm_net",
+            "mm_long_change_1w",
+            "mm_short_change_1w",
+            "mm_net_change_1w",
+            "weekly_change_state",
+        ]
+    ].to_numpy()
+    fig = go.Figure()
+    series = [
+        ("MM Long Change 1W", "mm_long_change_1w", "#16a34a"),
+        ("MM Short Change 1W", "mm_short_change_1w", "#dc2626"),
+        ("MM Net Change 1W", "mm_net_change_1w", "#2563eb"),
+    ]
+    for name, column, color in series:
+        fig.add_trace(
+            go.Scatter(
+                x=frame["date"],
+                y=frame[column],
+                mode="lines",
+                name=name,
+                line={"color": color, "width": 2},
+                customdata=customdata,
+                hovertemplate=weekly_change_hover_template(name),
+            )
+        )
+    fig.add_hline(y=0, line_color="#111827", line_width=1)
+    fig.update_layout(title=None, xaxis=lifecycle_range_controls(), dragmode="pan")
+    fig.update_yaxes(title_text="Weekly contract change")
+    return fig
+
+
+def render_mm_weekly_change_section(weekly_change: pd.DataFrame, hub_summary: dict) -> None:
+    st.subheader("MM Weekly Change")
+    st.caption(
+        "本區顯示最新 COT 報告相對前一週的 Managed Money 部位變化。"
+        "這是週變化，不是交易訊號。Historical COT Weekly Change Research only."
+    )
+    required = [
+        "date",
+        "gold_close",
+        "mm_long",
+        "mm_short",
+        "mm_net",
+        "mm_long_change_1w",
+        "mm_short_change_1w",
+        "mm_net_change_1w",
+        "weekly_change_state",
+    ]
+    missing = missing_columns(weekly_change, required)
+    if weekly_change.empty:
+        st.info("N/A: MM weekly change dataset not found. Run the update pipeline to generate it.")
+        return
+    if missing:
+        st.warning("MM weekly change dataset is missing columns: " + ", ".join(missing))
+        return
+
+    latest = latest_row(weekly_change)
+    if latest is None:
+        st.info("N/A")
+        return
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("MM Long / Short", f"{fmt_int(latest.get('mm_long'))} / {fmt_int(latest.get('mm_short'))}")
+    c2.metric(
+        "Long Δ / Short Δ",
+        f"{fmt_int(latest.get('mm_long_change_1w'))} / {fmt_int(latest.get('mm_short_change_1w'))}",
+    )
+    c3.metric("MM Net Δ", fmt_int(latest.get("mm_net_change_1w")))
+    c4.metric("Weekly Structure", str(latest.get("weekly_change_state", "N/A")))
+
+    if hub_summary.get("mm_weekly_change"):
+        st.caption("Hub summary weekly change date: `" + str(hub_summary["mm_weekly_change"].get("date", "N/A")) + "`")
+    render_component_date_context("MM Weekly Change", fmt_date(latest.get("date")))
+
+    st.markdown("**Interactive Gold vs MM Weekly Change**")
+    c1, c2 = st.columns(2)
+    try:
+        with c1:
+            render_interactive_chart(
+                "Gold vs MM Net",
+                build_weekly_change_gold_net_chart(weekly_change),
+                key="weekly_change_gold_vs_mm_net",
+                height=540,
+                config=PLOTLY_WEEKLY_CHANGE_CONFIG,
+                has_range_slider=True,
+            )
+        with c2:
+            render_interactive_chart(
+                "MM Long / Short / Net Weekly Change",
+                build_weekly_change_delta_chart(weekly_change),
+                key="weekly_change_long_short_net_delta",
+                height=540,
+                config=PLOTLY_WEEKLY_CHANGE_CONFIG,
+                has_range_slider=True,
+            )
+    except ValueError as error:
+        st.warning(str(error))
 
 def render_historical_positioning_explanation(latest: pd.Series) -> None:
     st.subheader("Historical Positioning Explanation")
@@ -1912,8 +2134,10 @@ def page_current_position(
         return
 
     tendency_summary = build_historical_tendency_summary(latest, historical_stats)
+    weekly_change = load_mm_weekly_change_dataset()
     render_how_to_read_dashboard()
     render_current_market_snapshot(latest, hub_summary, diagnostics)
+    render_mm_weekly_change_section(weekly_change, hub_summary)
     render_dashboard_data_freshness(master, hub_summary, diagnostics)
     render_historical_positioning_explanation(latest)
     render_indicator_dictionary_cards(latest)
@@ -2970,6 +3194,18 @@ PLOTLY_VELOCITY_READING_CONFIG = {
     "toImageButtonOptions": {
         "format": "png",
         "filename": "ghpr_mm_velocity_reading_layer",
+        "scale": 2,
+    },
+}
+
+PLOTLY_WEEKLY_CHANGE_CONFIG = {
+    "displayModeBar": True,
+    "displaylogo": False,
+    "scrollZoom": True,
+    "modeBarButtonsToAdd": ["select2d"],
+    "toImageButtonOptions": {
+        "format": "png",
+        "filename": "ghpr_mm_weekly_change_layer",
         "scale": 2,
     },
 }

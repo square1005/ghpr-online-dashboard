@@ -25,6 +25,7 @@ MM_LIFECYCLE_LEAD_LAG_PATH = PROJECT_ROOT / "outputs" / "reports" / "mm_lifecycl
 MM_STRUCTURE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_structure_lifecycle_dataset.csv"
 MM_VELOCITY_READING_LAYER_PATH = PROJECT_ROOT / "data" / "processed" / "mm_velocity_reading_layer.csv"
 MM_VELOCITY_WINDOW_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_velocity_window_dataset.csv"
+MM_WEEKLY_CHANGE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_weekly_change_dataset.csv"
 HUB_SUMMARY_PATH = PROJECT_ROOT / "outputs" / "reports" / "ghpr_summary_for_hub.json"
 DASHBOARD_URL = "https://square1005.github.io/ghpr-online-dashboard/"
 
@@ -200,6 +201,7 @@ def build_data_health(
     structure: pd.DataFrame,
     velocity_reading: pd.DataFrame,
     velocity_window: pd.DataFrame,
+    weekly_change: pd.DataFrame,
 ) -> dict[str, Any]:
     missing_master_columns = [
         column for column in MASTER_REQUIRED_COLUMNS if column not in master.columns
@@ -215,6 +217,7 @@ def build_data_health(
             MM_STRUCTURE_DATASET_PATH,
             MM_VELOCITY_READING_LAYER_PATH,
             MM_VELOCITY_WINDOW_DATASET_PATH,
+            MM_WEEKLY_CHANGE_DATASET_PATH,
         ]
         if not path.exists()
     ]
@@ -239,6 +242,7 @@ def build_data_health(
         "mm_structure": latest_frame_date(structure),
         "velocity_reading": latest_frame_date(velocity_reading),
         "velocity_window": latest_frame_date(velocity_window),
+        "mm_weekly_change": latest_frame_date(weekly_change),
     }
     stale_components = [
         component
@@ -351,6 +355,26 @@ def latest_velocity_reading_row(reading: pd.DataFrame) -> pd.Series | None:
         return None
     return data.iloc[-1]
 
+def latest_weekly_change_row(weekly_change: pd.DataFrame) -> pd.Series | None:
+    required = [
+        "date",
+        "mm_long",
+        "mm_short",
+        "mm_net",
+        "mm_long_change_1w",
+        "mm_short_change_1w",
+        "mm_net_change_1w",
+        "weekly_change_state",
+    ]
+    if weekly_change.empty or any(column not in weekly_change.columns for column in required):
+        return None
+    data = weekly_change.copy()
+    data["date"] = pd.to_datetime(data["date"], errors="coerce")
+    data = data.dropna(subset=["date"]).sort_values("date")
+    if data.empty:
+        return None
+    return data.iloc[-1]
+
 
 def build_structure_note(row: pd.Series | None) -> str | None:
     if row is None:
@@ -407,6 +431,21 @@ def velocity_reading_layer_metadata(row: pd.Series | None) -> dict[str, Any] | N
         "note": "historical structure research only; not a trading signal",
     }
 
+def weekly_change_metadata(row: pd.Series | None) -> dict[str, Any] | None:
+    if row is None:
+        return None
+    return {
+        "date": json_value(row.get("date")),
+        "mm_long": json_value(row.get("mm_long"), 0),
+        "mm_short": json_value(row.get("mm_short"), 0),
+        "mm_net": json_value(row.get("mm_net"), 0),
+        "mm_long_change_1w": json_value(row.get("mm_long_change_1w"), 0),
+        "mm_short_change_1w": json_value(row.get("mm_short_change_1w"), 0),
+        "mm_net_change_1w": json_value(row.get("mm_net_change_1w"), 0),
+        "weekly_change_state": json_value(row.get("weekly_change_state")),
+        "note": "weekly COT change only; not a trading signal",
+    }
+
 
 def build_lifecycle_lead_lag_note(lead_lag: pd.DataFrame) -> str | None:
     required = ["mm_feature", "lag_weeks", "rank_correlation", "interpretation"]
@@ -440,10 +479,12 @@ def build_hub_summary() -> dict[str, Any]:
     structure = read_csv_or_empty(MM_STRUCTURE_DATASET_PATH)
     velocity_reading = read_csv_or_empty(MM_VELOCITY_READING_LAYER_PATH)
     velocity_window = read_csv_or_empty(MM_VELOCITY_WINDOW_DATASET_PATH)
+    weekly_change = read_csv_or_empty(MM_WEEKLY_CHANGE_DATASET_PATH)
     top20 = top20_stats_row(stats)
     latest_lifecycle = latest_lifecycle_row(lifecycle)
     latest_structure = latest_structure_row(structure)
     latest_velocity_reading = latest_velocity_reading_row(velocity_reading)
+    latest_weekly_change = latest_weekly_change_row(weekly_change)
 
     mm_percentile = percent_points(latest.get("mm_net_percentile_156w"))
     producer_percentile = percent_points(latest.get("producer_net_percentile_156w"))
@@ -474,6 +515,7 @@ def build_hub_summary() -> dict[str, Any]:
             structure,
             velocity_reading,
             velocity_window,
+            weekly_change,
         ),
         "last_update_time": datetime.now(timezone.utc).isoformat(),
         "dashboard_url": DASHBOARD_URL,
@@ -514,6 +556,7 @@ def build_hub_summary() -> dict[str, Any]:
         "mm_structure_note": build_structure_note(latest_structure),
         "velocity_window_review": velocity_window_review_metadata(),
         "velocity_reading_layer": velocity_reading_layer_metadata(latest_velocity_reading),
+        "mm_weekly_change": weekly_change_metadata(latest_weekly_change),
     }
     return summary
 

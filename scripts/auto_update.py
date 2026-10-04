@@ -26,7 +26,9 @@ def utc_now() -> str:
 def write_json(path: Path, value: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + ".tmp")
-    temporary.write_text(json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+    # Hash exactly the UTF-8/LF bytes that GitHub will serve. Windows text-mode
+    # CRLF conversion followed by Git autocrlf normalization changes the digest.
+    temporary.write_bytes((json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode("utf-8"))
     temporary.replace(path)
 
 
@@ -89,7 +91,31 @@ def validated_release(stage: Path) -> dict:
     return manifest
 
 
+def validated_git_index(repo: Path, env: dict) -> dict:
+    """Validate the actual staged blobs after any Git clean/EOL filters."""
+    def blob(relative: str) -> bytes:
+        completed = subprocess.run(["git", "show", f":{relative}"], cwd=repo, env=env,
+                                   capture_output=True, timeout=60)
+        if completed.returncode:
+            raise RuntimeError(f"Could not read staged GHPR release blob: {relative}")
+        return completed.stdout
+
+    manifest = json.loads(blob("web-data/manifest.json").decode("utf-8"))
+    web = (repo / "web-data").resolve()
+    for key in ("bundle", "outcomes", "status"):
+        item = manifest["files"][key]
+        path = (web / item["path"]).resolve()
+        if not path.is_relative_to(web) or path == web:
+            raise ValueError(f"Invalid staged release file path: {key}")
+        relative = path.relative_to(repo.resolve()).as_posix()
+        if hashlib.sha256(blob(relative)).hexdigest() != item["sha256"]:
+            raise ValueError(f"Staged Git release hash mismatch: {key}; publication blocked")
+    return manifest
+
+
 def publish_files(repo: Path, stage: Path, env: dict, log: Path, run_id: str, status_only: bool = False) -> str:
+    # Includes the final status rewrite, after same-generation/failure handling.
+    validated_release(stage)
     # Refuse to mix an operator's uncommitted changes into an automated release.
     dirty = execute(["git", "status", "--porcelain", "--untracked-files=no"], repo, env, log)
     if dirty:
@@ -110,6 +136,7 @@ def publish_files(repo: Path, stage: Path, env: dict, log: Path, run_id: str, st
                 shutil.copytree(src, dst, dirs_exist_ok=True)
         paths = list(PUBLISH_PATHS)
     execute(["git", "add", "-f", "--", *paths], repo, env, log)
+    validated_git_index(repo, env)
     changed = execute(["git", "diff", "--cached", "--name-only"], repo, env, log)
     if changed:
         # No caller-supplied shell text or credentials appear in this command.
@@ -129,12 +156,25 @@ def failure_release(repo: Path, stage: Path, status: dict) -> bool:
     web = stage / "web-data"
     web.mkdir(parents=True, exist_ok=True)
     manifest = json.loads((source / "manifest.json").read_text(encoding="utf-8"))
+    # Build a complete, internally valid status-only release. The regenerated
+    # stage data may have different metadata bytes despite the same data ID.
+    for key in ("bundle", "outcomes"):
+        item = manifest["files"][key]
+        original = (source / item["path"]).resolve()
+        target = (web / item["path"]).resolve()
+        if not original.is_relative_to(source.resolve()) or not target.is_relative_to(web.resolve()):
+            raise ValueError(f"Invalid retained release path: {key}")
+        if hashlib.sha256(original.read_bytes()).hexdigest() != item["sha256"]:
+            raise ValueError(f"Retained release hash mismatch: {key}")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(original, target)
     write_json(web / "update-status.json", status)
     manifest["files"]["status"] = {
         "path": "update-status.json", "sha256": hashlib.sha256((web / "update-status.json").read_bytes()).hexdigest()
     }
     # Leave data generation/as_of and bundle/outcomes hashes untouched.
     write_json(web / "manifest.json", manifest)
+    validated_release(stage)
     return True
 
 

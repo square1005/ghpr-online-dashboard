@@ -200,6 +200,31 @@ class AutomaticUpdateSafetyTests(unittest.TestCase):
         for name in ("bundle", "outcomes"):
             self.assertEqual(captured["manifest"]["files"][name], previous_manifest["files"][name])
 
+    def test_status_only_release_matches_git_blobs_with_windows_autocrlf(self):
+        previous = self.build_release(self.repo, generation=self.GENERATION, bundle=b"retained published bundle")
+        stage = self.root / "same-generation-stage"
+        self.build_release(stage, generation=self.GENERATION, bundle=b"new metadata must not replace retained bytes")
+        self.assertTrue(automatic.failure_release(self.repo, stage, {"status": "data_ready", "trigger_reason": "startup_catchup"}))
+        manifest = automatic.validated_release(stage)
+        self.assertEqual(manifest["files"]["bundle"], previous["files"]["bundle"])
+        self.assertNotIn(b"\r\n", (stage / "web-data/update-status.json").read_bytes())
+        for args in (("init",), ("config", "core.autocrlf", "true"), ("add", "--", "web-data")):
+            subprocess.run(["git", *args], cwd=stage, check=True, capture_output=True)
+        self.assertEqual(automatic.validated_git_index(stage, os.environ.copy())["files"], manifest["files"])
+
+    def test_git_index_gate_blocks_crlf_hash_that_git_would_publish_as_lf(self):
+        stage = self.root / "crlf-stage"
+        manifest = self.build_release(stage)
+        status_path = stage / "web-data/update-status.json"
+        status_path.write_bytes(status_path.read_bytes().replace(b"\n", b"\r\n"))
+        manifest["files"]["status"]["sha256"] = hashlib.sha256(status_path.read_bytes()).hexdigest()
+        automatic.write_json(stage / "web-data/manifest.json", manifest)
+        automatic.validated_release(stage)  # Local-only checks miss Git's clean conversion.
+        for args in (("init",), ("config", "core.autocrlf", "true"), ("add", "--", "web-data")):
+            subprocess.run(["git", *args], cwd=stage, check=True, capture_output=True)
+        with self.assertRaisesRegex(ValueError, "Staged Git release hash mismatch: status"):
+            automatic.validated_git_index(stage, os.environ.copy())
+
     def test_publish_failure_never_retries_push_through_failure_status_path(self):
         previous = self.previous_good()
         self.config["publish"] = True

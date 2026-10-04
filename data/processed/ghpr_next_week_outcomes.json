@@ -5,7 +5,7 @@
   "scope": {
     "cot_start": "2026-07-04",
     "cot_end": "2026-10-04",
-    "as_of": "2026-10-04T14:54:41+00:00",
+    "as_of": "2026-10-04T15:04:43.747502+00:00",
     "window_rule": "COT observation date -> following calendar Monday–Friday, COMEX session-date labels in America/New_York",
     "selection_rule": "Inclusive COT observation dates; outcome weeks may cross the scope boundary."
   },
@@ -1936,11 +1936,11 @@
     },
     "daily": {
       "file": "gc_f_1d_normalized.csv",
-      "sha256": "f7f3f97527138abda1b147e988a098d8115c3c10f9de105c09f278a7d78c6ffc"
+      "sha256": "d934a94b5fc7bafaa7a99f95fabeeef68b48ad974c743d919b7360bf7bac34df"
     },
     "hourly": {
       "file": "gc_f_1h_normalized.csv",
-      "sha256": "7f143847478723167927f0119f8fe798d93bca947615b33ed2b5964cb8cb9e81"
+      "sha256": "f991d7052d17fd169d1228948bb4270b80f0235147577fc3e53aa2824aaf6551"
     },
     "calendar": {
       "file": "source_calendar.json",
@@ -1949,7 +1949,7 @@
     "price_coverage": {
       "schema_version": 2,
       "normalization_version": "ghpr-prices-v2",
-      "normalized_at_utc": "2026-10-04T14:43:38.180642+00:00",
+      "normalized_at_utc": "2026-10-04T15:06:14.196570+00:00",
       "symbol": "GC=F",
       "source": "Yahoo Finance chart",
       "notes": [
@@ -1968,10 +1968,10 @@
         "last": "2026-10-02",
         "normalized_file": "gc_f_1d_normalized.csv",
         "normalized_json_file": "gc_f_1d_normalized.json",
-        "normalized_sha256": "f7f3f97527138abda1b147e988a098d8115c3c10f9de105c09f278a7d78c6ffc",
-        "raw_sha256": "826b80985651d910b383ead8f63d0ad9e2cc978f6f025a34038f9fadc3f171b7",
+        "normalized_sha256": "d934a94b5fc7bafaa7a99f95fabeeef68b48ad974c743d919b7360bf7bac34df",
+        "raw_sha256": "e317a0ec1b6e9224e02b8f297d39672975bd314f4a7d0a18a3904f1a89799791",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1782864000&period2=1791072000&interval=1d&events=history",
-        "fetched_at_utc": "2026-10-04T14:35:23.686879+00:00",
+        "fetched_at_utc": "2026-10-04T15:06:13.744824+00:00",
         "requested_start_utc": "2026-07-01T00:00:00+00:00",
         "requested_end_exclusive_utc": "2026-10-04T00:00:00+00:00",
         "exchange": "COMEX",
@@ -1993,10 +1993,10 @@
         "last": "2026-10-02T20:00:00+00:00",
         "normalized_file": "gc_f_1h_normalized.csv",
         "normalized_json_file": "gc_f_1h_normalized.json",
-        "normalized_sha256": "7f143847478723167927f0119f8fe798d93bca947615b33ed2b5964cb8cb9e81",
-        "raw_sha256": "3c483d6016e294bde775cb5b1428034f05937af2d616e08835725d36b823a796",
+        "normalized_sha256": "f991d7052d17fd169d1228948bb4270b80f0235147577fc3e53aa2824aaf6551",
+        "raw_sha256": "b4fc08f37b2d33a7d8ae207c2179e149a07c4962e5ec936c3988a1edeeae47bf",
         "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1782864000&period2=1791072000&interval=1h&events=history",
-        "fetched_at_utc": "2026-10-04T14:35:23.945639+00:00",
+        "fetched_at_utc": "2026-10-04T15:06:13.946336+00:00",
         "requested_start_utc": "2026-07-01T00:00:00+00:00",
         "requested_end_exclusive_utc": "2026-10-04T00:00:00+00:00",
         "exchange": "COMEX",

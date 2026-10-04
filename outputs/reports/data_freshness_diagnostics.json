@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-04T14:53:41.587047+00:00",
+  "generated_at_utc": "2026-10-04T15:06:12.868948+00:00",
   "expected_latest_date": "2026-09-29",
   "overall_status": "OK",
   "source_check": {
@@ -7,7 +7,7 @@
       "cftc": {
         "url": "https://www.cftc.gov/dea/newcot/f_disagg.txt",
         "observation_date": "2026-09-29",
-        "fetched_at_utc": "2026-10-04T14:51:58.481919+00:00",
+        "fetched_at_utc": "2026-10-04T15:04:48.268360+00:00",
         "sha256": "fa53d3ffe423c75784009e5fbbbec384d7a8bc493c6de44bce74a9a36ef538bc",
         "response_sha256": "577de6bfa5105fc3bae2c2cef49f41a86b3e9f7e12b72330fb5f920d82767f78",
         "response_last_modified": "Fri, 02 Oct 2026 19:27:48 GMT",
@@ -22,9 +22,9 @@
         "symbol": "GC=F",
         "instrument": "COMEX gold futures proxy",
         "observation_date": "2026-10-02",
-        "fetched_at_utc": "2026-10-04T14:52:02.076776+00:00",
+        "fetched_at_utc": "2026-10-04T15:04:49.957827+00:00",
         "sha256": "3002e4b2115e59761bb09365f05883e1a6438ad67d9100f337fef4e535795924",
-        "response_sha256": "9a25cac613d0ad2c0d91508d9dc3cce546bcf4148558381346627259d7b67733",
+        "response_sha256": "7f3be395feeb6b32df085fa8ad9ccc7a21f8ab959d93a69b6c4731ec0c523a05",
         "ohlc_sha256": "5ae1ae0c7da700f29563f524dd874d99b7754b11727e7fd44e11cb8275c0725d",
         "bar_interval": "1d",
         "close_semantics": "Yahoo daily close; not an asserted official settlement",

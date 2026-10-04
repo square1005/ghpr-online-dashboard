@@ -189,7 +189,9 @@ def run_once(config: dict) -> dict:
                   "previous_good_run_id": previous.get("run_id"), "error": None,
                   "host_dependency": "Windows host on, Administrator logged in, network and existing Git credential manager available",
                   "schedule": config.get("schedule", "not configured"), "scheduler_invocation": bool(config.get("scheduled", False)),
-                  "natural_schedule_note": "Scheduler flag alone does not prove a natural trigger; verify Windows task run history and next-run time."}
+                  "trigger_reason": os.environ.get("GHPR_SCHEDULER_TRIGGER_REASON", "manual"),
+                  "trigger_slot_utc": os.environ.get("GHPR_SCHEDULER_SLOT_UTC"),
+                  "natural_schedule_note": "Verify scheduler-status.json heartbeat, trigger reason, slot and published GitHub commit; startup_catchup is not a later scheduled_slot."}
         write_json(runtime / "status.json", status)
         try:
             source_commit = execute(["git", "rev-parse", "HEAD"], repo, env, log)

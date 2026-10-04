@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import json
+import argparse
+import hashlib
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -23,6 +26,7 @@ MM_VELOCITY_WINDOW_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_velo
 MM_WEEKLY_CHANGE_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "mm_weekly_change_dataset.csv"
 DIAGNOSTICS_JSON_PATH = PROJECT_ROOT / "outputs" / "reports" / "data_freshness_diagnostics.json"
 DIAGNOSTICS_MD_PATH = PROJECT_ROOT / "outputs" / "reports" / "data_freshness_diagnostics.md"
+SOURCE_STATUS_PATH = PROJECT_ROOT / "outputs" / "reports" / "source_status.json"
 
 
 @dataclass(frozen=True)
@@ -98,7 +102,7 @@ def compare_component(
     if error is not None:
         stale_reason = error
     elif expected_latest_date is None:
-        stale_reason = "missing expected latest date from master dataset"
+        stale_reason = "missing expected latest date from verified CFTC source"
     elif not path_used.exists():
         stale_reason = "file missing"
     elif latest_date is None:
@@ -167,10 +171,53 @@ def overall_status(records: list[dict[str, Any]]) -> str:
     return "OK"
 
 
+def source_freshness(now: datetime | None = None) -> dict[str, Any]:
+    now = now or datetime.now(timezone.utc)
+    try:
+        sources = json.loads(SOURCE_STATUS_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        sources = {}
+    errors = []
+    for name, relative in (("cftc", "data/raw/cot/fut_disagg_txt_current.csv"),
+                           ("gold", "data/raw/gold_price/gold_price.csv")):
+        source = sources.get(name, {})
+        try:
+            fetched = datetime.fromisoformat(source["fetched_at_utc"])
+            age_hours = (now - fetched).total_seconds() / 3600
+            if age_hours > 36 or age_hours < -0.1:
+                errors.append(f"{name} source check is not recent (age {age_hours:.1f}h)")
+            path = PROJECT_ROOT / relative
+            if hashlib.sha256(path.read_bytes()).hexdigest() != source.get("sha256"):
+                errors.append(f"{name} source file hash differs from verified download")
+            if not source.get("observation_date"):
+                errors.append(f"{name} observation date is missing")
+        except (KeyError, ValueError, TypeError, OSError):
+            errors.append(f"{name} source verification is missing or invalid")
+    cftc_date = sources.get("cftc", {}).get("observation_date")
+    # This is the normal timetable only: holidays/delays may change release.
+    # Actual availability always comes from the freshly retrieved official file.
+    eastern = now.astimezone(ZoneInfo("America/New_York"))
+    friday = eastern.date() - pd.Timedelta(days=(eastern.weekday() - 4) % 7)
+    if eastern.weekday() == 4 and (eastern.hour, eastern.minute) < (15, 30):
+        friday -= pd.Timedelta(days=7)
+    normal_observation = (friday - pd.Timedelta(days=3)).isoformat()
+    awaiting = bool(cftc_date and cftc_date < normal_observation and not errors)
+    return {"sources": sources, "errors": errors,
+            "latest_cftc_available_date": cftc_date,
+            "normal_schedule_observation_date": normal_observation,
+            "release_state": "awaiting_scheduled_release" if awaiting else "available",
+            "schedule_note": "Normal Friday 15:30 America/New_York schedule; holiday or delayed releases may differ. Actual publication time is not inferred."}
+
+
 def build_diagnostics() -> dict[str, Any]:
-    expected_latest_date = latest_csv_date(MASTER_PATH, "date")
+    source_check = source_freshness()
+    expected_latest_date = source_check["latest_cftc_available_date"]
     records = [compare_component(spec, expected_latest_date) for spec in component_specs()]
     status = overall_status(records)
+    if source_check["errors"]:
+        status = "SOURCE_UNVERIFIED"
+    elif status == "OK" and source_check["release_state"] == "awaiting_scheduled_release":
+        status = "AWAITING_RELEASE"
     stale_components = [
         record["component"]
         for record in records
@@ -180,6 +227,7 @@ def build_diagnostics() -> dict[str, Any]:
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "expected_latest_date": expected_latest_date,
         "overall_status": status,
+        "source_check": source_check,
         "stale_components": stale_components,
         "components": records,
         "scope": "Historical statistics / research reference only. Not a trading signal.",
@@ -234,13 +282,16 @@ def write_diagnostics(
     return diagnostics
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Verify derived dates against recently retrieved sources.")
+    parser.add_argument("--strict", action="store_true")
+    args = parser.parse_args(argv)
     diagnostics = write_diagnostics()
     print(f"Wrote diagnostics: {DIAGNOSTICS_JSON_PATH}")
     print(f"Wrote diagnostics: {DIAGNOSTICS_MD_PATH}")
     print(f"Overall freshness status: {diagnostics['overall_status']}")
     print(f"Expected latest date: {diagnostics.get('expected_latest_date') or 'N/A'}")
-    return 0
+    return 0 if not args.strict or diagnostics["overall_status"] in {"OK", "AWAITING_RELEASE"} else 1
 
 
 if __name__ == "__main__":

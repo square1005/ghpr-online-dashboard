@@ -9,11 +9,15 @@ from __future__ import annotations
 import argparse
 import csv
 import io
+import hashlib
+import json
+import math
 import re
 from datetime import date, datetime, timezone
 from pathlib import Path
 from urllib.parse import quote
-from zipfile import ZipFile
+from zipfile import BadZipFile, ZipFile
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 import requests
@@ -64,6 +68,7 @@ CFTC_HISTORY_BUNDLE = "fut_disagg_txt_hist_2006_2016.zip"
 CFTC_YEARLY_TEMPLATE = "fut_disagg_txt_{year}.zip"
 CFTC_CURRENT_URL = "https://www.cftc.gov/dea/newcot/f_disagg.txt"
 CFTC_CURRENT_FILE = "fut_disagg_txt_current.csv"
+SOURCE_STATUS_PATH = PROJECT_ROOT / "outputs" / "reports" / "source_status.json"
 
 FRED_SERIES_ID = "GOLDPMGBD228NLBM"
 FRED_URL = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={FRED_SERIES_ID}"
@@ -142,7 +147,9 @@ def build_master_dataset(
     if download:
         ensure_cot_archives(end_year=end_year, force=force)
         ensure_current_cot_report(force=True)
-        ensure_gold_price_csv(end_year=end_year, force=force)
+        # A full update always retrieves current prices. The old 14-day cache
+        # could carry a stale close into a newly released COT observation.
+        ensure_gold_price_csv(end_year=end_year, force=True)
 
     cot_archives = find_cot_archives()
     if not cot_archives:
@@ -188,22 +195,21 @@ def ensure_cot_archives(end_year: int, force: bool = False) -> None:
             try:
                 response = requests.get(url, timeout=60, headers=REQUEST_HEADERS)
                 response.raise_for_status()
-                output.write_bytes(response.content)
-                with ZipFile(output) as zf:
-                    if zf.namelist():
+                with ZipFile(io.BytesIO(response.content)) as zf:
+                    if zf.namelist() and zf.testzip() is None:
+                        atomic_write(output, response.content)
                         downloaded = True
                         break
-                output.unlink(missing_ok=True)
                 errors.append(f"{url}: invalid zip")
-            except requests.RequestException as exc:
+            except (requests.RequestException, OSError, ValueError, BadZipFile) as exc:
                 errors.append(f"{url}: {exc}")
         if not downloaded and archive == CFTC_HISTORY_BUNDLE:
             fallback = PROJECT_ROOT.parent / "data" / "raw" / "cftc" / archive
             if fallback.exists():
                 output.write_bytes(fallback.read_bytes())
                 downloaded = True
-        if not downloaded and archive == CFTC_HISTORY_BUNDLE:
-            raise RuntimeError("Could not download required CFTC history bundle.\n" + "\n".join(errors))
+        if not downloaded:
+            raise RuntimeError(f"Could not refresh required CFTC archive {archive}.\n" + "\n".join(errors))
 
 
 def ensure_current_cot_report(force: bool = False) -> Path:
@@ -215,21 +221,41 @@ def ensure_current_cot_report(force: bool = False) -> Path:
         response = requests.get(CFTC_CURRENT_URL, timeout=60, headers=REQUEST_HEADERS)
         response.raise_for_status()
     except requests.RequestException as exc:
-        if output.exists():
-            return output
         raise RuntimeError(f"Could not download current CFTC report: {exc}") from exc
 
     content = response.content
     if not content.strip() or b"<html" in content[:512].lower():
-        if output.exists():
-            return output
         raise RuntimeError(f"Current CFTC report did not look like text data: {CFTC_CURRENT_URL}")
 
     header = current_cot_header()
     text = content.decode("latin1", errors="replace")
     rows = [line.rstrip() for line in text.replace("\r\n", "\n").replace("\r", "\n").splitlines()]
     rows = [line for line in rows if line.strip()]
-    output.write_text(",".join(header) + "\n" + "\n".join(rows) + "\n", encoding="latin1")
+    csv_text = ",".join(header) + "\n" + "\n".join(rows) + "\n"
+    parsed = pd.read_csv(io.StringIO(csv_text))
+    market_col = pick_column(parsed, CFTC_COLUMN_ALIASES["market"])
+    selected = parsed[parsed[market_col].astype(str).str.upper().str.strip().eq(GOLD_MARKET_NAME)]
+    if len(selected) != 1:
+        raise RuntimeError("Current CFTC report must contain exactly one COMEX Gold futures-only row.")
+    if "FutOnly_or_Combined" in selected and not selected["FutOnly_or_Combined"].eq("FutOnly").all():
+        raise RuntimeError("CFTC report is not futures-only.")
+    gold = normalize_cot(selected)
+    if gold.empty or gold.drop(columns="date").isna().any().any():
+        raise RuntimeError("Current CFTC Gold record is incomplete.")
+    observed = gold["date"].max()
+    if observed > pd.Timestamp.now().normalize():
+        raise RuntimeError("CFTC observation is in the future.")
+    atomic_write(output, csv_text.encode("latin1"))
+    record_source("cftc", {
+        "url": CFTC_CURRENT_URL, "observation_date": observed.strftime("%Y-%m-%d"),
+        "fetched_at_utc": datetime.now(timezone.utc).isoformat(),
+        "sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
+        "response_sha256": hashlib.sha256(content).hexdigest(),
+        "response_last_modified": response.headers.get("Last-Modified"),
+        "actual_publication_at_utc": None,
+        "publication_time_note": "Fetch time and HTTP Last-Modified are not verified actual publication time.",
+        "report_type": "Disaggregated Futures Only", "market_code": "088691",
+    })
     return output
 
 
@@ -276,22 +302,9 @@ def ensure_gold_price_csv(end_year: int, force: bool = False) -> Path:
         return output
 
     errors = []
-    if download_csv(FRED_URL, output, errors) and csv_is_daily_enough(output, end_year=end_year):
-        return output
-    if download_csv(STOOQ_URL, output, errors) and csv_is_daily_enough(output, end_year=end_year):
-        return output
     if download_yahoo_chart(output, end_year=end_year, errors=errors):
         return output
-
-    if output.exists() and csv_is_daily_enough(output, end_year=end_year):
-        return output
-
-    fallback = PROJECT_ROOT.parent / "data" / "raw" / "fred" / "gold_price.csv"
-    if fallback.exists() and csv_is_daily_enough(fallback, end_year=end_year):
-        output.write_bytes(fallback.read_bytes())
-        return output
-
-    raise RuntimeError("Could not download gold price data.\n" + "\n".join(errors))
+    raise RuntimeError("Could not refresh Yahoo GC=F prices; no alternate feed or stale cache was substituted.\n" + "\n".join(errors))
 
 
 def download_csv(url: str, output: Path, errors: list[str]) -> bool:
@@ -326,33 +339,85 @@ def download_yahoo_chart(output: Path, end_year: int, errors: list[str]) -> bool
         response.raise_for_status()
         payload = response.json()
         result = payload["chart"]["result"][0]
+        if result.get("meta", {}).get("symbol") != YAHOO_SYMBOL:
+            raise ValueError("Yahoo response symbol is not GC=F")
         timestamps = result["timestamp"]
-        closes = result["indicators"]["quote"][0]["close"]
+        quote_data = result["indicators"]["quote"][0]
+        closes = quote_data["close"]
     except (requests.RequestException, ValueError, KeyError, IndexError, TypeError) as exc:
         errors.append(f"{url}: {exc}")
         return False
 
     rows = []
-    for timestamp, close in zip(timestamps, closes, strict=False):
-        if close is None:
+    ohlc_rows = []
+    quarantined_ohlc = []
+    now_exchange = datetime.now(ZoneInfo("America/New_York"))
+    for index, (timestamp, close) in enumerate(zip(timestamps, closes, strict=False)):
+        bar_date = pd.to_datetime(timestamp, unit="s", utc=True).tz_convert("America/New_York").date()
+        # GC's trading day finishes at 17:00 ET; wait 15 minutes for a full bar.
+        if bar_date > now_exchange.date() or (bar_date == now_exchange.date() and (now_exchange.hour, now_exchange.minute) < (17, 15)):
             continue
-        rows.append(
-            {
-                "Date": pd.to_datetime(timestamp, unit="s", utc=True).date().isoformat(),
-                "Close": close,
-                "Source": GOLD_SOURCE_DEFAULT,
-            }
-        )
-    if not rows:
-        errors.append(f"{url}: no close prices returned")
+        if close is None or not math.isfinite(close) or close <= 0:
+            continue
+        # Yahoo's long history contains occasional internally inconsistent OHLC
+        # records. Preserve the independently reported finite close for legacy
+        # COT close research; quarantine OHLC rather than inventing/clamping it.
+        rows.append({"Date": bar_date.isoformat(), "Close": close, "Source": GOLD_SOURCE_DEFAULT})
+        values = {key: quote_data.get(key, [None] * len(timestamps))[index]
+                  for key in ("open", "high", "low", "close")}
+        if any(value is None or not math.isfinite(value) or value <= 0 for value in values.values()):
+            quarantined_ohlc.append({"date": bar_date.isoformat(), "reason": "missing/nonpositive/nonfinite OHLC"})
+            continue
+        if values["high"] < max(values["open"], values["close"], values["low"]) or values["low"] > min(values["open"], values["close"]):
+            quarantined_ohlc.append({"date": bar_date.isoformat(), "reason": "OHLC bounds inconsistent"})
+            continue
+        ohlc_rows.append({"date": bar_date.isoformat(), **values,
+                          "volume": int((quote_data.get("volume") or [0] * len(timestamps))[index] or 0),
+                          "source": "Yahoo Finance GC=F futures proxy"})
+    if not rows or not ohlc_rows:
+        errors.append(f"{url}: no usable close/OHLC series returned (missing or invalid OHLC)")
         return False
 
     buffer = io.StringIO()
     writer = csv.DictWriter(buffer, fieldnames=["Date", "Close", "Source"])
     writer.writeheader()
     writer.writerows(rows)
-    output.write_text(buffer.getvalue(), encoding="utf-8")
+    latest = max(row["Date"] for row in rows)
+    if end_year >= date.today().year and (pd.Timestamp.now().normalize() - pd.Timestamp(latest)).days > 4:
+        errors.append(f"{url}: latest complete GC=F daily bar {latest} is more than four calendar days old")
+        return False
+    atomic_write(output, buffer.getvalue().encode("utf-8"))
+    ohlc_path = PROJECT_ROOT / "data" / "processed" / "gold_daily_ohlc.csv"
+    atomic_write(ohlc_path, pd.DataFrame(ohlc_rows).to_csv(index=False).encode("utf-8"))
+    raw_path = output.parent / "gc_daily_yahoo.json"
+    atomic_write(raw_path, response.content)
+    atomic_write(output.parent / "gc_daily_ohlc_quarantine.json", (json.dumps(quarantined_ohlc, indent=2) + "\n").encode("utf-8"))
+    record_source("gold", {
+        "url": url, "symbol": YAHOO_SYMBOL, "instrument": "COMEX gold futures proxy",
+        "observation_date": latest, "fetched_at_utc": datetime.now(timezone.utc).isoformat(),
+        "sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
+        "response_sha256": hashlib.sha256(response.content).hexdigest(),
+        "ohlc_sha256": hashlib.sha256(ohlc_path.read_bytes()).hexdigest(),
+        "bar_interval": "1d", "close_semantics": "Yahoo daily close; not an asserted official settlement",
+        "extreme_time_precision": "day", "exchange_timezone": "America/New_York",
+        "ohlc_quarantined_count": len(quarantined_ohlc), "ohlc_quarantined_records": quarantined_ohlc,
+        "quality_note": "Finite positive Yahoo daily close retained independently; invalid OHLC excluded without clamping.",
+    })
     return True
+
+
+def atomic_write(path: Path, content: bytes) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_bytes(content)
+    temporary.replace(path)
+
+
+def record_source(name: str, value: dict) -> None:
+    metadata = json.loads(SOURCE_STATUS_PATH.read_text(encoding="utf-8")) if SOURCE_STATUS_PATH.exists() else {}
+    metadata[name] = value
+    metadata["schema_version"] = 1
+    atomic_write(SOURCE_STATUS_PATH, (json.dumps(metadata, ensure_ascii=False, indent=2) + "\n").encode("utf-8"))
 
 
 def find_cot_archives() -> list[Path]:
@@ -367,11 +432,8 @@ def find_cot_archives() -> list[Path]:
 
 
 def find_gold_price_csv() -> Path | None:
-    local = sorted(GOLD_RAW_DIR.glob("*.csv"))
-    if local:
-        return local[0]
-    fallback = PROJECT_ROOT.parent / "data" / "raw" / "fred" / "gold_price.csv"
-    return fallback if fallback.exists() else None
+    local = GOLD_RAW_DIR / "gold_price.csv"
+    return local if local.exists() else None
 
 
 def load_gold_cot(archive_paths: list[Path]) -> pd.DataFrame:
@@ -441,6 +503,8 @@ def normalize_cot(frame: pd.DataFrame) -> pd.DataFrame:
 
 def load_gold_price_csv(path: Path) -> pd.DataFrame:
     frame = pd.read_csv(path)
+    if "Source" not in frame or not frame["Source"].fillna("").astype(str).str.contains("GC=F", regex=False).all():
+        raise ValueError("GHPR requires an explicitly labelled GC=F price file; other feeds cannot be mixed in.")
     date_col = pick_column(frame, ("DATE", "Date", "date", "observation_date"))
     close_col = pick_column(frame, (FRED_SERIES_ID, "Close", "close", "gold_close", "price"))
     source = infer_gold_price_source(frame)
@@ -458,7 +522,12 @@ def load_gold_price_csv(path: Path) -> pd.DataFrame:
 def align_gold_price(cot: pd.DataFrame, gold_daily: pd.DataFrame) -> pd.DataFrame:
     left = cot.sort_values("date").reset_index(drop=True)
     right = gold_daily.sort_values("date").reset_index(drop=True)
-    return pd.merge_asof(left, right, on="date", direction="backward")
+    result = pd.merge_asof(left, right, on="date", direction="backward", tolerance=pd.Timedelta(days=4))
+    missing = result[result["gold_close"].isna()]
+    if not missing.empty:
+        dates = missing["date"].dt.strftime("%Y-%m-%d").tolist()
+        raise ValueError(f"No GC=F close within four days before COT observations: {dates[:10]}")
+    return result
 
 
 def add_features(frame: pd.DataFrame) -> pd.DataFrame:

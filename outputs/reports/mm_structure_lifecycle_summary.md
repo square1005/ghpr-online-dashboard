@@ -4,15 +4,15 @@ Historical structure research only. Not a trading signal. Not financial advice.
 
 ## Executive Summary
 
-- Data period: `2009-09-01` to `2026-06-23`.
-- Latest date: `2026-06-23`.
-- Latest MM Long / Short / Net: `131,102` / `15,707` / `115,395`.
-- Latest MM Long / Short / Net percentile: `28.85%` / `3.21%` / `44.23%`.
-- Latest Long / Short / Net velocity 8W: `11.54%` / `-34.62%` / `23.72%`.
+- Data period: `2009-09-01` to `2026-09-29`.
+- Latest date: `2026-09-29`.
+- Latest MM Long / Short / Net: `131,711` / `11,393` / `120,318`.
+- Latest MM Long / Short / Net percentile: `21.79%` / `4.49%` / `38.46%`.
+- Latest Long / Short / Net velocity 8W: `-11.54%` / `4.49%` / `-16.03%`.
 - Latest structure state: `MM_STRUCTURE_LOW_PARTICIPATION`.
-- Latest contribution state: `SHORT_COVERING`.
-- Structure state note: MM_STRUCTURE_CROWDED_LONG has the largest absolute 8W median following return (4.50%) in this sample.
-- Contribution note: LONG_BUILDING has the largest absolute 8W median following return (5.29%) in this sample.
+- Latest contribution state: `LONG_LIQUIDATION`.
+- Structure state note: MM_STRUCTURE_CROWDED_LONG has the largest absolute 8W median following return (4.49%) in this sample.
+- Contribution note: LONG_BUILDING has the largest absolute 8W median following return (5.33%) in this sample.
 
 ## Required Research Questions
 
@@ -26,7 +26,7 @@ MM Long describes long-side exposure, MM Short describes short-side exposure, an
 
 ### 3. When Net rises, is it driven by Long building or Short covering?
 
-Latest 8W changes: Long `8,845`, Short `-16,798`, Net `25,643`. Latest contribution label is `SHORT_COVERING`.
+Latest 8W changes: Long `-8,098`, Short `2,350`, Net `-10,448`. Latest contribution label is `LONG_LIQUIDATION`.
 
 ### 4. When Net falls, is it driven by Long liquidation or Short building?
 
@@ -34,17 +34,17 @@ The contribution analysis table separates long-side reduction from short-side in
 
 ### 5. Which has more information: Long Velocity, Short Velocity, or Net Velocity?
 
-- Long: mm_long_velocity_4w vs 4W at lag 0W has rank correlation 0.572.
-- Short: mm_short_velocity_4w vs 4W at lag 0W has rank correlation -0.425.
-- Net: mm_net_velocity_4w vs 4W at lag 0W has rank correlation 0.571.
+- Long: mm_long_velocity_4w vs 4W at lag 0W has rank correlation 0.566.
+- Short: mm_short_velocity_4w vs 4W at lag 0W has rank correlation -0.419.
+- Net: mm_net_velocity_4w vs 4W at lag 0W has rank correlation 0.566.
 
 ### 6. Does Long lead Gold?
 
-mm_long_velocity_4w vs 4W at lag 0W has rank correlation 0.572.
+mm_long_velocity_4w vs 4W at lag 0W has rank correlation 0.566.
 
 ### 7. Does Short lead Gold?
 
-mm_short_velocity_4w vs 4W at lag 0W has rank correlation -0.425.
+mm_short_velocity_4w vs 4W at lag 0W has rank correlation -0.419.
 
 ### 8. Is Net mainly a Long or Short outcome?
 
@@ -56,12 +56,12 @@ The current MM Structure State is `MM_STRUCTURE_LOW_PARTICIPATION`. This is a hi
 
 ### 10. What do the current structure fields mean?
 
-- MM Long Percentile: `28.85%`.
-- MM Short Percentile: `3.21%`.
-- MM Net Percentile: `44.23%`.
-- Long Velocity 8W: `11.54%`.
-- Short Velocity 8W: `-34.62%`.
-- Net Velocity 8W: `23.72%`.
+- MM Long Percentile: `21.79%`.
+- MM Short Percentile: `4.49%`.
+- MM Net Percentile: `38.46%`.
+- Long Velocity 8W: `-11.54%`.
+- Short Velocity 8W: `4.49%`.
+- Net Velocity 8W: `-16.03%`.
 
 ### 11. Should GHPR Dashboard v0.6 add Long / Short / Net structure?
 
@@ -79,40 +79,40 @@ MM structure adds useful decomposition around MM Net. The dashboard should displ
 
 | mm_structure_state                |   count |   avg_forward_return_1w |   median_forward_return_1w |   win_rate_1w |   avg_forward_return_2w |   median_forward_return_2w |   win_rate_2w |   avg_forward_return_4w |   median_forward_return_4w |   win_rate_4w |   avg_forward_return_8w |   median_forward_return_8w |   win_rate_8w |   best_return_8w |   worst_return_8w |
 |:----------------------------------|--------:|------------------------:|---------------------------:|--------------:|------------------------:|---------------------------:|--------------:|------------------------:|---------------------------:|--------------:|------------------------:|---------------------------:|--------------:|-----------------:|------------------:|
-| MM_STRUCTURE_ACCUMULATION         |     184 |             0.00491417  |                0.00584793  |      0.646739 |             0.0110112   |                 0.0125264  |      0.695652 |              0.0210354  |                 0.0235206  |      0.733696 |               0.0393797 |                 0.0376427  |      0.842391 |        0.142329  |        -0.135196  |
-| MM_STRUCTURE_SHORT_COVERING_RALLY |      54 |             0.000558779 |                0.00246879  |      0.592593 |             0.000116041 |                -0.00179082 |      0.462963 |             -0.00696774 |                -0.00754169 |      0.407407 |              -0.0066129 |                -0.00515305 |      0.351852 |        0.0816615 |        -0.119216  |
-| MM_STRUCTURE_LONG_LIQUIDATION     |     292 |            -0.00268185  |               -0.00354845  |      0.431507 |            -0.00591395  |                -0.00675684 |      0.393836 |             -0.00966842 |                -0.0115302  |      0.35274  |              -0.014621  |                -0.0230957  |      0.280822 |        0.24908   |        -0.141753  |
-| MM_STRUCTURE_SHORT_BUILDING       |      39 |            -0.0040514   |               -0.0015478   |      0.384615 |            -0.00623433  |                -0.00762389 |      0.307692 |             -0.0116967  |                -0.0189264  |      0.25641  |              -0.0220933 |                -0.0255492  |      0.153846 |        0.117368  |        -0.136609  |
-| MM_STRUCTURE_CROWDED_LONG         |     156 |             0.00547001  |                0.00778209  |      0.615385 |             0.0118811   |                 0.012684   |      0.666667 |              0.0258808  |                 0.0249279  |      0.788462 |               0.0467834 |                 0.0450474  |      0.820513 |        0.179186  |        -0.0721955 |
-| MM_STRUCTURE_LOW_PARTICIPATION    |      48 |            -0.000171236 |                0.000170738 |      0.5      |            -0.00046538  |                -0.00102292 |      0.479167 |              0.0037228  |                -0.00261388 |      0.5      |               0.0207541 |                -0.00105739 |      0.5      |        0.213371  |        -0.133979  |
-| MM_STRUCTURE_NEUTRAL              |     105 |             0.00827494  |                0.00942395  |      0.730769 |             0.0142963   |                 0.0175025  |      0.68932  |              0.0226129  |                 0.0291188  |      0.732673 |               0.0354311 |                 0.0286094  |      0.649485 |        0.239115  |        -0.1255    |
+| MM_STRUCTURE_ACCUMULATION         |     187 |             0.00483206  |                 0.00581463 |      0.636364 |             0.0117224   |                0.0124645   |      0.68984  |              0.0220352  |                 0.0258927  |      0.737968 |              0.0394784  |                 0.0378672  |      0.850267 |        0.142329  |        -0.135196  |
+| MM_STRUCTURE_SHORT_COVERING_RALLY |      54 |             0.000424144 |                 0.00244548 |      0.592593 |             2.68613e-05 |               -0.00179082  |      0.481481 |             -0.00701579 |                -0.00887337 |      0.407407 |             -0.00623099 |                -0.00400469 |      0.37037  |        0.0816615 |        -0.119216  |
+| MM_STRUCTURE_LONG_LIQUIDATION     |     292 |            -0.00272497  |                -0.00375328 |      0.431507 |            -0.00601736  |               -0.006655    |      0.393836 |             -0.00977727 |                -0.0114109  |      0.342466 |             -0.0146133  |                -0.023045   |      0.291096 |        0.239587  |        -0.141753  |
+| MM_STRUCTURE_SHORT_BUILDING       |      39 |            -0.00367702  |                -0.00146849 |      0.410256 |            -0.00524069  |               -0.00385505  |      0.333333 |             -0.0102687  |                -0.0189264  |      0.282051 |             -0.0211194  |                -0.0255492  |      0.179487 |        0.120818  |        -0.136609  |
+| MM_STRUCTURE_CROWDED_LONG         |     156 |             0.00546397  |                 0.00772644 |      0.615385 |             0.0118098   |                0.0132346   |      0.660256 |              0.0257963  |                 0.0243997  |      0.788462 |              0.0467741  |                 0.044928   |      0.820513 |        0.18041   |        -0.0721955 |
+| MM_STRUCTURE_LOW_PARTICIPATION    |      58 |            -0.0008744   |                 0.00187716 |      0.517241 |            -0.00347776  |               -0.000329301 |      0.5      |             -0.0027644  |                -0.00918914 |      0.431034 |              0.0106879  |                -0.00908824 |      0.482759 |        0.207895  |        -0.133908  |
+| MM_STRUCTURE_NEUTRAL              |     106 |             0.00879391  |                 0.00956677 |      0.733333 |             0.0146332   |                0.0173229   |      0.692308 |              0.0237176  |                 0.0292887  |      0.735294 |              0.0370013  |                 0.0292694  |      0.653061 |        0.239115  |        -0.1255    |
 
 ## MM Structure Contribution Analysis
 
 | mm_structure_contribution_state   |   count |   avg_forward_return_1w |   median_forward_return_1w |   win_rate_1w |   avg_forward_return_2w |   median_forward_return_2w |   win_rate_2w |   avg_forward_return_4w |   median_forward_return_4w |   win_rate_4w |   avg_forward_return_8w |   median_forward_return_8w |   win_rate_8w |   best_return_8w |   worst_return_8w |
 |:----------------------------------|--------:|------------------------:|---------------------------:|--------------:|------------------------:|---------------------------:|--------------:|------------------------:|---------------------------:|--------------:|------------------------:|---------------------------:|--------------:|-----------------:|------------------:|
-| LONG_BUILDING                     |     183 |              0.00710035 |                 0.00820457 |      0.63388  |             0.0153856   |                 0.0171047  |      0.688525 |              0.0302392  |                 0.0318099  |      0.814208 |              0.0553304  |                 0.0528523  |      0.928962 |         0.207895 |         -0.135196 |
-| SHORT_COVERING                    |      95 |              0.00426028 |                 0.0070031  |      0.694737 |             0.0110116   |                 0.0114818  |      0.768421 |              0.0206379  |                 0.0234781  |      0.715789 |              0.0373342  |                 0.0333731  |      0.789474 |         0.142329 |         -0.117098 |
-| LONG_LIQUIDATION                  |     206 |             -0.00329015 |                -0.0037412  |      0.451456 |            -0.00452355  |                -0.00542077 |      0.383495 |             -0.00690003 |                -0.0102268  |      0.368932 |             -0.0105151  |                -0.0242189  |      0.281553 |         0.24908  |         -0.133979 |
-| SHORT_BUILDING                    |     118 |             -0.00385201 |                -0.00434914 |      0.432203 |            -0.00969399  |                -0.0101794  |      0.355932 |             -0.0179187  |                -0.0163001  |      0.322034 |             -0.0263539  |                -0.0330494  |      0.194915 |         0.152911 |         -0.141753 |
-| MIXED_LONG_AND_SHORT_UP           |     137 |              0.00614355 |                 0.00581202 |      0.627737 |             0.0106178   |                 0.0138563  |      0.59854  |              0.0208013  |                 0.0241584  |      0.686131 |              0.0306462  |                 0.0259073  |      0.642336 |         0.239115 |         -0.136609 |
-| MIXED_LONG_AND_SHORT_DOWN         |     131 |              0.00137677 |                 0.00147674 |      0.541985 |            -0.000350679 |                 0.00191802 |      0.541985 |             -0.00210938 |                -0.00412392 |      0.473282 |              0.00682572 |                -0.00186023 |      0.480916 |         0.197196 |         -0.119216 |
-| NEUTRAL_STRUCTURE                 |       8 |              0.0150236  |                 0.00915424 |      0.714286 |             0.0285532   |                 0.0212724  |      0.833333 |              0.0457257  |                 0.0418876  |      1        |            nan          |               nan          |    nan        |       nan        |        nan        |
+| LONG_BUILDING                     |     191 |              0.00689527 |                 0.00800128 |      0.628272 |             0.0152881   |                 0.0171047  |      0.675393 |              0.0296555  |                 0.0318246  |      0.801047 |              0.0526927  |                0.0532884   |      0.921466 |         0.207895 |         -0.135196 |
+| SHORT_COVERING                    |      99 |              0.00374932 |                 0.00654504 |      0.686869 |             0.00932083  |                 0.0103795  |      0.737374 |              0.0176909  |                 0.0218626  |      0.686869 |              0.0348306  |                0.0338164   |      0.777778 |         0.142329 |         -0.116224 |
+| LONG_LIQUIDATION                  |     207 |             -0.00357984 |                -0.00401823 |      0.449275 |            -0.00476509  |                -0.00572189 |      0.391304 |             -0.00716953 |                -0.0109772  |      0.362319 |             -0.0106101  |               -0.0230965   |      0.285024 |         0.239587 |         -0.133908 |
+| SHORT_BUILDING                    |     118 |             -0.00395939 |                -0.00495307 |      0.432203 |            -0.0100396   |                -0.00944929 |      0.355932 |             -0.0182331  |                -0.0187409  |      0.29661  |             -0.0261855  |               -0.0330494   |      0.220339 |         0.152911 |         -0.141753 |
+| MIXED_LONG_AND_SHORT_UP           |     138 |              0.00670791 |                 0.00585138 |      0.637681 |             0.011307    |                 0.0137941  |      0.615942 |              0.0222625  |                 0.0247547  |      0.695652 |              0.0318643  |                0.0255947   |      0.644928 |         0.239115 |         -0.136609 |
+| MIXED_LONG_AND_SHORT_DOWN         |     131 |              0.00153915 |                 0.00208689 |      0.541985 |            -6.78328e-05 |                 0.00224127 |      0.549618 |             -0.00202867 |                -0.00363299 |      0.480916 |              0.00667488 |               -0.000661677 |      0.48855  |         0.197196 |         -0.119216 |
+| NEUTRAL_STRUCTURE                 |       8 |              0.0150236  |                 0.00915424 |      0.714286 |             0.0285532   |                 0.0212724  |      0.833333 |              0.0457257  |                 0.0418876  |      1        |            nan          |              nan           |    nan        |       nan        |        nan        |
 
 ## Strongest Lead-Lag Rows
 
 | mm_feature           | gold_horizon   |   lag_weeks |   correlation |   rank_correlation |   sample_count | interpretation                          |   abs_rank_correlation |
 |:---------------------|:---------------|------------:|--------------:|-------------------:|---------------:|:----------------------------------------|-----------------------:|
-| mm_long_velocity_4w  | 4W             |           0 |      0.488362 |           0.572243 |            854 | same_week_positive_historical_alignment |               0.572243 |
-| mm_net_velocity_4w   | 4W             |           0 |      0.491199 |           0.570629 |            823 | same_week_positive_historical_alignment |               0.570629 |
-| mm_long_velocity_8w  | 8W             |           0 |      0.429579 |           0.482813 |            850 | same_week_positive_historical_alignment |               0.482813 |
-| mm_net_velocity_8w   | 8W             |           0 |      0.426347 |           0.477097 |            819 | same_week_positive_historical_alignment |               0.477097 |
-| mm_long_velocity_4w  | 2W             |           0 |      0.350191 |           0.429734 |            854 | same_week_positive_historical_alignment |               0.429734 |
-| mm_long_velocity_12w | 8W             |           0 |      0.380694 |           0.428112 |            846 | same_week_positive_historical_alignment |               0.428112 |
-| mm_short_velocity_4w | 4W             |           0 |     -0.409101 |          -0.425187 |            854 | same_week_negative_historical_alignment |               0.425187 |
-| mm_long_velocity_8w  | 4W             |           0 |      0.375298 |           0.419706 |            850 | same_week_positive_historical_alignment |               0.419706 |
-| mm_net_velocity_12w  | 8W             |           0 |      0.369308 |           0.419202 |            815 | same_week_positive_historical_alignment |               0.419202 |
-| mm_net_velocity_4w   | 2W             |           0 |      0.336525 |           0.417085 |            823 | same_week_positive_historical_alignment |               0.417085 |
+| mm_net_velocity_4w   | 4W             |           0 |      0.483573 |           0.566401 |            837 | same_week_positive_historical_alignment |               0.566401 |
+| mm_long_velocity_4w  | 4W             |           0 |      0.478632 |           0.565672 |            868 | same_week_positive_historical_alignment |               0.565672 |
+| mm_long_velocity_8w  | 8W             |           0 |      0.422451 |           0.473207 |            864 | same_week_positive_historical_alignment |               0.473207 |
+| mm_net_velocity_8w   | 8W             |           0 |      0.415641 |           0.463548 |            833 | same_week_positive_historical_alignment |               0.463548 |
+| mm_long_velocity_4w  | 2W             |           0 |      0.34649  |           0.428477 |            868 | same_week_positive_historical_alignment |               0.428477 |
+| mm_net_velocity_4w   | 2W             |           0 |      0.337441 |           0.419732 |            837 | same_week_positive_historical_alignment |               0.419732 |
+| mm_long_velocity_12w | 8W             |           0 |      0.37435  |           0.419694 |            860 | same_week_positive_historical_alignment |               0.419694 |
+| mm_short_velocity_4w | 4W             |           0 |     -0.397219 |          -0.418657 |            868 | same_week_negative_historical_alignment |               0.418657 |
+| mm_long_velocity_8w  | 4W             |           0 |      0.371448 |           0.418179 |            864 | same_week_positive_historical_alignment |               0.418179 |
+| mm_net_velocity_12w  | 8W             |           0 |      0.358074 |           0.404761 |            829 | same_week_positive_historical_alignment |               0.404761 |
 
 ## Method Notes
 

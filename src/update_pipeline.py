@@ -133,6 +133,8 @@ def run_update_pipeline(mode: str = "local", no_download: bool | None = None) ->
         latest_dataset_date_after,
         latest_cftc_available_date,
     )
+    if mode == "full" and not data_is_current and not error_message:
+        error_message = f"Source freshness verification failed: {stale_reason}"
     pipeline_result = UpdatePipelineResult(
         success=not error_message,
         started_at_utc=started_at,
@@ -174,7 +176,7 @@ def build_update_commands(mode: str = "local", no_download: bool | None = None) 
         ("Run MM velocity reading layer", [python, "src/mm_velocity_reading_layer.py"]),
         ("Run MM weekly change layer", [python, "src/mm_weekly_change_layer.py"]),
         ("Export hub summary", [python, "src/export_hub_summary.py"]),
-        ("Run data freshness diagnostics", [python, "src/data_freshness_diagnostics.py"]),
+        ("Run data freshness diagnostics", [python, "src/data_freshness_diagnostics.py", *(["--strict"] if mode == "full" else [])]),
     ]
 
 

@@ -26,37 +26,37 @@ Net 8W is the current swing baseline. Net 26W is the research candidate because 
 
 | Field | Value |
 |---|---|
-| date | `2026-06-23` |
-| gold_close | `4,172.90` |
-| long_baseline_8w | `11.54 pct points` |
-| long_candidate_26w | `-21.15 pct points` |
-| long_alignment_status | `BASELINE_POSITIVE_CANDIDATE_NEGATIVE` |
-| short_baseline_8w | `-34.62 pct points` |
-| short_candidate_2w | `-7.69 pct points` |
-| short_candidate_4w | `-19.23 pct points` |
-| short_candidate_fast_avg | `-13.46 pct points` |
-| short_alignment_status | `SAME_DIRECTION_NEGATIVE` |
-| net_baseline_8w | `23.72 pct points` |
-| net_candidate_26w | `-16.03 pct points` |
-| net_alignment_status | `BASELINE_POSITIVE_CANDIDATE_NEGATIVE` |
-| overall_velocity_reading | `MEDIUM_TERM_STRUCTURE_WEAKENING` |
+| date | `2026-09-29` |
+| gold_close | `4,179.70` |
+| long_baseline_8w | `-11.54 pct points` |
+| long_candidate_26w | `8.97 pct points` |
+| long_alignment_status | `BASELINE_NEGATIVE_CANDIDATE_POSITIVE` |
+| short_baseline_8w | `4.49 pct points` |
+| short_candidate_2w | `3.85 pct points` |
+| short_candidate_4w | `1.28 pct points` |
+| short_candidate_fast_avg | `2.56 pct points` |
+| short_alignment_status | `SAME_DIRECTION_POSITIVE` |
+| net_baseline_8w | `-16.03 pct points` |
+| net_candidate_26w | `15.38 pct points` |
+| net_alignment_status | `BASELINE_NEGATIVE_CANDIDATE_POSITIVE` |
+| overall_velocity_reading | `MEDIUM_TERM_PARTICIPATION_BUILDING` |
 
 ## 7. Overall Reading Distribution
 
 | Reading | Count |
 |---|---:|
-| MEDIUM_TERM_STRUCTURE_WEAKENING | 388 |
-| MEDIUM_TERM_PARTICIPATION_BUILDING | 323 |
+| MEDIUM_TERM_STRUCTURE_WEAKENING | 393 |
+| MEDIUM_TERM_PARTICIPATION_BUILDING | 332 |
 | MIXED_STRUCTURE | 108 |
 | SHORT_TERM_RECOVERY_MEDIUM_TERM_UNCONFIRMED | 53 |
 | SHORT_TERM_ONLY_REACTION | 6 |
 
 ## 8. Are Long / Short / Net Aligned?
 
-- Long alignment: `BASELINE_POSITIVE_CANDIDATE_NEGATIVE`.
-- Short alignment: `SAME_DIRECTION_NEGATIVE`.
-- Net alignment: `BASELINE_POSITIVE_CANDIDATE_NEGATIVE`.
-- Overall reading: `MEDIUM_TERM_STRUCTURE_WEAKENING`.
+- Long alignment: `BASELINE_NEGATIVE_CANDIDATE_POSITIVE`.
+- Short alignment: `SAME_DIRECTION_POSITIVE`.
+- Net alignment: `BASELINE_NEGATIVE_CANDIDATE_POSITIVE`.
+- Overall reading: `MEDIUM_TERM_PARTICIPATION_BUILDING`.
 
 ## 9. Should GHPR Replace 8W Now?
 

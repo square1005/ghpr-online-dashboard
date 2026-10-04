@@ -1,0 +1,1 @@
+{"schema":"ghpr.update-status.v1","status":"DATA_PREPARED","last_data_success_at":"2026-10-04T14:53:40.367265+00:00","last_error":null,"schedule_utc":["03:00","09:00","15:00","21:00"],"host_dependency":"Windows host powered on, Administrator signed in, network and existing GitHub credential available"}

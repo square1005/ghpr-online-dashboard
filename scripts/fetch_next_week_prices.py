@@ -24,22 +24,16 @@ TZ_NAME = 'America/New_York'
 CME_SPEC = 'https://www.cmegroup.com/market-regulation/files/gold-futures-and-options-fact-card.pdf'
 CME_HOURS = 'https://www.cmegroup.com/trading-hours.html'
 CME_LABOR = 'https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/labor-day-holiday-settlement-times-2026.pdf'
-SOURCE_CALENDAR = {
- 'schema_version': 1,
- 'source_evidence_checked_on_utc': '2026-10-04',
- 'exchange': 'COMEX', 'symbol': 'GC=F', 'exchange_timezone': TZ_NAME,
- 'normal_session': {'week_open_weekday':'Sunday','week_open_local':'18:00','week_close_weekday':'Friday','week_close_local':'17:00','daily_break_start_local':'17:00','daily_break_end_local':'18:00','daily_session_label_rule':'At or after 18:00 America/New_York, provisional session date is the following calendar date. Apply verified holiday trade-date overrides.','daily_label_weekdays':[0,1,2,3,4],'weekday_encoding':'Python Monday=0','normal_week_hour_buckets':115,'source_url':CME_SPEC},
- 'holidays': [{'date':'2026-09-07','label':'U.S. Labor Day','exclude_daily':True,'settlement_published':False,'source_url':CME_LABOR,'scope':'CME, CBOT, NYMEX and COMEX settlement prices not derived or disseminated. This is not a claim that Globex has no holiday trading.'}],
- 'daily_excluded_dates':['2026-09-07'],
- 'trade_date_overrides': {'2026-09-07':'2026-09-08'},
- 'override_source_url':CME_HOURS,
- 'override_note':'CME Holiday Notes: orders after Sunday September 6 pre-open have Tuesday September 8 trade date.',
- 'verified_scope':{'target_week_start_min':'2026-07-06','target_week_end_max':'2026-10-02'},
- 'limitations':['No complete holiday-specific hourly session schedule is encoded.','September 7-11 vendor hourly coverage is partial: no Sunday/Monday evening buckets and only 17 hourly buckets for provisional September 8 session.','Do not equate four daily labels with complete hourly coverage.']
-}
+DEFAULT_CALENDAR_PATH = Path(__file__).resolve().parents[1] / 'config' / 'gc_price_calendar.json'
+def load_source_calendar(path:Path|None=None):
+ calendar_path=path or DEFAULT_CALENDAR_PATH
+ calendar=json.loads(calendar_path.read_text(encoding='utf-8-sig'))
+ if calendar.get('symbol')!=SYMBOL or calendar.get('exchange_timezone')!=TZ_NAME:raise ValueError('Calendar source identity mismatch')
+ return calendar
+
 
 def write_json(path:Path,value):
- path.write_text(json.dumps(value,ensure_ascii=False,indent=2,allow_nan=False)+'\n',encoding='utf-8')
+ path.write_bytes((json.dumps(value,ensure_ascii=False,indent=2,allow_nan=False)+'\n').encode('utf-8'))
 
 def set_process_temp(output_dir:Path):
  output_dir.mkdir(parents=True,exist_ok=True)
@@ -76,7 +70,8 @@ def is_regular_hour(local:dt.datetime)->bool:
  wd=local.weekday();h=local.hour
  return (wd==6 and h>=18) or (wd in (0,1,2,3) and h!=17) or (wd==4 and h<17)
 
-def normalize_interval(output_dir:Path,interval:str):
+def normalize_interval(output_dir:Path,interval:str,calendar:dict|None=None):
+ calendar=calendar if calendar is not None else load_source_calendar()
  raw_path=output_dir/f'yahoo_gc_f_{interval}_raw.json';raw=raw_path.read_bytes();sha=hashlib.sha256(raw).hexdigest()
  fetch=json.loads((output_dir/f'yahoo_gc_f_{interval}_fetch.json').read_text(encoding='utf-8'))
  payload=json.loads(raw)
@@ -87,23 +82,29 @@ def normalize_interval(output_dir:Path,interval:str):
  if meta.get('exchangeTimezoneName')!=TZ_NAME:raise ValueError('Unexpected exchange timezone; calendar mapping must be reviewed')
  if len(stamps)!=len(set(stamps)) or stamps!=sorted(stamps):raise ValueError('Duplicate or unordered source timestamps')
  tz=ZoneInfo(TZ_NAME);rows=[];rejected=[]
+ requested_start=dt.datetime.fromisoformat(fetch['requested_start_utc']).timestamp();requested_end=dt.datetime.fromisoformat(fetch['requested_end_exclusive_utc']).timestamp()
+ next_minute={};next_stamp=None
+ for candidate_stamp in reversed(stamps):
+  next_minute[candidate_stamp]=next_stamp
+  if candidate_stamp%60==0 and requested_start<=candidate_stamp<requested_end:next_stamp=candidate_stamp
  for i,stamp in enumerate(stamps):
   utc=dt.datetime.fromtimestamp(stamp,UTC);local=utc.astimezone(tz)
   values={k:q[k][i] for k in ('open','high','low','close','volume')}
   raw_row={'raw_index':i,'source_timestamp_utc':utc.isoformat(),'source_timestamp_exchange':local.isoformat(),**values}
   reason=None
-  if any(values[k] is None or not math.isfinite(values[k]) for k in ('open','high','low','close')):reason='missing_ohlc_chart_slot'
-  elif interval=='1h' and stamp%3600:reason='non_grid_quote_snapshot'
+  if not requested_start<=stamp<requested_end:reason='outside_requested_capture_window'
+  elif any(values[k] is None or not math.isfinite(values[k]) or values[k]<=0 for k in ('open','high','low','close')):reason='missing_ohlc_chart_slot'
+  elif interval=='1h' and stamp%60:reason='non_minute_quote_snapshot'
   elif interval=='1h' and not is_regular_hour(local):reason='outside_cme_regular_session'
+  elif values['high']<max(values['open'],values['close'],values['low']) or values['low']>min(values['open'],values['close'],values['high']):reason='ohlc_bounds_inconsistent'
   if reason:rejected.append({**raw_row,'reason':reason});continue
-  if values['high']<max(values['open'],values['close'],values['low']) or values['low']>min(values['open'],values['close'],values['high']):raise ValueError(f'Invalid OHLC bounds at {interval} raw index {i}')
   shared={**values,'symbol':SYMBOL,'source':'Yahoo Finance chart','source_interval':interval,'exchange_timezone':TZ_NAME,'fetched_at_utc':fetch['fetched_at_utc'],'raw_sha256':sha,'raw_index':i}
   if interval=='1d':
    row={'date':local.date().isoformat(),'source_timestamp_utc':utc.isoformat(),'source_timestamp_exchange':local.isoformat(),**shared}
   else:
-   end=utc+dt.timedelta(hours=1);candidate=(local.date()+(dt.timedelta(days=1) if local.hour>=18 else dt.timedelta())).isoformat()
-   session_date=SOURCE_CALENDAR['trade_date_overrides'].get(candidate,candidate)
-   row={'bar_start_utc':utc.isoformat(),'bar_end_utc_nominal':end.isoformat(),'bar_start_exchange':local.isoformat(),'bar_end_exchange_nominal':end.astimezone(tz).isoformat(),'calendar_date_exchange':local.date().isoformat(),'session_date_candidate':candidate,'session_date':session_date,'session_date_rule':'NY_1800_rollover_plus_verified_CME_LaborDay2026_override','bar_duration_seconds_nominal':3600,'extremum_time_precision':'one_hour_bucket',**shared}
+   end_stamp=min(stamp+3600,requested_end,next_minute[stamp] if next_minute[stamp] is not None else requested_end);end=dt.datetime.fromtimestamp(end_stamp,UTC);candidate=(local.date()+(dt.timedelta(days=1) if local.hour>=18 else dt.timedelta())).isoformat()
+   session_date=calendar.get('trade_date_overrides', {}).get(candidate,candidate)
+   row={'bar_start_utc':utc.isoformat(),'bar_end_utc_nominal':end.isoformat(),'bar_start_exchange':local.isoformat(),'bar_end_exchange_nominal':end.astimezone(tz).isoformat(),'calendar_date_exchange':local.date().isoformat(),'session_date_candidate':candidate,'session_date':session_date,'session_date_rule':'NY_1800_rollover_plus_verified_calendar_overrides','bar_duration_seconds_nominal':end_stamp-stamp,'bar_start_minute':local.minute,'bar_end_basis':'min_one_hour_and_next_minute_aligned_source_timestamp','extremum_time_precision':'one_hour_or_shorter_vendor_bucket',**shared}
   rows.append(row)
  if not rows:raise ValueError(f'No usable {interval} rows')
  out=output_dir/f'gc_f_{interval}_normalized.csv'
@@ -112,34 +113,36 @@ def normalize_interval(output_dir:Path,interval:str):
  write_json(output_dir/f'gc_f_{interval}_normalized.json',rows)
  write_json(output_dir/f'gc_f_{interval}_excluded_rows.json',rejected)
  key='date' if interval=='1d' else 'bar_start_utc'
- summary={'raw_rows':len(stamps),'normalized_rows':len(rows),'excluded_rows':len(rejected),'exclusion_counts':dict(Counter(r['reason'] for r in rejected)),'first':rows[0][key],'last':rows[-1][key],'normalized_file':out.name,'normalized_json_file':f'gc_f_{interval}_normalized.json','normalized_sha256':hashlib.sha256(out.read_bytes()).hexdigest(),'raw_sha256':sha,'source_url':fetch['url'],'fetched_at_utc':fetch['fetched_at_utc'],'requested_start_utc':fetch['requested_start_utc'],'requested_end_exclusive_utc':fetch['requested_end_exclusive_utc'],'exchange':meta.get('fullExchangeName'),'exchange_timezone':TZ_NAME,'currency':meta.get('currency'),'instrument_type':meta.get('instrumentType'),'ohlc_bounds_issues':0}
+ summary={'raw_rows':len(stamps),'normalized_rows':len(rows),'excluded_rows':len(rejected),'exclusion_counts':dict(Counter(r['reason'] for r in rejected)),'first':rows[0][key],'last':rows[-1][key],'normalized_file':out.name,'normalized_json_file':f'gc_f_{interval}_normalized.json','normalized_sha256':hashlib.sha256(out.read_bytes()).hexdigest(),'raw_sha256':sha,'source_url':fetch['url'],'fetched_at_utc':fetch['fetched_at_utc'],'requested_start_utc':fetch['requested_start_utc'],'requested_end_exclusive_utc':fetch['requested_end_exclusive_utc'],'exchange':meta.get('fullExchangeName'),'exchange_timezone':TZ_NAME,'currency':meta.get('currency'),'instrument_type':meta.get('instrumentType'),'ohlc_bounds_issues':sum(r['reason']=='ohlc_bounds_inconsistent' for r in rejected)}
  if interval=='1h':summary['per_provisional_session_counts']=dict(sorted(Counter(r['session_date_candidate'] for r in rows).items()))
  return summary
 
-def normalize_directory(output_dir:Path):
+def normalize_directory(output_dir:Path,calendar_path:Path|None=None):
  set_process_temp(output_dir)
+ calendar=load_source_calendar(calendar_path)
  report={'schema_version':2,'normalization_version':'ghpr-prices-v2','normalized_at_utc':dt.datetime.now(UTC).isoformat(),'symbol':SYMBOL,'source':'Yahoo Finance chart','notes':['No COT outcome table is produced by this script.','Daily OHLC dates are labels, not intraday extreme timestamps.','Hourly timestamps denote one-hour buckets, not exact extreme times.','Hourly regular-session filtering does not establish holiday-specific coverage completeness.','No interpolation or fill or other instruments are used.']}
- for interval in ('1d','1h'):report[interval]=normalize_interval(output_dir,interval)
- write_json(output_dir/'source_calendar.json',SOURCE_CALENDAR)
+ for interval in ('1d','1h'):report[interval]=normalize_interval(output_dir,interval,calendar)
+ write_json(output_dir/'source_calendar.json',calendar)
  write_json(output_dir/'price_coverage.json',report)
  return report
 
-def fetch_prices(start:dt.date,end_exclusive:dt.date,output_dir:Path):
+def fetch_prices(start:dt.date,end_exclusive:dt.date,output_dir:Path,calendar_path:Path|None=None):
  set_process_temp(output_dir)
  for interval in ('1d','1h'):fetch_chart(start,end_exclusive,interval,output_dir)
- return normalize_directory(output_dir)
+ return normalize_directory(output_dir,calendar_path)
 
 def main(argv=None):
  p=argparse.ArgumentParser(description=__doc__)
  p.add_argument('--start',type=dt.date.fromisoformat)
  p.add_argument('--end-exclusive',type=dt.date.fromisoformat)
  p.add_argument('--output-dir',type=Path,default=Path(__file__).resolve().parent)
+ p.add_argument('--calendar',type=Path)
  p.add_argument('--from-capture',action='store_true',help='Normalize saved raw JSON with no network requests')
  args=p.parse_args(argv)
- if args.from_capture:result=normalize_directory(args.output_dir.resolve())
+ if args.from_capture:result=normalize_directory(args.output_dir.resolve(),args.calendar)
  else:
   if not args.start or not args.end_exclusive:p.error('--start and --end-exclusive are required unless --from-capture')
-  result=fetch_prices(args.start,args.end_exclusive,args.output_dir.resolve())
+  result=fetch_prices(args.start,args.end_exclusive,args.output_dir.resolve(),args.calendar)
  print(json.dumps({k:v for k,v in result.items() if k in ('1d','1h')},ensure_ascii=False))
  return 0
 if __name__=='__main__':raise SystemExit(main())

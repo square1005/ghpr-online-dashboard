@@ -1,0 +1,216 @@
+{
+  "schema_version": 2,
+  "source_evidence_checked_on_utc": "2026-10-04",
+  "exchange": "COMEX",
+  "symbol": "GC=F",
+  "exchange_timezone": "America/New_York",
+  "normal_session": {
+    "week_open_weekday": "Sunday",
+    "week_open_local": "18:00",
+    "week_close_weekday": "Friday",
+    "week_close_local": "17:00",
+    "daily_break_start_local": "17:00",
+    "daily_break_end_local": "18:00",
+    "daily_session_label_rule": "At or after 18:00 America/New_York, provisional session date is the following calendar date. Apply verified holiday trade-date overrides.",
+    "daily_label_weekdays": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "weekday_encoding": "Python Monday=0",
+    "normal_week_hour_buckets": 115,
+    "source_url": "https://www.cmegroup.com/market-regulation/files/gold-futures-and-options-fact-card.pdf"
+  },
+  "holidays": [
+    {
+      "date": "2025-10-13",
+      "label": "Columbus Day",
+      "exclude_daily": false,
+      "settlement_published": true,
+      "settlement_status": "normal_schedule",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/columbus-day-holiday-settlement-times-2025.pdf",
+      "scope": "CME explicitly confirms normal COMEX settlement; do not exclude as a generic U.S. holiday."
+    },
+    {
+      "date": "2025-11-11",
+      "label": "Veterans Day",
+      "exclude_daily": false,
+      "settlement_published": true,
+      "settlement_status": "normal_schedule",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/veterans-day-holiday-settlement-times-2025.pdf",
+      "scope": "CME explicitly confirms normal COMEX settlement; do not exclude as a generic U.S. holiday."
+    },
+    {
+      "date": "2025-11-27",
+      "label": "U.S. Thanksgiving",
+      "exclude_daily": true,
+      "vendor_daily_label_absent_in_verified_capture": true,
+      "settlement_published": false,
+      "settlement_status": "not_derived_or_disseminated",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/thanksgiving-holiday-settlement-times-2025.pdf",
+      "scope": "COMEX settlement notice; not an assertion of no intraday trading.",
+      "note": "CME states no COMEX settlement derived/disseminated; Yahoo supplied no daily OHLC label."
+    },
+    {
+      "date": "2025-12-25",
+      "label": "Christmas Day",
+      "exclude_daily": true,
+      "vendor_daily_label_absent_in_verified_capture": true,
+      "settlement_published": false,
+      "settlement_status": "not_derived_or_disseminated",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/christmas-holiday-settlement-times-2025.pdf",
+      "scope": "COMEX settlement notice; not an assertion of no intraday trading.",
+      "note": "CME states no COMEX settlement derived/disseminated; Yahoo supplied no daily OHLC label."
+    },
+    {
+      "date": "2026-01-01",
+      "label": "New Year Day",
+      "exclude_daily": true,
+      "vendor_daily_label_absent_in_verified_capture": true,
+      "settlement_published": false,
+      "settlement_status": "not_derived_or_disseminated",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/new-years-eve-holiday-settlement-times-2026.pdf",
+      "scope": "COMEX settlement notice; not an assertion of no intraday trading.",
+      "note": "CME states no COMEX settlement derived/disseminated; Yahoo supplied no daily OHLC label."
+    },
+    {
+      "date": "2026-01-19",
+      "label": "Martin Luther King Day",
+      "exclude_daily": true,
+      "vendor_daily_label_absent_in_verified_capture": true,
+      "settlement_published": false,
+      "settlement_status": "not_derived_or_disseminated",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/mlk-day-holiday-settlement-times-2026.pdf",
+      "scope": "COMEX settlement notice; not an assertion of no intraday trading.",
+      "note": "CME states no COMEX settlement derived/disseminated; Yahoo supplied no daily OHLC label."
+    },
+    {
+      "date": "2026-02-16",
+      "label": "Presidents Day",
+      "exclude_daily": true,
+      "vendor_daily_label_absent_in_verified_capture": true,
+      "settlement_published": false,
+      "settlement_status": "not_derived_or_disseminated",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/presidents-day-holiday-settlement-times-2026.pdf",
+      "scope": "COMEX settlement notice; not an assertion of no intraday trading.",
+      "note": "CME states no COMEX settlement derived/disseminated; Yahoo supplied no daily OHLC label."
+    },
+    {
+      "date": "2026-04-03",
+      "label": "Good Friday",
+      "exclude_daily": true,
+      "vendor_daily_label_absent_in_verified_capture": true,
+      "settlement_published": true,
+      "settlement_status": "prior_day_settlement_carried_forward",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/good-friday-holiday-settlement-times-2026.pdf",
+      "scope": "COMEX settlement notice; not an assertion of no intraday trading.",
+      "note": "CME states COMEX settlement copied from April 2; Yahoo supplied no April 3 daily OHLC label."
+    },
+    {
+      "date": "2026-05-25",
+      "label": "Memorial Day",
+      "exclude_daily": true,
+      "vendor_daily_label_absent_in_verified_capture": true,
+      "settlement_published": false,
+      "settlement_status": "not_derived_or_disseminated",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/memorial-day-holiday-settlement-times-2026.pdf",
+      "scope": "COMEX settlement notice; not an assertion of no intraday trading.",
+      "note": "CME states no COMEX settlement derived/disseminated; Yahoo supplied no daily OHLC label."
+    },
+    {
+      "date": "2026-06-19",
+      "label": "Juneteenth",
+      "exclude_daily": true,
+      "vendor_daily_label_absent_in_verified_capture": true,
+      "settlement_published": false,
+      "settlement_status": "not_derived_or_disseminated",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/juneteenth-day-settlement-times-2026.pdf",
+      "scope": "COMEX settlement notice; not an assertion of no intraday trading.",
+      "note": "CME states no COMEX settlement derived/disseminated; Yahoo supplied no daily OHLC label."
+    },
+    {
+      "date": "2026-07-03",
+      "label": "U.S. Independence Day observed",
+      "exclude_daily": true,
+      "vendor_daily_label_absent_in_verified_capture": true,
+      "settlement_published": false,
+      "settlement_status": "not_derived_or_disseminated",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/us-independence-day-settlement-times-2026.pdf",
+      "scope": "COMEX settlement notice; not an assertion of no intraday trading.",
+      "note": "CME states no COMEX settlement derived/disseminated; Yahoo supplied no daily OHLC label."
+    },
+    {
+      "date": "2026-09-07",
+      "label": "U.S. Labor Day",
+      "exclude_daily": true,
+      "vendor_daily_label_absent_in_verified_capture": true,
+      "settlement_published": false,
+      "settlement_status": "not_derived_or_disseminated",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2026/labor-day-holiday-settlement-times-2026.pdf",
+      "scope": "COMEX settlement notice; not an assertion of no intraday trading.",
+      "note": "CME states no COMEX settlement derived/disseminated; Yahoo supplied no daily OHLC label."
+    }
+  ],
+  "daily_excluded_dates": [
+    "2025-11-27",
+    "2025-12-25",
+    "2026-01-01",
+    "2026-01-19",
+    "2026-02-16",
+    "2026-04-03",
+    "2026-05-25",
+    "2026-06-19",
+    "2026-07-03",
+    "2026-09-07"
+  ],
+  "trade_date_overrides": {
+    "2026-09-07": "2026-09-08"
+  },
+  "override_source_url": "https://www.cmegroup.com/trading-hours.html",
+  "override_note": "CME Holiday Notes: orders after Sunday September 6 pre-open have Tuesday September 8 trade date.",
+  "verified_scope": {
+    "target_week_start_min": "2025-10-06",
+    "target_week_end_max": "2026-10-02"
+  },
+  "limitations": [
+    "These verified holiday labels cover October 2025 through October 2026; earlier and later missing daily labels are not automatically treated as holidays.",
+    "No complete holiday-specific hourly session or halt calendar is encoded.",
+    "No-settlement notices do not mean the exchange is closed all day.",
+    "Only the September 7, 2026 to September 8, 2026 trade-date override is explicitly verified here; other holiday mappings remain provisional.",
+    "Expected normal weekdays with missing or quarantined OHLC remain PARTIAL outside the verified exclusions.",
+    "Half-hour-start and shortened vendor H1 buckets remain nominal time intervals, not tick times."
+  ],
+  "modified_settlement_days": [
+    {
+      "date": "2025-12-24",
+      "gold_settlement_time_local": "12:30",
+      "timezone": "America/New_York",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/christmas-holiday-settlement-times-2025.pdf",
+      "note": "Settlement time is not the exchange trading-close time."
+    },
+    {
+      "date": "2025-11-28",
+      "gold_settlement_time": "normal schedule",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2025/thanksgiving-holiday-settlement-times-2025.pdf",
+      "note": "Normal settlement does not prove full hourly chart coverage."
+    }
+  ],
+  "vendor_daily_capture_evidence": {
+    "raw_file": "yahoo_gc_f_1d_raw.json",
+    "sha256": "449a2be8defb8cbc3a32dc7fc1ff0ffcef0e77034fe9b31480f8102ebe7fc21e",
+    "missing_weekday_labels": [
+      "2025-11-27",
+      "2025-12-25",
+      "2026-01-01",
+      "2026-01-19",
+      "2026-02-16",
+      "2026-04-03",
+      "2026-05-25",
+      "2026-06-19",
+      "2026-07-03",
+      "2026-09-07"
+    ]
+  }
+}

@@ -6,7 +6,7 @@ from datetime import date, datetime, timedelta
 
 from build_next_week_outcomes import (
     NY, UTC, build_outcomes, csv_output, months_before, next_week,
-    normalize_prices, parse_time,
+    normalize_prices, parse_time, research_availability,
 )
 
 
@@ -192,7 +192,7 @@ class OutcomeTests(unittest.TestCase):
         daily = daily_fixture()
         hourly = hourly_fixture(daily)
         hourly[0]["open"] = ""
-        hourly[1]["bar_start_utc"] = "2026-09-27T23:12:00Z"
+        hourly[1]["bar_start_utc"] = "2026-09-27T23:12:17Z"
         accepted, rejected = normalize_prices(hourly, "1h")
         self.assertEqual(len(accepted), 113)
         self.assertEqual(len(rejected), 2)
@@ -223,6 +223,171 @@ class OutcomeTests(unittest.TestCase):
         self.assertNotIn("{'", output)
         csv_row = next(csv.DictReader(io.StringIO(output)))
         self.assertEqual(csv_row["cot_date"], "2026-09-22")
+
+    def test_twelve_calendar_months_and_leap_day_are_not_365_day_subtractions(self):
+        self.assertEqual(months_before(date(2026, 10, 4), 12), date(2025, 10, 4))
+        self.assertEqual(months_before(date(2024, 2, 29), 12), date(2023, 2, 28))
+        dates = [date(2025, 9, 30)] + [date(2025, 10, 7) + timedelta(weeks=n) for n in range(52)]
+        dates[dates.index(date(2025, 11, 11))] = date(2025, 11, 10)
+        payload = build_outcomes(dates, [], [], as_of=parse_time("2026-10-04T00:00:00Z"))
+        self.assertEqual(len(payload["rows"]), 52)
+        self.assertEqual(payload["rows"][0]["cot_date"], "2025-10-07")
+        self.assertIn("2025-11-10", [r["cot_date"] for r in payload["rows"]])
+        self.assertEqual(payload["scope"]["scope_mode"], "ROLLING_CALENDAR_MONTHS")
+
+    def test_all_history_includes_real_master_dates_and_preserves_future_pending(self):
+        dates = [date(2009, 9, 1), date(2025, 11, 10), date(2026, 9, 22), date(2026, 9, 29)]
+        payload = build_outcomes(dates, daily_fixture(), [], as_of=parse_time("2026-10-04T00:00:00Z"),
+                                 all_history=True, cot_start=date(2026, 7, 4))
+        self.assertEqual(len(payload["rows"]), 4)
+        self.assertEqual(payload["scope"]["coverage_scope"], "ALL_MASTER")
+        self.assertEqual(payload["scope"]["cot_start"], "2009-09-01")
+        self.assertEqual(payload["rows"][1]["week_start"], "2025-11-17")
+        self.assertEqual(payload["rows"][-1]["coverage_status"], "PENDING")
+        self.assertIsNone(payload["rows"][-1]["close"])
+
+    def test_half_hour_start_and_shortened_bar_are_valid_but_not_complete_grid(self):
+        daily = daily_fixture()
+        hourly = hourly_fixture(daily)
+        original_start = parse_time(hourly[-11]["bar_start_utc"])
+        hourly[-11]["bar_start_utc"] = (original_start + timedelta(minutes=30)).isoformat()
+        row = build(daily, hourly)["rows"][0]
+        self.assertEqual(row["observed_hourly_bars"], 115)
+        self.assertEqual(row["hourly_coverage_status"], "PARTIAL")
+        self.assertEqual(row["high_time_precision"], "hour_bucket")
+        bounds = row["high_time_range_utc"]
+        self.assertEqual(parse_time(bounds["end"]) - parse_time(bounds["start"]), timedelta(minutes=30))
+        self.assertFalse(row["high_first_hour_bucket_verified"])
+
+    def test_all_history_recalculates_daily_and_preserves_matching_archived_hourly(self):
+        daily = daily_fixture()
+        previous = build(daily, hourly_fixture(daily))
+        kwargs = dict(as_of=parse_time("2026-10-04T00:00:00Z"), all_history=True,
+                      previous_outcomes=previous, hourly_source_window_start=parse_time("2026-10-03T00:00:00Z"))
+        result = build_outcomes([date(2026, 9, 22)], daily, [], **kwargs)
+        row = result["rows"][0]
+        self.assertEqual(row["archive_status"], "CURRENT_DAILY_WITH_ARCHIVED_HOURLY")
+        self.assertEqual(row["high_time_utc"], previous["rows"][0]["high_time_utc"])
+        self.assertIn(row["hourly_archive_reference"]["provenance_id"], result["archived_provenance"])
+        again = build_outcomes([date(2026, 9, 22)], daily, [], **{**kwargs, "previous_outcomes": result})
+        self.assertEqual(again["rows"][0]["hourly_archive_reference"], row["hourly_archive_reference"])
+        revised = [dict(r) for r in daily]
+        revised[-1]["high"] = 200
+        changed = build_outcomes([date(2026, 9, 22)], revised, [], **kwargs)["rows"][0]
+        self.assertEqual(changed["high"], 200)
+        self.assertIsNone(changed["high_time_utc"])
+        self.assertEqual(changed["high_time_reason"], "DAILY_CHANGED_ARCHIVED_HOURLY_NOT_REUSED")
+        missing = build_outcomes([date(2026, 9, 22)], [], [], **kwargs)["rows"][0]
+        self.assertEqual(missing["coverage_status"], "MISSING")
+        self.assertIsNone(missing["high"])
+
+    def test_old_daily_only_data_has_explicit_h1_retention_reason(self):
+        payload = build_outcomes([date(2026, 9, 22)], daily_fixture(), [], all_history=True,
+                                 as_of=parse_time("2026-10-04T00:00:00Z"),
+                                 hourly_source_window_start=parse_time("2026-10-03T00:00:00Z"))
+        row = payload["rows"][0]
+        self.assertEqual(row["high_time_precision"], "day")
+        self.assertIsNone(row["high_time_utc"])
+        self.assertEqual(row["high_time_reason"], "NO_HOURLY_BARS_OUTSIDE_RETAINED_COVERAGE")
+
+    def test_revised_schedule_does_not_create_actual_publication_timestamp(self):
+        cot = date(2025, 10, 7)
+        record = {"original_scheduled_release_date": "2025-10-10", "revised_publication_date": "2025-11-21",
+                  "evidence_kind": "official_revised_schedule", "publication_delayed": True,
+                  "evidence_sources": ["https://www.cftc.gov/PressRoom/PressReleases/9147-25"]}
+        payload = build_outcomes([cot], [], [], all_history=True, as_of=parse_time("2026-10-04T00:00:00Z"),
+                                 cot_release_calendar={"reports": [{"cot_date": cot.isoformat(), **record}]})
+        row = payload["rows"][0]
+        self.assertEqual(row["week_start"], "2025-10-13")
+        self.assertEqual(row["research_availability_status"], "SCHEDULED_AFTER_WEEK_START")
+        self.assertEqual(row["scheduled_release_relation"], "AFTER_OUTCOME_WEEK")
+        self.assertFalse(row["no_lookahead_eligible"])
+        self.assertIsNone(row["actual_cot_release_at_utc"])
+        self.assertEqual(row["original_scheduled_release_date"], "2025-10-10")
+
+    def test_monday_publication_schedule_is_after_sunday_session_open(self):
+        record = {"cot_date": "2025-12-23", "scheduled_release_date": "2025-12-29",
+                  "evidence_kind": "official_schedule", "evidence_sources": ["https://www.cftc.gov/example"]}
+        row = build_outcomes([date(2025, 12, 23)], [], [], all_history=True,
+                             as_of=parse_time("2026-10-04T00:00:00Z"), cot_release_calendar={"reports": [record]})["rows"][0]
+        self.assertEqual(row["week_start_at"], "2025-12-28T23:00:00+00:00")
+        self.assertEqual(row["scheduled_release_relation"], "DURING_OUTCOME_WEEK")
+        self.assertTrue(row["not_ex_ante_available"])
+
+    def test_normal_schedule_before_window_still_has_unknown_actual_release(self):
+        record = {"cot_date": "2026-09-22", "scheduled_release_date": "2026-09-25",
+                  "evidence_sources": ["https://www.cftc.gov/example"]}
+        row = build_outcomes([date(2026, 9, 22)], daily_fixture(), [], all_history=True,
+                             as_of=parse_time("2026-10-04T00:00:00Z"), cot_release_calendar={"reports": [record]})["rows"][0]
+        self.assertEqual(row["research_availability_status"], "RELEASE_TIME_UNVERIFIED")
+        self.assertIsNone(row["no_lookahead_eligible"])
+        self.assertIsNone(row["actual_cot_release_at_utc"])
+
+    def test_actual_publication_date_is_not_promoted_to_midnight_timestamp(self):
+        record = {"cot_date": "2023-01-31", "actual_publication_date": "2023-02-24",
+                  "evidence_kind": "official_publication_notice", "evidence_sources": ["https://www.cftc.gov/example"]}
+        row = build_outcomes([date(2023, 1, 31)], [], [], all_history=True,
+                             as_of=parse_time("2026-10-04T00:00:00Z"), cot_release_calendar={"reports": [record]})["rows"][0]
+        self.assertEqual(row["actual_publication_date"], "2023-02-24")
+        self.assertIsNone(row["actual_cot_release_at_utc"])
+        self.assertEqual(row["research_availability_status"], "ACTUAL_PUBLICATION_DATE_AFTER_WEEK_START")
+        self.assertFalse(row["no_lookahead_eligible"])
+
+    def test_revised_release_window_does_not_fall_back_to_original_due_date(self):
+        record = {"cot_date": "2013-10-08", "original_scheduled_release_date": "2013-10-11",
+                  "planned_release_window_start": "2013-10-28", "planned_release_window_end": "2013-11-01",
+                  "evidence_kind": "official_schedule_derived", "evidence_sources": ["https://www.cftc.gov/example"]}
+        row = build_outcomes([date(2013, 10, 8)], [], [], all_history=True,
+                             as_of=parse_time("2026-10-04T00:00:00Z"), cot_release_calendar={"reports": [record]})["rows"][0]
+        self.assertIsNone(row["scheduled_release_date"])
+        self.assertEqual(row["scheduled_release_relation"], "AFTER_OUTCOME_WEEK")
+        self.assertFalse(row["no_lookahead_eligible"])
+
+    def test_unverified_actual_timestamp_is_rejected(self):
+        record = {"cot_date": "2026-09-22", "actual_release_at_utc": "2026-09-25T19:30:00Z"}
+        with self.assertRaisesRegex(ValueError, "explicit verification"):
+            build_outcomes([date(2026, 9, 22)], [], [], all_history=True,
+                           as_of=parse_time("2026-10-04T00:00:00Z"), cot_release_calendar={"reports": [record]})
+
+    def test_revised_historical_vintage_is_not_automatically_ex_ante_eligible(self):
+        record = {"cot_date": "2019-03-26", "actual_publication_date": "2019-03-29",
+                  "evidence_kind": "official_publication_notice", "evidence_sources": ["https://www.cftc.gov/example"],
+                  "revision_risk": True, "revision_note": "Gold positions were revised on April 3."}
+        row = build_outcomes([date(2019, 3, 26)], [], [], all_history=True,
+                             as_of=parse_time("2026-10-04T00:00:00Z"), cot_release_calendar={"reports": [record]})["rows"][0]
+        self.assertEqual(row["research_availability_status"], "ACTUAL_PUBLICATION_DATE_BEFORE_WEEK_START")
+        self.assertTrue(row["point_in_time_vintage_unverified"])
+        self.assertIsNone(row["no_lookahead_eligible"])
+
+    def test_outside_active_scope_history_retains_original_source_reference(self):
+        dates = [date(2025, 10, 7), date(2025, 11, 4)]
+        old_daily = daily_fixture(date(2025, 10, 13))
+        current_daily = daily_fixture(date(2025, 11, 10))
+        previous = build_outcomes(dates, old_daily + current_daily, [],
+                                  as_of=parse_time("2026-10-04T00:00:00Z"), provenance={"daily": {"sha256": "first-source"}})
+        rotated = build_outcomes(dates, current_daily, [], as_of=parse_time("2026-11-04T00:00:00Z"),
+                                 previous_outcomes=previous, source_window_start=parse_time("2025-11-01T00:00:00Z"))
+        self.assertEqual([row["cot_date"] for row in rotated["rows"]], ["2025-11-04"])
+        retained = rotated["retained_history_rows"][0]
+        self.assertEqual(retained["cot_date"], "2025-10-07")
+        self.assertEqual(retained["high"], previous["rows"][0]["high"])
+        self.assertEqual(rotated["archived_provenance"][retained["archive_reference"]["provenance_id"]]["daily"]["sha256"], "first-source")
+
+
+    def test_unchanged_partial_daily_keeps_qualified_hourly_without_coverage_promotion(self):
+        daily = daily_fixture()[1:]
+        previous = build(daily, hourly_fixture(daily))
+        kwargs = dict(all_history=True, as_of=parse_time('2026-10-04T00:00:00Z'), previous_outcomes=previous, hourly_source_window_start=parse_time('2026-10-03T00:00:00Z'))
+        row = build_outcomes([date(2026,9,22)],daily,[],**kwargs)['rows'][0]
+        self.assertEqual(row['archive_status'],'CURRENT_DAILY_WITH_ARCHIVED_HOURLY')
+        self.assertEqual(row['coverage_status'],'PARTIAL')
+        self.assertEqual(row['hourly_coverage_status'],'PARTIAL')
+        self.assertEqual(row['high_time_utc'],previous['rows'][0]['high_time_utc'])
+        self.assertFalse(row['high_first_hour_bucket_verified'])
+        previous['rows'][0]['expected_session_dates']=['2026-09-29','2026-09-30','2026-10-01','2026-10-02']
+        changed=build_outcomes([date(2026,9,22)],daily,[],**kwargs)['rows'][0]
+        self.assertEqual(changed['archive_status'],'CURRENT_QUERY')
+        self.assertIsNone(changed['high_time_utc'])
 
 
 if __name__ == "__main__":

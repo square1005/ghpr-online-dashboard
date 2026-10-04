@@ -27,6 +27,7 @@ WEEKDAYS = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", 
 PRICE_TOLERANCE = 0.0005  # Float serialization tolerance, well below a GC tick.
 PRICE_KEYS = ("open", "high", "low", "close")
 SCHEMA_VERSION = 1
+DEFAULT_SCOPE_MONTHS = 12
 
 
 def iso_time(value: datetime | None) -> str | None:
@@ -79,14 +80,16 @@ def normalize_prices(rows: list[dict], interval: str) -> tuple[list[dict], list[
                 row["date"] = key
             else:
                 start = parse_time(row["bar_start_utc"])
-                if start.minute or start.second or start.microsecond:
+                if start.second or start.microsecond:
                     raise ValueError("non-grid quote snapshot")
                 local = start.astimezone(NY)
                 if local.hour == 17:
                     raise ValueError("CME daily maintenance break")
                 end = parse_time(row["bar_end_utc_nominal"]) if row.get("bar_end_utc_nominal") else start + timedelta(hours=1)
-                if end - start != timedelta(hours=1):
-                    raise ValueError("not a nominal one-hour bar")
+                if end.second or end.microsecond:
+                    raise ValueError("non-minute bar endpoint")
+                if not timedelta(0) < end - start <= timedelta(hours=1):
+                    raise ValueError("not a positive bar of at most one hour")
                 candidate = local.date() + timedelta(days=int(local.hour >= 18))
                 session = row.get("session_date") or row.get("session_date_candidate") or candidate.isoformat()
                 row["session_date"] = date.fromisoformat(session).isoformat()
@@ -147,6 +150,8 @@ def observed_hour_coverage(hours: list[dict], expected: dict, start: date) -> st
     if expected["hourly_coverage_known_partial"] or expected["hours"] is None:
         return "PARTIAL"
     if len(hours) != expected["hours"]:
+        return "PARTIAL"
+    if any(row["_end"] - row["_start"] != timedelta(hours=1) for row in hours):
         return "PARTIAL"
     # Count alone cannot prove normal-week coverage: verify every session bucket.
     if expected["hours"] == 115 and not expected["holiday_affected"]:
@@ -226,22 +231,234 @@ def extreme_order(row: dict) -> str:
     return "SAME_BUCKET_UNKNOWN"
 
 
+def release_records(evidence: dict | None) -> dict[str, dict]:
+    records = {}
+    for record in (evidence or {}).get("reports", []):
+        key = date.fromisoformat(record["cot_date"]).isoformat()
+        if key in records:
+            raise ValueError(f"Duplicate COT release evidence for {key}")
+        records[key] = record
+    return records
+
+
+def research_availability(cot: date, session_open: datetime, session_close: datetime,
+                          as_of: datetime, record: dict | None = None) -> dict:
+    """Keep intended publication dates separate from verified actual timestamps.
+
+    The price outcome always remains the observation's next calendar week.
+    An official planned date after that week's Sunday session open excludes the
+    row from an ex-ante study conservatively; it does not prove an actual release.
+    """
+    record = record or {}
+    original = record.get("original_scheduled_release_date")
+    revised = record.get("revised_publication_date")
+    planned_start = record.get("planned_release_window_start")
+    planned_end = record.get("planned_release_window_end")
+    scheduled = revised or record.get("scheduled_release_date") or (None if planned_start else original)
+    actual_date = record.get("actual_publication_date")
+    for value in (original, revised, scheduled, planned_start, planned_end, actual_date):
+        if value:
+            date.fromisoformat(value)
+    sources = record.get("evidence_sources", record.get("source_urls", []))
+    if record.get("source_url") and record["source_url"] not in sources:
+        sources = [*sources, record["source_url"]]
+    result = {
+        "research_window_mode": "OBSERVATION_NEXT_CALENDAR_WEEK",
+        "research_availability_status": "RELEASE_TIME_UNVERIFIED",
+        "not_ex_ante_available": None, "no_lookahead_eligible": None,
+        "original_scheduled_release_date": original,
+        "revised_publication_date": revised,
+        "scheduled_release_date": scheduled,
+        "planned_release_window_start": planned_start,
+        "planned_release_window_end": planned_end,
+        "actual_publication_date": None,
+        "scheduled_release_relation": "UNKNOWN",
+        "release_evidence_kind": record.get("evidence_kind", record.get("basis", record.get("source_basis"))),
+        "release_evidence_sources": sources,
+        "release_mapping_inferred": bool(record.get("mapping_inferred", False)),
+        "release_evidence_date_precision": record.get("date_precision"),
+        "release_evidence_note": record.get("note"),
+        "publication_delayed": record.get("publication_delayed"),
+        "actual_cot_release_at_utc": None,
+        "actual_cot_release_source_url": None,
+        "revision_risk": bool(record.get("revision_risk", False)),
+        "point_in_time_vintage_unverified": bool(record.get("point_in_time_vintage_unverified", record.get("revision_risk", False))),
+        "revision_note": record.get("revision_note"),
+        "revision_publication_dates": record.get("revision_publication_dates", []),
+        "revision_release_at_utc": record.get("revision_release_at_utc"),
+        "research_availability_note": "Observation-next-calendar-week outcome only. Actual CFTC publication time is unverified; do not assume this row was available before the outcome week.",
+    }
+    if scheduled or planned_start:
+        # A date-only planned release represents a civil date in the CFTC's
+        # Eastern time zone. Never turn its midnight into an actual timestamp.
+        day = date.fromisoformat(scheduled or planned_start)
+        earliest = datetime.combine(day, time.min, NY).astimezone(UTC)
+        final_day = date.fromisoformat(planned_end) if planned_end and not scheduled else day
+        latest = datetime.combine(final_day + timedelta(days=1), time.min, NY).astimezone(UTC)
+        if earliest >= session_close:
+            relation = "AFTER_OUTCOME_WEEK"
+        elif earliest >= session_open:
+            relation = "DURING_OUTCOME_WEEK"
+        elif latest <= session_open:
+            relation = "BEFORE_OUTCOME_WEEK"
+        else:
+            relation = "OVERLAPS_WEEK_START_DATE"
+        result["scheduled_release_relation"] = relation
+        if earliest >= session_open and sources:
+            result.update({
+                "research_availability_status": "SCHEDULED_AFTER_WEEK_START",
+                "not_ex_ante_available": True, "no_lookahead_eligible": False,
+                "research_availability_note": "Official intended publication date is after the outcome week's Sunday session open. Excluded from an ex-ante study; this is schedule evidence, not a verified actual publication timestamp. The observation-next-calendar-week window is unchanged.",
+            })
+    if actual_date:
+        if not sources or (record.get("actual_publication_date_verified") is not True
+                           and result["release_evidence_kind"] != "official_publication_notice"):
+            raise ValueError(f"Actual publication date for {cot} requires an official date-level notice or explicit verification")
+        day = date.fromisoformat(actual_date)
+        earliest = datetime.combine(day, time.min, NY).astimezone(UTC)
+        latest = datetime.combine(day + timedelta(days=1), time.min, NY).astimezone(UTC)
+        if earliest > as_of:
+            raise ValueError(f"Verified actual publication date cannot be in the future for {cot}")
+        result["actual_publication_date"] = actual_date
+        result["research_availability_note"] = "An official notice verifies the actual publication date only; no exact UTC publication timestamp is inferred. The observation-next-calendar-week price window is unchanged."
+        if earliest >= session_open:
+            result.update({"research_availability_status": "ACTUAL_PUBLICATION_DATE_AFTER_WEEK_START",
+                           "not_ex_ante_available": True, "no_lookahead_eligible": False})
+        elif latest <= session_open:
+            result.update({"research_availability_status": "ACTUAL_PUBLICATION_DATE_BEFORE_WEEK_START",
+                           "not_ex_ante_available": False, "no_lookahead_eligible": True})
+        else:
+            result.update({"research_availability_status": "ACTUAL_PUBLICATION_DATE_OVERLAPS_WEEK_START",
+                           "not_ex_ante_available": None, "no_lookahead_eligible": None})
+    actual = record.get("actual_release_at_utc")
+    if actual:
+        if record.get("actual_release_verified") is not True or not record.get("actual_release_source_url"):
+            raise ValueError(f"Actual release timestamp for {cot} requires explicit verification and a source URL")
+        actual_time = parse_time(actual)
+        if actual_time > as_of:
+            raise ValueError(f"Verified actual release cannot be in the future for {cot}")
+        unavailable = actual_time > session_open
+        result.update({
+            "actual_cot_release_at_utc": iso_time(actual_time),
+            "actual_cot_release_source_url": record["actual_release_source_url"],
+            "research_availability_status": "ACTUAL_RELEASE_AFTER_WEEK_START" if unavailable else "ACTUAL_RELEASE_BEFORE_WEEK_START",
+            "not_ex_ante_available": unavailable, "no_lookahead_eligible": not unavailable,
+            "research_availability_note": "Availability is based on an explicitly verified actual publication timestamp. Outcome prices still use the observation-next-calendar-week window.",
+        })
+    if result["point_in_time_vintage_unverified"] and result["no_lookahead_eligible"] is True:
+        result["no_lookahead_eligible"] = None
+        result["research_availability_note"] += " The current historical value may be revised; its point-in-time vintage has not been verified."
+    return result
+
+
+def preserve_previous_row(row: dict, previous_payload: dict, previous_fingerprint: dict | None,
+                          archived_provenance: dict) -> dict:
+    preserved = copy.deepcopy(row)
+    reference = row.get("archive_reference")
+    if reference:
+        provenance_id = reference["provenance_id"]
+        source_provenance = previous_payload.get("archived_provenance", {}).get(provenance_id)
+        if source_provenance is None:
+            raise RuntimeError(f"Archived provenance missing for {row['cot_date']}")
+    else:
+        previous_sha = (previous_fingerprint or {}).get("sha256") or hashlib.sha256(
+            json.dumps(previous_payload, sort_keys=True, ensure_ascii=False, allow_nan=False).encode()).hexdigest()
+        provenance_id = previous_sha
+        reference = {"provenance_id": provenance_id, "source_snapshot_sha256": previous_sha,
+                     "source_snapshot_as_of": previous_payload.get("scope", {}).get("as_of")}
+        source_provenance = previous_payload.get("provenance", {})
+    archived_provenance[provenance_id] = copy.deepcopy(source_provenance)
+    hourly_reference = row.get("hourly_archive_reference")
+    if hourly_reference:
+        hourly_id = hourly_reference["provenance_id"]
+        hourly_provenance = previous_payload.get("archived_provenance", {}).get(hourly_id)
+        if hourly_provenance is None:
+            raise RuntimeError(f"Archived hourly provenance missing for {row['cot_date']}")
+        archived_provenance[hourly_id] = copy.deepcopy(hourly_provenance)
+    preserved["archive_reference"] = copy.deepcopy(reference)
+    return preserved
+
+
+def same_daily_prices(current: dict, previous: dict) -> bool:
+    """Archived intraday evidence cannot survive a changed daily price series."""
+    for key in PRICE_KEYS:
+        if current.get(key) is None or previous.get(key) is None or abs(current[key] - previous[key]) > PRICE_TOLERANCE:
+            return False
+    current_bars = {row["date"]: row for row in current.get("bars", [])}
+    previous_bars = {row["date"]: row for row in previous.get("bars", [])}
+    if not current_bars or current_bars.keys() != previous_bars.keys():
+        return False
+    return all(abs(current_bars[day][key] - previous_bars[day][key]) <= PRICE_TOLERANCE
+               for day in current_bars for key in PRICE_KEYS)
+
+
+def compatible_daily_archive(current: dict, previous: dict) -> bool:
+    if not same_daily_prices(current, previous) or current['coverage_status'] != previous.get('coverage_status'):
+        return False
+    if current['coverage_status'] == 'COMPLETE_DAILY':
+        return True
+    if current['coverage_status'] == 'PARTIAL':
+        return all(current.get(k) == previous.get(k) for k in ('expected_session_dates', 'missing_session_dates', 'unexpected_session_dates'))
+    return False
+
+
+def restore_archived_hourly(row: dict, previous: dict, previous_payload: dict,
+                            previous_fingerprint: dict | None, archived_provenance: dict) -> None:
+    reference_row = copy.deepcopy(previous)
+    if previous.get("hourly_archive_reference"):
+        reference_row["archive_reference"] = previous["hourly_archive_reference"]
+    preserved = preserve_previous_row(reference_row, previous_payload, previous_fingerprint, archived_provenance)
+    for key in ("hourly_coverage_status", "observed_hourly_bars", "expected_hourly_bars"):
+        row[key] = previous[key]
+    for side in ("high", "low"):
+        for suffix in ("time_utc", "time_taipei", "time_range_utc", "time_range_taipei", "time_precision",
+                       "time_reason", "hour_bucket_tie_count", "observed_hour_buckets", "first_hour_bucket_verified",
+                       "weekday_taipei", "hourly_comparison_price"):
+            key = f"{side}_{suffix}"
+            if key in previous:
+                row[key] = copy.deepcopy(previous[key])
+    row["hourly_archive_reference"] = preserved["archive_reference"]
+    row["archive_status"] = "CURRENT_DAILY_WITH_ARCHIVED_HOURLY"
+
+
 def build_outcomes(cot_dates: list[date], daily_input: list[dict], hourly_input: list[dict], *,
-                   as_of: datetime, cot_start: date, cot_end: date,
+                   as_of: datetime, cot_start: date | None = None, cot_end: date | None = None,
                    calendar_data: dict | None = None, provenance: dict | None = None,
                    previous_outcomes: dict | None = None, source_window_start: datetime | None = None,
-                   previous_fingerprint: dict | None = None) -> dict:
+                   previous_fingerprint: dict | None = None, scope_months: int = DEFAULT_SCOPE_MONTHS,
+                   cot_release_calendar: dict | None = None, all_history: bool = False,
+                   hourly_source_window_start: datetime | None = None) -> dict:
+    if all_history:
+        if not cot_dates:
+            raise ValueError("All-history mode requires a nonempty COT master")
+        cot_start, cot_end = min(cot_dates), max(cot_dates)
+    else:
+        cot_start = cot_start or months_before(as_of.date(), scope_months)
+        cot_end = cot_end or as_of.date()
+    hourly_source_window_start = hourly_source_window_start or source_window_start
+    if cot_start > cot_end or scope_months < 0:
+        raise ValueError("Invalid COT date range")
     if previous_outcomes and (previous_outcomes.get("price_feed") != "GC=F" or previous_outcomes.get("schema_version") != SCHEMA_VERSION):
         raise RuntimeError("Previous outcome feed/schema must match GC=F schema 1")
-    if previous_outcomes and source_window_start is None:
+    if previous_outcomes and source_window_start is None and (not all_history or hourly_source_window_start is None):
         raise ValueError("Preservation requires the explicit source query window start, not the first valid bar")
     if source_window_start and source_window_start > as_of:
         raise ValueError("Source query window start cannot be after as-of")
+    if hourly_source_window_start and hourly_source_window_start > as_of:
+        raise ValueError("Hourly source query window start cannot be after as-of")
     daily, daily_rejections = normalize_prices(daily_input, "1d")
     hourly, hourly_rejections = normalize_prices(hourly_input, "1h")
     rows = []
-    previous_rows = {r["cot_date"]: r for r in (previous_outcomes or {}).get("rows", [])}
+    previous_rows = {r["cot_date"]: r for r in (previous_outcomes or {}).get("retained_history_rows", [])}
+    previous_rows.update({r["cot_date"]: r for r in (previous_outcomes or {}).get("rows", [])})
     archived_provenance = {}
+    retained_history = []
+    releases = release_records(cot_release_calendar)
+    for previous in sorted(previous_rows.values(), key=lambda row: row["cot_date"]):
+        if previous["cot_date"] < cot_start.isoformat():
+            preserved = preserve_previous_row(previous, previous_outcomes, previous_fingerprint, archived_provenance)
+            preserved["archive_status"] = "OUTSIDE_ACTIVE_SCOPE"
+            retained_history.append(preserved)
     for cot in sorted(set(cot_dates)):
         if not cot_start <= cot <= cot_end:
             continue
@@ -249,31 +466,18 @@ def build_outcomes(cot_dates: list[date], daily_input: list[dict], hourly_input:
         expected = week_expectations(start, end, calendar_data)
         session_open = datetime.combine(start - timedelta(days=1), time(18), NY).astimezone(UTC)
         session_close = datetime.combine(end, time(17), NY).astimezone(UTC)
+        availability = research_availability(cot, session_open, session_close, as_of, releases.get(cot.isoformat()))
         previous = previous_rows.get(cot.isoformat())
-        if (previous and source_window_start and session_close < source_window_start
+        if (not all_history and previous and source_window_start and session_close < source_window_start
                 and previous.get("coverage_status") == "COMPLETE_DAILY"):
             if previous.get("price_feed") != "GC=F" or previous.get("week_start") != start.isoformat() or previous.get("week_end") != end.isoformat():
                 raise RuntimeError(f"Archived outcome feed/window mismatch for {cot}")
             for key in PRICE_KEYS:
                 finite_price(previous.get(key))
-            preserved = copy.deepcopy(previous)
+            preserved = preserve_previous_row(previous, previous_outcomes, previous_fingerprint, archived_provenance)
             preserved.update({"archive_status": "ARCHIVED_COMPLETE", "week_state": "ENDED",
                               "week_start_at": iso_time(session_open), "week_end_at": iso_time(session_close)})
-            reference = previous.get("archive_reference")
-            if reference:
-                provenance_id = reference["provenance_id"]
-                source_provenance = (previous_outcomes or {}).get("archived_provenance", {}).get(provenance_id)
-                if source_provenance is None:
-                    raise RuntimeError(f"Archived provenance missing for {cot}")
-            else:
-                previous_sha = (previous_fingerprint or {}).get("sha256") or hashlib.sha256(
-                    json.dumps(previous_outcomes, sort_keys=True, ensure_ascii=False, allow_nan=False).encode()).hexdigest()
-                provenance_id = previous_sha
-                reference = {"provenance_id": provenance_id, "source_snapshot_sha256": previous_sha,
-                             "source_snapshot_as_of": previous_outcomes.get("scope", {}).get("as_of")}
-                source_provenance = previous_outcomes.get("provenance", {})
-            archived_provenance[provenance_id] = copy.deepcopy(source_provenance)
-            preserved["archive_reference"] = copy.deepcopy(reference)
+            preserved.update(availability)
             rows.append(preserved)
             continue
         pending = as_of < session_open
@@ -302,13 +506,12 @@ def build_outcomes(cot_dates: list[date], daily_input: list[dict], hourly_input:
             "calendar_note": expected["note"], "calendar_sources": expected["sources"],
             "source": "Yahoo Finance GC=F", "price_feed": "GC=F", "currency": "USD",
             "price_semantics": "First daily session open and last daily vendor close; not an official CME settlement series.",
-            "time_semantics": "One-hour bucket start/end, not the exact minute of an extremum. First matching observed bucket only when daily prices reconcile.",
+            "time_semantics": "Source intraday bucket of at most one hour, not the exact minute of an extremum. First matching observed bucket only when daily prices reconcile.",
             "week_timezone": "America/New_York", "display_timezone": "Asia/Taipei",
             "window_start_utc": iso_time(session_open), "window_end_utc": iso_time(session_close),
             "week_start_at": iso_time(session_open), "week_end_at": iso_time(session_close),
             "bars": [{"date": r["date"], **{key: r[key] for key in PRICE_KEYS}} for r in week_daily],
-            "actual_cot_release_at_utc": None,
-            "research_availability_note": "Observation-next-calendar-week rule. Actual CFTC publication time must be checked separately before claiming a no-look-ahead study.",
+            **availability,
         }
         if week_daily:
             opening, closing = week_daily[0]["open"], week_daily[-1]["close"]
@@ -318,6 +521,16 @@ def build_outcomes(cot_dates: list[date], daily_input: list[dict], hourly_input:
                         "range": high - low, "range_pct": (high - low) / opening})
         row.update(extreme_details("high", week_daily, week_hourly, hour_coverage))
         row.update(extreme_details("low", week_daily, week_hourly, hour_coverage))
+        outside_hourly_window = hourly_source_window_start and session_close < hourly_source_window_start
+        if not week_hourly and outside_hourly_window:
+            if (previous and previous.get("observed_hourly_bars", 0) > 0
+                    and compatible_daily_archive(row, previous)):
+                restore_archived_hourly(row, previous, previous_outcomes, previous_fingerprint, archived_provenance)
+            else:
+                for side in ("high", "low"):
+                    if row[f"{side}_time_reason"] == "NO_HOURLY_BARS":
+                        row[f"{side}_time_reason"] = ("DAILY_CHANGED_ARCHIVED_HOURLY_NOT_REUSED"
+                            if previous and previous.get("observed_hourly_bars", 0) > 0 else "NO_HOURLY_BARS_OUTSIDE_RETAINED_COVERAGE")
         precisions = {row["high_time_precision"], row["low_time_precision"]}
         row["time_precision"] = next(iter(precisions)) if len(precisions) == 1 else "mixed"
         row["extreme_order"] = extreme_order(row)
@@ -327,6 +540,9 @@ def build_outcomes(cot_dates: list[date], daily_input: list[dict], hourly_input:
     return {
         "schema_version": SCHEMA_VERSION, "price_feed": "GC=F", "source": "Yahoo Finance chart",
         "scope": {"cot_start": cot_start.isoformat(), "cot_end": cot_end.isoformat(), "as_of": iso_time(as_of),
+                  "scope_months": None if all_history else scope_months,
+                  "scope_mode": "ALL_MASTER" if all_history else "ROLLING_CALENDAR_MONTHS" if cot_start == months_before(as_of.date(), scope_months) and cot_end == as_of.date() else "EXPLICIT_COT_RANGE",
+                  "coverage_scope": "ALL_MASTER" if all_history else "COT_DATE_RANGE",
                   "window_rule": "COT observation date -> following calendar Monday–Friday, COMEX session-date labels in America/New_York",
                   "selection_rule": "Inclusive COT observation dates; outcome weeks may cross the scope boundary."},
         "percent_units": "ratio (0.01 means 1%)", "price_tolerance": PRICE_TOLERANCE,
@@ -334,10 +550,15 @@ def build_outcomes(cot_dates: list[date], daily_input: list[dict], hourly_input:
             "hour_bucket_highs": sum(r["high_time_precision"] == "hour_bucket" for r in rows),
             "hour_bucket_lows": sum(r["low_time_precision"] == "hour_bucket" for r in rows)},
         "provenance": provenance or {}, "calendar": calendar_data or {},
+        "cot_release_calendar": cot_release_calendar or {},
         "source_window_start": iso_time(source_window_start),
+        "hourly_source_window_start": iso_time(hourly_source_window_start),
         "archived_provenance": archived_provenance,
+        "retained_history_rows": retained_history,
         "archive_summary": {"preserved_complete_rows": sum(r["archive_status"] == "ARCHIVED_COMPLETE" for r in rows),
-                            "rule": "Only previously COMPLETE_DAILY weeks ending strictly before the explicit source query start are preserved. Current-window gaps are never masked."},
+                            "daily_recomputed_hourly_archived_rows": sum(r["archive_status"] == "CURRENT_DAILY_WITH_ARCHIVED_HOURLY" for r in rows),
+                            "outside_active_scope_rows": len(retained_history),
+                            "rule": "Full-history D1 is recalculated. Outside the H1 query window, prior hourly evidence is retained only when daily prices and coverage agree; PARTIAL stays PARTIAL. Current-window gaps are never masked."},
         "input_audit": {"daily_accepted": len(daily), "hourly_accepted": len(hourly),
                         "daily_rejections": daily_rejections, "hourly_rejections": hourly_rejections},
     }
@@ -390,11 +611,15 @@ def main() -> int:
     parser.add_argument("--hourly", type=Path)
     parser.add_argument("--calendar", type=Path)
     parser.add_argument("--price-coverage", type=Path)
+    parser.add_argument("--cot-release-calendar", "--release-evidence", dest="cot_release_calendar", type=Path,
+                        help="Official publication schedule/verified actual evidence; never inferred from COT observation dates")
     parser.add_argument("--previous-outcomes", "--previous-json", dest="previous_outcomes", type=Path,
                         help="Previous same-feed outcomes, read before replacing output; may equal --output-json")
     parser.add_argument("--source-window-start", help="Actual source query start date/aware ISO; required when preserving previous outcomes")
+    parser.add_argument("--hourly-source-window-start", help="Actual H1 query start date/aware ISO when the D1 input covers a longer history")
     parser.add_argument("--as-of", default=None, help="UTC-aware ISO datetime, or date interpreted as 00:00 UTC")
-    parser.add_argument("--scope-months", type=int, default=3)
+    parser.add_argument("--scope-months", type=int, default=DEFAULT_SCOPE_MONTHS)
+    parser.add_argument("--all-history", action="store_true", help="Include every actual COT master date; do not synthesize Tuesdays or apply a rolling cutoff")
     parser.add_argument("--cot-start", type=date.fromisoformat)
     parser.add_argument("--cot-end", type=date.fromisoformat)
     parser.add_argument("--output-json", type=Path, required=True)
@@ -406,11 +631,13 @@ def main() -> int:
     cot_end = args.cot_end or as_of.date()
     if cot_start > cot_end or args.scope_months < 0:
         parser.error("Invalid COT date range")
-    if args.previous_outcomes and not args.source_window_start:
-        parser.error("--previous-outcomes requires --source-window-start")
+    if args.previous_outcomes and not args.source_window_start and (not args.all_history or not args.hourly_source_window_start):
+        parser.error("--previous-outcomes requires --source-window-start, or --all-history with --hourly-source-window-start")
     source_window_start = (parse_time(args.source_window_start + "T00:00:00+00:00" if len(args.source_window_start) == 10 else args.source_window_start)
                            if args.source_window_start else None)
-    inputs = [args.master, args.daily, args.hourly, args.calendar, args.price_coverage]
+    hourly_source_window_start = (parse_time(args.hourly_source_window_start + "T00:00:00+00:00" if len(args.hourly_source_window_start) == 10 else args.hourly_source_window_start)
+                                  if args.hourly_source_window_start else None)
+    inputs = [args.master, args.daily, args.hourly, args.calendar, args.price_coverage, args.cot_release_calendar]
     outputs = [args.output_json.resolve(), args.output_csv.resolve()]
     if len(set(outputs)) != len(outputs) or any(p and p.resolve() in outputs for p in inputs):
         parser.error("Output paths must be distinct from each other and every source input")
@@ -422,10 +649,15 @@ def main() -> int:
     if args.price_coverage:
         provenance["price_coverage"] = json.loads(args.price_coverage.read_text(encoding="utf-8-sig"))
     previous = json.loads(args.previous_outcomes.read_text(encoding="utf-8-sig")) if args.previous_outcomes else None
+    release_calendar = json.loads(args.cot_release_calendar.read_text(encoding="utf-8-sig")) if args.cot_release_calendar else None
+    if args.cot_release_calendar:
+        provenance["cot_release_calendar"] = fingerprint(args.cot_release_calendar)
     result = build_outcomes(cot_dates, read_csv(args.daily), read_csv(args.hourly), as_of=as_of,
                             cot_start=cot_start, cot_end=cot_end, calendar_data=calendar_data, provenance=provenance,
                             previous_outcomes=previous, source_window_start=source_window_start,
-                            previous_fingerprint=fingerprint(args.previous_outcomes))
+                            previous_fingerprint=fingerprint(args.previous_outcomes), scope_months=args.scope_months,
+                            cot_release_calendar=release_calendar, all_history=args.all_history,
+                            hourly_source_window_start=hourly_source_window_start)
     changed_json = write_atomic(args.output_json, json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n")
     changed_csv = write_atomic(args.output_csv, csv_output(result))
     print(json.dumps({"coverage": result["coverage_summary"], "output_json": str(args.output_json),

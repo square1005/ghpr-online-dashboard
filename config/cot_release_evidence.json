@@ -1,0 +1,780 @@
+{
+  "schema_version": 1,
+  "checked_on_utc": "2026-10-04",
+  "scope": "Documented official CFTC publication exceptions relevant to existing GHPR observation dates. Not an exhaustive point-in-time release database.",
+  "semantics": {
+    "scheduled_dates": "Intended dates only; never promoted to actual publication timestamps.",
+    "derived_mappings": "Explicit mapping_inferred=true and official_schedule_derived indicate report-date pairings derived from an official catch-up or holiday rule.",
+    "unlisted_observations": "Actual publication time remains unknown. No Friday rule creates a verified actual timestamp.",
+    "actual_date": "Official date-level publication notice only; no midnight timestamp is synthesized.",
+    "revision_risk": "Current historical numbers can include corrections released after the outcome began; retain point-in-time uncertainty.",
+    "price_window": "Always observation-next-calendar-week; publication evidence does not move OHLC windows."
+  },
+  "sources": [
+    {
+      "url": "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm",
+      "title": "CFTC Historical Special Announcements"
+    },
+    {
+      "url": "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+      "title": "2025 accelerated COT publication schedule, December 9 revision"
+    },
+    {
+      "url": "https://www.cftc.gov/PressRoom/PressReleases/6745-13",
+      "title": "2013 anticipated COT catch-up schedule"
+    },
+    {
+      "url": "https://www.cftc.gov/PressRoom/PressReleases/7864-19",
+      "title": "2019 anticipated COT catch-up schedule"
+    },
+    {
+      "url": "https://www.cftc.gov/MarketReports/CommitmentsofTraders/ReleaseSchedule/index.htm",
+      "title": "2026 COT release schedule"
+    }
+  ],
+  "reports": [
+    {
+      "cot_date": "2012-11-27",
+      "original_scheduled_release_date": null,
+      "revised_publication_date": null,
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": null,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revision_notice",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "revision_risk": true,
+      "point_in_time_vintage_unverified": true,
+      "revision_publication_dates": [
+        "2012-12-05"
+      ],
+      "revision_release_at_utc": "2012-12-05T20:30:00+00:00",
+      "revision_note": "Official classification correction republished reports on December 5 at 15:30 Eastern. This is a revision, not evidence that the initial publication was delayed. The historical data vintage is unverified."
+    },
+    {
+      "cot_date": "2013-10-01",
+      "original_scheduled_release_date": "2013-10-04",
+      "revised_publication_date": "2013-10-25",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/6745-13"
+      ],
+      "date_precision": "date",
+      "note": "Official anticipated first catch-up publication, not verified actual release."
+    },
+    {
+      "cot_date": "2013-10-08",
+      "original_scheduled_release_date": "2013-10-11",
+      "revised_publication_date": null,
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "planned_release_window_start": "2013-10-28",
+      "planned_release_window_end": "2013-11-01",
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/6745-13"
+      ],
+      "date_precision": "week_window",
+      "note": "Observation pairing is derived by weekly sequence from the official anticipated multi-report catch-up windows; no exact intended or actual date assigned."
+    },
+    {
+      "cot_date": "2013-10-15",
+      "original_scheduled_release_date": "2013-10-18",
+      "revised_publication_date": null,
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "planned_release_window_start": "2013-10-28",
+      "planned_release_window_end": "2013-11-01",
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/6745-13"
+      ],
+      "date_precision": "week_window",
+      "note": "Observation pairing is derived by weekly sequence from the official anticipated multi-report catch-up windows; no exact intended or actual date assigned."
+    },
+    {
+      "cot_date": "2013-10-22",
+      "original_scheduled_release_date": "2013-10-25",
+      "revised_publication_date": null,
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "planned_release_window_start": "2013-11-04",
+      "planned_release_window_end": "2013-11-08",
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/6745-13"
+      ],
+      "date_precision": "week_window",
+      "note": "Observation pairing is derived by weekly sequence from the official anticipated multi-report catch-up windows; no exact intended or actual date assigned."
+    },
+    {
+      "cot_date": "2013-10-29",
+      "original_scheduled_release_date": "2013-11-01",
+      "revised_publication_date": null,
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "planned_release_window_start": "2013-11-04",
+      "planned_release_window_end": "2013-11-08",
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/6745-13"
+      ],
+      "date_precision": "week_window",
+      "note": "Observation pairing is derived by weekly sequence from the official anticipated multi-report catch-up windows; no exact intended or actual date assigned."
+    },
+    {
+      "cot_date": "2014-07-01",
+      "original_scheduled_release_date": "2014-07-07",
+      "revised_publication_date": null,
+      "actual_publication_date": "2014-07-04",
+      "actual_release_at_utc": "2014-07-04T19:30:00+00:00",
+      "publication_delayed": false,
+      "mapping_inferred": true,
+      "actual_publication_date_verified": true,
+      "actual_release_verified": true,
+      "actual_release_source_url": "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm",
+      "evidence_kind": "official_publication_notice",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "timestamp",
+      "note": "July 7 official notice confirms inadvertent July 4 publication at 15:30 EDT, with identical report content; this is a documented early release. Observation-date pairing is derived from the normal preceding-Tuesday rule."
+    },
+    {
+      "cot_date": "2014-12-23",
+      "original_scheduled_release_date": null,
+      "revised_publication_date": "2014-12-30",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "note": "December 19 official holiday notice; observation pairing uses the normal weekly rule.",
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date"
+    },
+    {
+      "cot_date": "2015-06-30",
+      "original_scheduled_release_date": "2015-07-03",
+      "revised_publication_date": "2015-07-06",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "note": "The premature July 3 report was incomplete; the planned full release was July 6. Do not treat partial publication as full availability.",
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date"
+    },
+    {
+      "cot_date": "2018-12-24",
+      "original_scheduled_release_date": "2018-12-28",
+      "revised_publication_date": "2019-02-01",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/7864-19",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Explicitly expected first catch-up release; preserve Monday observation."
+    },
+    {
+      "cot_date": "2018-12-31",
+      "original_scheduled_release_date": "2019-01-04",
+      "revised_publication_date": "2019-02-05",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/7864-19",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Intended Tuesday/Friday catch-up sequence derived from the official rule; neither actual publication nor a timestamp is asserted."
+    },
+    {
+      "cot_date": "2019-01-08",
+      "original_scheduled_release_date": "2019-01-11",
+      "revised_publication_date": "2019-02-08",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/7864-19",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Intended Tuesday/Friday catch-up sequence derived from the official rule; neither actual publication nor a timestamp is asserted."
+    },
+    {
+      "cot_date": "2019-01-15",
+      "original_scheduled_release_date": "2019-01-18",
+      "revised_publication_date": "2019-02-12",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/7864-19",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Intended Tuesday/Friday catch-up sequence derived from the official rule; neither actual publication nor a timestamp is asserted."
+    },
+    {
+      "cot_date": "2019-01-22",
+      "original_scheduled_release_date": "2019-01-25",
+      "revised_publication_date": "2019-02-15",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/7864-19",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Intended Tuesday/Friday catch-up sequence derived from the official rule; neither actual publication nor a timestamp is asserted."
+    },
+    {
+      "cot_date": "2019-01-29",
+      "original_scheduled_release_date": "2019-02-01",
+      "revised_publication_date": "2019-02-19",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/7864-19",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Intended Tuesday/Friday catch-up sequence derived from the official rule; neither actual publication nor a timestamp is asserted."
+    },
+    {
+      "cot_date": "2019-02-05",
+      "original_scheduled_release_date": "2019-02-08",
+      "revised_publication_date": "2019-02-22",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/7864-19",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Intended Tuesday/Friday catch-up sequence derived from the official rule; neither actual publication nor a timestamp is asserted."
+    },
+    {
+      "cot_date": "2019-02-12",
+      "original_scheduled_release_date": "2019-02-15",
+      "revised_publication_date": "2019-02-26",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/7864-19",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Intended Tuesday/Friday catch-up sequence derived from the official rule; neither actual publication nor a timestamp is asserted."
+    },
+    {
+      "cot_date": "2019-02-19",
+      "original_scheduled_release_date": "2019-02-22",
+      "revised_publication_date": "2019-03-01",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/7864-19",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Intended Tuesday/Friday catch-up sequence derived from the official rule; neither actual publication nor a timestamp is asserted."
+    },
+    {
+      "cot_date": "2019-02-26",
+      "original_scheduled_release_date": "2019-03-01",
+      "revised_publication_date": "2019-03-05",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/7864-19",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Intended Tuesday/Friday catch-up sequence derived from the official rule; neither actual publication nor a timestamp is asserted."
+    },
+    {
+      "cot_date": "2019-03-26",
+      "original_scheduled_release_date": null,
+      "revised_publication_date": null,
+      "actual_publication_date": "2019-03-29",
+      "actual_release_at_utc": null,
+      "publication_delayed": false,
+      "mapping_inferred": false,
+      "actual_publication_date_verified": true,
+      "evidence_kind": "official_publication_notice",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "revision_risk": true,
+      "point_in_time_vintage_unverified": true,
+      "revision_publication_dates": [
+        "2019-04-03"
+      ],
+      "revision_note": "Official April 3 correction added reportable positions to the March 26 report, including CMX Gold 088691. Current historical values may reflect the correction after the outcome week began; initial publication delay is not asserted."
+    },
+    {
+      "cot_date": "2020-12-21",
+      "original_scheduled_release_date": null,
+      "revised_publication_date": null,
+      "actual_publication_date": "2020-12-28",
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "actual_publication_date_verified": true,
+      "evidence_kind": "official_publication_notice",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official notice confirms publication on December 28. Monday observation is preserved; exact clock time unverified."
+    },
+    {
+      "cot_date": "2021-06-15",
+      "original_scheduled_release_date": "2021-06-18",
+      "revised_publication_date": "2021-06-21",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "note": "Official Juneteenth adjustment explicitly identifies the observation date.",
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date"
+    },
+    {
+      "cot_date": "2023-01-31",
+      "original_scheduled_release_date": "2023-02-03",
+      "revised_publication_date": null,
+      "actual_publication_date": "2023-02-24",
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "actual_publication_date_verified": true,
+      "evidence_kind": "official_publication_notice",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official ION-related backlog notice identifies the issuing date. The date does not establish an exact clock time."
+    },
+    {
+      "cot_date": "2023-02-07",
+      "original_scheduled_release_date": "2023-02-10",
+      "revised_publication_date": null,
+      "actual_publication_date": "2023-03-03",
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "actual_publication_date_verified": true,
+      "evidence_kind": "official_publication_notice",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official ION-related backlog notice identifies the issuing date. The date does not establish an exact clock time."
+    },
+    {
+      "cot_date": "2023-02-14",
+      "original_scheduled_release_date": "2023-02-17",
+      "revised_publication_date": null,
+      "actual_publication_date": "2023-03-08",
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "actual_publication_date_verified": true,
+      "evidence_kind": "official_publication_notice",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official ION-related backlog notice identifies the issuing date. The date does not establish an exact clock time."
+    },
+    {
+      "cot_date": "2023-02-21",
+      "original_scheduled_release_date": "2023-02-24",
+      "revised_publication_date": null,
+      "actual_publication_date": "2023-03-10",
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "actual_publication_date_verified": true,
+      "evidence_kind": "official_publication_notice",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official ION-related backlog notice identifies the issuing date. The date does not establish an exact clock time."
+    },
+    {
+      "cot_date": "2023-02-28",
+      "original_scheduled_release_date": "2023-03-03",
+      "revised_publication_date": null,
+      "actual_publication_date": "2023-03-14",
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "actual_publication_date_verified": true,
+      "evidence_kind": "official_publication_notice",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official ION-related backlog notice identifies the issuing date. The date does not establish an exact clock time."
+    },
+    {
+      "cot_date": "2023-03-07",
+      "original_scheduled_release_date": "2023-03-10",
+      "revised_publication_date": null,
+      "actual_publication_date": "2023-03-16",
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "actual_publication_date_verified": true,
+      "evidence_kind": "official_publication_notice",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official ION-related backlog notice identifies the issuing date. The date does not establish an exact clock time."
+    },
+    {
+      "cot_date": "2023-03-14",
+      "original_scheduled_release_date": "2023-03-17",
+      "revised_publication_date": null,
+      "actual_publication_date": "2023-03-21",
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "actual_publication_date_verified": true,
+      "evidence_kind": "official_publication_notice",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official ION-related backlog notice identifies the issuing date. The date does not establish an exact clock time."
+    },
+    {
+      "cot_date": "2025-01-07",
+      "original_scheduled_release_date": "2025-01-10",
+      "revised_publication_date": "2025-01-13",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "note": "Carter mourning adjustment; observation pairing uses the normal weekly rule.",
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date"
+    },
+    {
+      "cot_date": "2025-09-30",
+      "original_scheduled_release_date": "2025-10-03",
+      "revised_publication_date": "2025-11-19",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official intended dates in the December 9 accelerated revision; supersedes the earlier shutdown catch-up schedule. No actual publication timestamp inferred."
+    },
+    {
+      "cot_date": "2025-10-07",
+      "original_scheduled_release_date": "2025-10-10",
+      "revised_publication_date": "2025-11-21",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official intended dates in the December 9 accelerated revision; supersedes the earlier shutdown catch-up schedule. No actual publication timestamp inferred."
+    },
+    {
+      "cot_date": "2025-10-14",
+      "original_scheduled_release_date": "2025-10-17",
+      "revised_publication_date": "2025-11-25",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official intended dates in the December 9 accelerated revision; supersedes the earlier shutdown catch-up schedule. No actual publication timestamp inferred."
+    },
+    {
+      "cot_date": "2025-10-21",
+      "original_scheduled_release_date": "2025-10-24",
+      "revised_publication_date": "2025-12-02",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official intended dates in the December 9 accelerated revision; supersedes the earlier shutdown catch-up schedule. No actual publication timestamp inferred."
+    },
+    {
+      "cot_date": "2025-10-28",
+      "original_scheduled_release_date": "2025-10-31",
+      "revised_publication_date": "2025-12-05",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official intended dates in the December 9 accelerated revision; supersedes the earlier shutdown catch-up schedule. No actual publication timestamp inferred."
+    },
+    {
+      "cot_date": "2025-11-04",
+      "original_scheduled_release_date": "2025-11-07",
+      "revised_publication_date": "2025-12-09",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official intended dates in the December 9 accelerated revision; supersedes the earlier shutdown catch-up schedule. No actual publication timestamp inferred."
+    },
+    {
+      "cot_date": "2025-11-10",
+      "original_scheduled_release_date": "2025-11-14",
+      "revised_publication_date": "2025-12-10",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official intended dates in the December 9 accelerated revision; supersedes the earlier shutdown catch-up schedule. No actual publication timestamp inferred."
+    },
+    {
+      "cot_date": "2025-11-18",
+      "original_scheduled_release_date": "2025-11-21",
+      "revised_publication_date": "2025-12-12",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official intended dates in the December 9 accelerated revision; supersedes the earlier shutdown catch-up schedule. No actual publication timestamp inferred."
+    },
+    {
+      "cot_date": "2025-11-25",
+      "original_scheduled_release_date": "2025-12-01",
+      "revised_publication_date": "2025-12-15",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official intended dates in the December 9 accelerated revision; supersedes the earlier shutdown catch-up schedule. No actual publication timestamp inferred."
+    },
+    {
+      "cot_date": "2025-12-02",
+      "original_scheduled_release_date": "2025-12-05",
+      "revised_publication_date": "2025-12-17",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official intended dates in the December 9 accelerated revision; supersedes the earlier shutdown catch-up schedule. No actual publication timestamp inferred."
+    },
+    {
+      "cot_date": "2025-12-09",
+      "original_scheduled_release_date": "2025-12-12",
+      "revised_publication_date": "2025-12-19",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official intended dates in the December 9 accelerated revision; supersedes the earlier shutdown catch-up schedule. No actual publication timestamp inferred."
+    },
+    {
+      "cot_date": "2025-12-16",
+      "original_scheduled_release_date": "2025-12-19",
+      "revised_publication_date": "2025-12-23",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official intended dates in the December 9 accelerated revision; supersedes the earlier shutdown catch-up schedule. No actual publication timestamp inferred."
+    },
+    {
+      "cot_date": "2025-12-23",
+      "original_scheduled_release_date": "2025-12-29",
+      "revised_publication_date": "2025-12-29",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": false,
+      "mapping_inferred": false,
+      "evidence_kind": "official_revised_schedule",
+      "evidence_sources": [
+        "https://www.cftc.gov/PressRoom/PressReleases/9147-25",
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/HistoricalSpecialAnnouncements/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Return-to-normal scheduled date, still after the following week's Sunday session open; actual release unverified."
+    },
+    {
+      "cot_date": "2025-12-30",
+      "original_scheduled_release_date": null,
+      "revised_publication_date": "2026-01-05",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/ReleaseSchedule/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official holiday-adjusted release date; report-date pairing follows the preceding observation week and is marked derived. Actual publication unverified."
+    },
+    {
+      "cot_date": "2026-06-16",
+      "original_scheduled_release_date": null,
+      "revised_publication_date": "2026-06-22",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/ReleaseSchedule/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official holiday-adjusted release date; report-date pairing follows the preceding observation week and is marked derived. Actual publication unverified."
+    },
+    {
+      "cot_date": "2026-06-30",
+      "original_scheduled_release_date": null,
+      "revised_publication_date": "2026-07-06",
+      "actual_publication_date": null,
+      "actual_release_at_utc": null,
+      "publication_delayed": true,
+      "mapping_inferred": true,
+      "evidence_kind": "official_schedule_derived",
+      "evidence_sources": [
+        "https://www.cftc.gov/MarketReports/CommitmentsofTraders/ReleaseSchedule/index.htm"
+      ],
+      "date_precision": "date",
+      "note": "Official holiday-adjusted release date; report-date pairing follows the preceding observation week and is marked derived. Actual publication unverified."
+    }
+  ]
+}

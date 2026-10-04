@@ -4,6 +4,7 @@ export const digest=async text=>[...new Uint8Array(await crypto.subtle.digest('S
 export function validateOutcomes(value,master){
  if(value.schema_version!==1||!['GC=F','Yahoo Finance GC=F'].includes(value.price_feed)||!Array.isArray(value.rows))throw Error('次週行情來源或格式不符');
  const dates=new Set(master.map(r=>r.date));let prior='';
+ if(value.scope?.coverage_scope==='ALL_MASTER'&&(value.rows.length!==master.length||value.rows.some((r,i)=>r.cot_date!==master[i].date)))throw Error('全歷史行情未完整對齊母表');
  for(const row of value.rows){
   if(!dates.has(row.cot_date)||row.cot_date<=prior)throw Error('次週行情與持倉日期不一致');prior=row.cot_date;
   const d=new Date(row.cot_date+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+((8-d.getUTCDay())%7||7));
@@ -14,6 +15,10 @@ export function validateOutcomes(value,master){
    if(!['open','high','low','close'].every(k=>Number.isFinite(row[k])&&row[k]>0)||row.high<Math.max(row.open,row.close,row.low)||row.low>Math.min(row.open,row.close))throw Error('週行情值不符');
    if(Math.abs(row.change_pct-(row.close/row.open-1))>1e-8||Math.abs(row.range_pct-(row.high-row.low)/row.open)>1e-8)throw Error('週行情比率不符');
   }
+  if(row.no_lookahead_eligible===true&&!((row.actual_cot_release_source_url&&Number.isFinite(Date.parse(row.actual_cot_release_at_utc))&&Date.parse(row.actual_cot_release_at_utc)<=Date.parse(row.window_start_utc))||(row.research_availability_status==='ACTUAL_PUBLICATION_DATE_BEFORE_WEEK_START'&&row.actual_publication_date&&row.release_evidence_sources?.length)))throw Error('研究資格缺少實際發布證據');
+  if(row.not_ex_ante_available===true&&row.no_lookahead_eligible!==false)throw Error('延遲发布研究資格不一致');
+  if(row.revision_risk===true&&row.no_lookahead_eligible===true)throw Error('歷史修訂版本尚未核實');
+  if(row.coverage_status==='PENDING'&&['change','change_pct','range','range_pct','high_date','low_date','high_time_utc','low_time_utc'].some(k=>row[k]!=null))throw Error('未來週不得含結果');
   for(const side of ['high','low'])if(row[side+'_time_range_taipei']&&row[side+'_time_precision']==='day')throw Error('日K不能宣稱小時精度');
  }
  return value;

@@ -4,6 +4,7 @@ from __future__ import annotations
 import os
 import json
 import hashlib
+from datetime import date
 from pathlib import Path
 import subprocess
 import sys
@@ -16,6 +17,19 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 from src import update_pipeline as pipeline
 from scripts import auto_update as automatic
+
+
+class RollingResearchWindowTests(unittest.TestCase):
+    def test_current_cutoff_is_twelve_calendar_months_with_seven_day_price_buffer(self):
+        self.assertEqual(automatic.rolling_window_dates(date(2026, 10, 4)), {
+            "cot_start": "2025-10-04", "price_start": "2025-09-27", "today_utc": "2026-10-04"})
+
+    def test_window_moves_with_following_week_without_a_fixed_july_floor(self):
+        self.assertEqual(automatic.rolling_window_dates(date(2026, 10, 11))["cot_start"], "2025-10-11")
+
+    def test_leap_day_clamps_to_prior_february_end_instead_of_subtracting_365_days(self):
+        self.assertEqual(automatic.rolling_window_dates(date(2024, 2, 29))["cot_start"], "2023-02-28")
+        self.assertEqual(automatic.rolling_window_dates(date(2025, 2, 28))["cot_start"], "2024-02-28")
 
 
 class PipelineCommandTests(unittest.TestCase):

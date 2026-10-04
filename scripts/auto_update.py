@@ -6,6 +6,8 @@ its configured Git credential manager have been approved for unattended use.
 from __future__ import annotations
 
 import argparse
+import calendar
+import csv
 import hashlib
 import json
 import os
@@ -21,6 +23,64 @@ PUBLISH_PATHS = ("data/processed", "outputs/reports", "web-data")
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
+
+
+def rolling_window_dates(as_of: date) -> dict[str, str]:
+    """Rolling 12 calendar months of COT dates, with a session-history buffer."""
+    prior_year = as_of.year - 1
+    prior_day = min(as_of.day, calendar.monthrange(prior_year, as_of.month)[1])
+    cot_start = as_of.replace(year=prior_year, day=prior_day)
+    return {"cot_start": cot_start.isoformat(),
+            "price_start": (cot_start - timedelta(days=7)).isoformat(),
+            "today_utc": as_of.isoformat()}
+
+
+def all_history_price_window(as_of: date, previous_outcomes: dict | None = None, recent_days: int = 120) -> dict:
+    if not 7 <= recent_days <= 729:
+        raise ValueError('recent_price_refresh_days must be between 7 and 729')
+    requested = as_of - timedelta(days=recent_days)
+    previous_as_of = (previous_outcomes or {}).get('scope', {}).get('as_of')
+    if previous_as_of:
+        try:
+            stamp = datetime.fromisoformat(previous_as_of.replace('Z', '+00:00'))
+            if stamp.tzinfo is not None:
+                previous_date = stamp.astimezone(timezone.utc).date()
+                if previous_date <= as_of:
+                    requested = min(requested, previous_date - timedelta(days=7))
+        except (TypeError, ValueError):
+            pass
+    requested -= timedelta(days=(requested.weekday() + 1) % 7)
+    earliest_legal = as_of - timedelta(days=729)
+    return {'price_start': max(requested, earliest_legal).isoformat(), 'today_utc': as_of.isoformat(),
+            'hourly_lookback_limited': requested < earliest_legal,
+            'recent_price_refresh_days': recent_days, 'hourly_max_query_days': 729}
+
+
+def require_full_daily_history(master_path: Path, daily_path: Path, as_of: date) -> dict:
+    try:
+        with master_path.open(encoding='utf-8-sig', newline='') as handle:
+            cot_dates = [date.fromisoformat(row['date']) for row in csv.DictReader(handle)]
+        with daily_path.open(encoding='utf-8-sig', newline='') as handle:
+            reader = csv.DictReader(handle)
+            if not {'date','open','high','low','close','source'}.issubset(reader.fieldnames or []):
+                raise ValueError('Full GC=F daily OHLC schema/source label missing')
+            daily_dates = []
+            for row in reader:
+                if 'GC=F' not in row.get('source',''):
+                    raise ValueError('Full daily history contains an unverified or different price feed')
+                daily_dates.append(date.fromisoformat(row['date']))
+    except (OSError, KeyError, ValueError) as exc:
+        raise RuntimeError(f'ALL_MASTER_HISTORY requires full GC=F D1 cache; recent-only cold start blocked: {exc}') from exc
+    if not cot_dates or not daily_dates:
+        raise RuntimeError('ALL_MASTER_HISTORY requires nonempty master and full GC=F D1 cache')
+    first_cot = min(cot_dates)
+    first_outcome_day = first_cot - timedelta(days=first_cot.weekday()) + timedelta(days=7)
+    if first_outcome_day <= as_of and min(daily_dates) > first_outcome_day:
+        raise RuntimeError(f'ALL_MASTER_HISTORY D1 starts {min(daily_dates)}, after earliest outcome week {first_outcome_day}; recent-only cold start blocked')
+    latest_needed = min(max(cot_dates), as_of - timedelta(days=4))
+    if max(daily_dates) < latest_needed:
+        raise RuntimeError(f'ALL_MASTER_HISTORY D1 ends {max(daily_dates)}, before required recent coverage {latest_needed}')
+    return {'master_rows':len(cot_dates),'daily_first_date':min(daily_dates).isoformat(),'daily_latest_date':max(daily_dates).isoformat(),'first_outcome_week':first_outcome_day.isoformat()}
 
 
 def write_json(path: Path, value: dict) -> None:
@@ -238,18 +298,21 @@ def run_once(config: dict) -> dict:
             status["source_commit"] = source_commit
             env["GHPR_SOURCE_COMMIT"] = source_commit
             shutil.copytree(repo, stage, ignore=shutil.ignore_patterns(".git", ".venv", "venv", "__pycache__", "node_modules", ".pytest_cache", ".env", ".env.*", "secrets.toml", "*.pem", "*.key"))
+            window_time = datetime.now(timezone.utc)
+            previous_outcomes_path = stage / 'data/processed/ghpr_next_week_outcomes.json'
+            previous_outcomes = json.loads(previous_outcomes_path.read_text(encoding='utf-8')) if previous_outcomes_path.exists() else {}
+            price_window = all_history_price_window(window_time.date(), previous_outcomes, config.get('recent_price_refresh_days', 120))
             values = {"python": config.get("python", sys.executable), "stage": str(stage),
                       "repo": str(repo), "runtime": str(runtime), "run_id": run_id,
-                      "today_utc": datetime.now(timezone.utc).date().isoformat(), "now_utc": utc_now()}
-            earliest = date.fromisoformat(config.get("initial_price_start", "2026-07-01"))
-            rolling_start = datetime.now(timezone.utc).date() - timedelta(days=120)
-            # Include the entire Sunday-open trading week at the rolling edge.
-            rolling_start -= timedelta(days=(rolling_start.weekday() + 1) % 7)
-            values["price_start"] = max(earliest, rolling_start).isoformat()
+                      "now_utc": window_time.isoformat(), **price_window}
+            status["next_week_window"] = {"coverage_mode": "ALL_MASTER_HISTORY", **price_window,
+                                          "daily_input": "data/processed/gold_daily_ohlc.csv", "as_of_utc": values["now_utc"]}
             commands = config.get("pipeline_commands", [["{python}", "-B", "src/update_pipeline.py", "--mode", "full"]])
             for command in commands:
                 execute([str(value).format(**values) for value in command], stage, env, log, config.get("command_timeout_seconds", 3600))
             execute([values["python"], "-B", "src/data_freshness_diagnostics.py", "--strict"], stage, env, log)
+            if config.get('coverage_mode') == 'ALL_MASTER_HISTORY':
+                status['next_week_window']['daily_history_check'] = require_full_daily_history(stage/'data/processed/ghpr_master_weekly.csv', stage/'data/processed/gold_daily_ohlc.csv', window_time.date())
             status.update({"status": "data_ready", "last_success_at_utc": utc_now(),
                            "last_success_kind": "source retrieval and data validation; publication verified separately by GitHub commit",
                            "source_status": json.loads((stage / "outputs/reports/source_status.json").read_text(encoding="utf-8"))})

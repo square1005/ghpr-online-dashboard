@@ -1,4 +1,4 @@
-"""GHPR user-session scheduler. Registration and launch are separate operations.
+"""GHPR weekly user-session scheduler: Sunday 08:00 Asia/Taipei (00:00 UTC).
 
 Publication requires the explicit --publish flag. This file alone does not
 register startup entries, launch a background service, or publish anything.
@@ -8,6 +8,7 @@ then approved tested publication and activation at 14:35:22 UTC ("可以").
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
@@ -17,36 +18,56 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from auto_update import AlreadyRunning, RunLock, write_json
 
-SLOT_HOURS = (3, 9, 15, 21)
+SCHEDULE_DESCRIPTION = "Every Sunday 08:00 Asia/Taipei (Sunday 00:00 UTC)"
+
+
+def latest_due(now: datetime) -> datetime:
+    if now.tzinfo is None:
+        raise ValueError("Scheduler time must include a timezone")
+    now = now.astimezone(timezone.utc)
+    return (now - timedelta(days=(now.weekday() + 1) % 7)).replace(hour=0, minute=0, second=0, microsecond=0)
 
 
 def next_slot(now: datetime) -> datetime:
-    if now.tzinfo is None:
-        raise ValueError("Scheduler time must include a timezone")
-    now = now.astimezone(timezone.utc)
-    for hour in SLOT_HOURS:
-        candidate = now.replace(hour=hour, minute=0, second=0, microsecond=0)
-        if candidate > now:
-            return candidate
-    return (now + timedelta(days=1)).replace(hour=3, minute=0, second=0, microsecond=0)
+    return latest_due(now) + timedelta(days=7)
 
 
-def latest_due_today(now: datetime) -> datetime | None:
-    if now.tzinfo is None:
-        raise ValueError("Scheduler time must include a timezone")
-    now = now.astimezone(timezone.utc)
-    due = [now.replace(hour=h, minute=0, second=0, microsecond=0)
-           for h in SLOT_HOURS if h <= now.hour]
-    return due[-1] if due else None
-
-
-def already_triggered(slot: datetime, last_trigger_slot: str | None) -> bool:
-    if not last_trigger_slot:
-        return False
+def verified_completion(last_good: dict, now: datetime) -> dict | None:
+    """A verified manual publication may satisfy its due week without relabeling it."""
+    if last_good.get("status") != "success" or not last_good.get("published_commit"):
+        return None
     try:
-        return datetime.fromisoformat(last_trigger_slot).astimezone(timezone.utc) >= slot
-    except (TypeError, ValueError):
-        return False
+        verified = datetime.fromisoformat(last_good["publication_verified_at_utc"])
+        if verified.tzinfo is None or verified > now:
+            return None
+        return {"week_key": latest_due(verified).date().isoformat(),
+                "run_id": last_good.get("run_id"), "trigger_reason": last_good.get("trigger_reason", "unknown"),
+                "published_commit": last_good["published_commit"], "verified_at_utc": verified.astimezone(timezone.utc).isoformat(),
+                "kind": "existing_verified_publication"}
+    except (KeyError, TypeError, ValueError):
+        return None
+
+
+def weekly_plan(now: datetime, previous: dict, last_good: dict, attempted_week_key: str | None = None) -> dict:
+    due = latest_due(now)
+    week_key = due.date().isoformat()
+    completed = previous.get("last_completed_week_key")
+    evidence = previous.get("completion_evidence")
+    verified = verified_completion(last_good, now)
+    if verified and (not completed or verified["week_key"] >= completed):
+        completed, evidence = verified["week_key"], verified
+    done = bool(completed and completed >= week_key)
+    should_run = not done and attempted_week_key != week_key
+    return {"due": due, "week_key": week_key, "should_run": should_run,
+            "planned_next_run_utc": (due if should_run else next_slot(now)).isoformat(),
+            "last_completed_week_key": completed, "completion_evidence": evidence}
+
+
+def read_json(path: Path) -> dict:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
 
 
 def scheduler_env(runtime: Path) -> dict:
@@ -70,50 +91,66 @@ def run_scheduler(config_path: Path, publish: bool = False) -> int:
     runtime.mkdir(parents=True, exist_ok=True)
     status_path = runtime / "scheduler-status.json"
     with RunLock(runtime / "supervisor.lock"):
-        try:
-            previous = json.loads(status_path.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            previous = {}
+        previous = read_json(status_path)
         now = datetime.now(timezone.utc)
-        planned = next_slot(now)
+        initial = weekly_plan(now, previous, read_json(runtime / "last_good.json"))
         status = {
-            "schema": "ghpr.user-session-scheduler.v1", "pid": os.getpid(), "enabled": True,
+            "schema": "ghpr.weekly-user-session-scheduler.v2", "pid": os.getpid(), "enabled": True,
             "publish_enabled": publish, "started_at_utc": now.isoformat(), "last_heartbeat": now.isoformat(),
-            "planned_next_run_utc": planned.isoformat(), "slots_utc": ["03:00", "09:00", "15:00", "21:00"],
+            "scheduler_code_sha256_at_start": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            "update_entrypoint_sha256_at_start": hashlib.sha256((repo / "scripts/auto_update.py").read_bytes()).hexdigest(),
+            "planned_next_run_utc": initial["planned_next_run_utc"], "schedule": SCHEDULE_DESCRIPTION,
+            "schedule_timezone": "Asia/Taipei", "weekly_due_weekday_utc": "Sunday", "weekly_due_time_utc": "00:00",
+            "last_completed_week_key": initial["last_completed_week_key"], "completion_evidence": initial["completion_evidence"],
             "last_trigger_slot": previous.get("last_trigger_slot"),
             "last_trigger_reason": previous.get("last_trigger_reason"),
             "last_trigger_at_utc": previous.get("last_trigger_at_utc"),
             "last_worker_exit_code": previous.get("last_worker_exit_code"),
             "last_worker_finished_at_utc": previous.get("last_worker_finished_at_utc"),
-            "last_error": None, "worker_pid": None,
+            "last_error": previous.get("last_error"), "worker_pid": None,
+            "retry_policy": "One attempt per due week in this session; an unsuccessful due week is retried on next login. Successful weeks are not repeated.",
             "dependency": "Windows host on, Administrator user session running, network and existing Git credential manager available",
         }
         env = scheduler_env(runtime)
         worker = None
         worker_log = None
         startup = True
+        attempted_week_key = None
+        worker_week_key = None
         try:
             while True:
                 now = datetime.now(timezone.utc)
                 status["last_heartbeat"] = now.isoformat()
+                plan = weekly_plan(now, status, read_json(runtime / "last_good.json"), attempted_week_key)
+                status["last_completed_week_key"] = plan["last_completed_week_key"]
+                status["completion_evidence"] = plan["completion_evidence"]
+                status["planned_next_run_utc"] = plan["planned_next_run_utc"]
+                evidence = plan["completion_evidence"] or {}
+                status["last_success_at_utc"] = evidence.get("verified_at_utc")
+                status["last_success_run_id"] = evidence.get("run_id")
+                status["last_success_trigger_reason"] = evidence.get("trigger_reason")
                 if worker is not None and worker.poll() is not None:
                     code = worker.returncode
                     status["last_worker_exit_code"] = code
                     status["last_worker_finished_at_utc"] = now.isoformat()
                     status["worker_pid"] = None
-                    status["last_error"] = None if code == 0 else f"GHPR update exited {code}; inspect runtime/status.json and run logs"
+                    completed = plan["last_completed_week_key"]
+                    verified_week = bool(worker_week_key and completed and completed >= worker_week_key)
+                    status["last_error"] = None if code == 0 and verified_week else (
+                        f"GHPR update exited {code}; this week's publication is not verified. Inspect runtime/status.json and run logs")
                     worker_log.close()
                     worker_log = None
                     worker = None
-                due = latest_due_today(now) if startup or now >= planned else None
                 reason = "startup_catchup" if startup else "scheduled_slot"
                 startup = False
-                if due is not None and worker is None and not already_triggered(due, status["last_trigger_slot"]):
+                if plan["should_run"] and worker is None:
+                    due = plan["due"]
+                    attempted_week_key = worker_week_key = plan["week_key"]
                     status.update({"last_trigger_slot": due.isoformat(), "last_trigger_reason": reason,
                                    "last_trigger_at_utc": now.isoformat(), "last_error": None,
+                                   "last_attempted_week_key": attempted_week_key,
                                    "trigger_delay_seconds": round((now - due).total_seconds(), 3)})
-                    planned = next_slot(now)
-                    status["planned_next_run_utc"] = planned.isoformat()
+                    status["planned_next_run_utc"] = next_slot(now).isoformat()
                     write_json(status_path, status)
                     try:
                         log_dir = runtime / "scheduler-logs"
@@ -139,10 +176,8 @@ def run_scheduler(config_path: Path, publish: bool = False) -> int:
                         if worker_log is not None:
                             worker_log.close()
                             worker_log = None
-                elif now >= planned and worker is None:
-                    planned = next_slot(now)
-                    status["planned_next_run_utc"] = planned.isoformat()
                 write_json(status_path, status)
+                planned = datetime.fromisoformat(status["planned_next_run_utc"])
                 delay = 30.0 if worker is not None else min(30.0, (planned - datetime.now(timezone.utc)).total_seconds())
                 time.sleep(max(0.1, delay))
         except KeyboardInterrupt:

@@ -156,7 +156,7 @@
     },
     "status": {
       "path": "update-status.json",
-      "sha256": "db51fab3b6c0761796a6dc678b3c77c3b83c82ce604bd3df03893a36a39aaef4"
+      "sha256": "730eb13282d3c601fc6141a8defc7dc940f36bfcff01d6c782b0f7cc9e6637f3"
     }
   },
   "release_time_note": "CFTC actual publication timestamps remain null unless directly evidenced; observation date is separate from this GHPR build time."

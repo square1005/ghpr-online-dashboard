@@ -4,8 +4,8 @@
   "trigger_reason": "manual_all_history_backfill",
   "scheduler_invocation": false,
   "started_at_utc": "2026-10-04T16:02:10+00:00",
-  "last_success_at_utc": "2026-10-04T16:25:52.211600+00:00",
-  "last_data_success_at": "2026-10-04T16:25:52.211600+00:00",
+  "last_success_at_utc": "2026-10-04T16:55:55.571832+00:00",
+  "last_data_success_at": "2026-10-04T16:55:55.571832+00:00",
   "last_success_kind": "All existing COT rows joined to available GC=F OHLC; original master and factor files unchanged",
   "last_source_success_at_utc": "2026-10-04T15:25:50.788864+00:00",
   "previous_source_run_id": "20261004T152435Z-ce065377",
@@ -157,5 +157,7 @@
   "backfill_note": "No new CFTC/master recalculation in this backfill. Daily prices reused verified full history; available recent H1 captures normalized and archived. Unknown publication timestamps stay null.",
   "natural_schedule_note": "Manual backfill does not prove the next Sunday natural scheduled run.",
   "hourly_source_window_start": "2024-10-05",
-  "daily_history_first": "2009-08-18"
+  "daily_history_first": "2009-08-18",
+  "coverage_method_note": "Holiday-shortened vendor daily-label coverage is separated from quarantined OHLC, source nulls, unverified calendar gaps and independent hourly precision.",
+  "daily_incremental_maintenance": "Last-good verified cache; overlap 120 days anchored to cached last date; cold start uses full history. Known-overlap gaps or invalid recent bars block publication."
 }

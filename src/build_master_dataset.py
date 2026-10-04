@@ -13,7 +13,7 @@ import hashlib
 import json
 import math
 import re
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import quote
 from zipfile import BadZipFile, ZipFile
@@ -321,14 +321,70 @@ def download_csv(url: str, output: Path, errors: list[str]) -> bool:
     return True
 
 
+def valid_gold_chart_identity(meta: dict) -> bool:
+    return all(meta.get(key) == value for key, value in {
+        "symbol": YAHOO_SYMBOL, "instrumentType": "FUTURE", "dataGranularity": "1d",
+        "exchangeTimezoneName": "America/New_York",
+    }.items())
+
+
+def verified_gold_cache(output: Path, ohlc_path: Path) -> dict | None:
+    """Only resume a complete, hash-verified GC=F snapshot, never a loose CSV."""
+    try:
+        metadata = json.loads(SOURCE_STATUS_PATH.read_text(encoding="utf-8"))["gold"]
+        raw = output.parent / "gc_daily_yahoo.json"
+        quarantine_path = output.parent / "gc_daily_ohlc_quarantine.json"
+        if (metadata.get("symbol") != YAHOO_SYMBOL or metadata.get("bar_interval") != "1d"
+                or metadata.get("exchange_timezone") != "America/New_York"):
+            return None
+        for path, field in ((output, "sha256"), (ohlc_path, "ohlc_sha256"), (raw, "response_sha256")):
+            if hashlib.sha256(path.read_bytes()).hexdigest() != metadata.get(field):
+                return None
+        if not valid_gold_chart_identity(json.loads(raw.read_text(encoding="utf-8"))["chart"]["result"][0]["meta"]):
+            return None
+        quarantine = json.loads(quarantine_path.read_text(encoding="utf-8"))
+        if quarantine != metadata.get("ohlc_quarantined_records", []):
+            return None
+        with output.open(encoding="utf-8-sig", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+        with ohlc_path.open(encoding="utf-8-sig", newline="") as handle:
+            ohlc = list(csv.DictReader(handle))
+        if not rows or not ohlc or min(row["Date"] for row in rows) > START_DATE:
+            return None
+        for records, key, source in ((rows, "Date", "Source"), (ohlc, "date", "source")):
+            dates = [row[key] for row in records]
+            if dates != sorted(set(dates)):
+                return None
+            for row in records:
+                date.fromisoformat(row[key])
+                if "GC=F" not in row[source]:
+                    return None
+                fields = ("Close",) if key == "Date" else ("open", "high", "low", "close")
+                values = [float(row[name]) for name in fields]
+                if any(not math.isfinite(value) or value <= 0 for value in values):
+                    return None
+                if key == "date" and (values[1] < max(values) or values[2] > min(values)):
+                    return None
+        close_map = {row["Date"]: float(row["Close"]) for row in rows}
+        if any(row["date"] not in close_map or float(row["close"]) != close_map[row["date"]] for row in ohlc):
+            return None
+        if set(close_map) - {row["date"] for row in ohlc} != {row["date"] for row in quarantine}:
+            return None
+        return {"rows": rows, "ohlc": ohlc, "quarantine": quarantine, "metadata": metadata}
+    except (OSError, ValueError, KeyError, IndexError, TypeError):
+        return None
+
+
 def download_yahoo_chart(output: Path, end_year: int, errors: list[str]) -> bool:
-    period1 = int(
-        (pd.Timestamp(START_DATE) - pd.Timedelta(days=14))
-        .to_pydatetime()
-        .replace(tzinfo=timezone.utc)
-        .timestamp()
-    )
-    period2 = int(datetime(end_year + 1, 1, 15, tzinfo=timezone.utc).timestamp())
+    ohlc_path = PROJECT_ROOT / "data" / "processed" / "gold_daily_ohlc.csv"
+    cache = verified_gold_cache(output, ohlc_path) if end_year >= date.today().year else None
+    start = date.fromisoformat(START_DATE) - timedelta(days=14)
+    if cache:
+        # Anchor to the last covered day, not today: offline gaps are caught up.
+        start = max(start, date.fromisoformat(cache["rows"][-1]["Date"]) - timedelta(days=120))
+    now_utc = datetime.now(timezone.utc)
+    period1 = int(datetime.combine(start, datetime.min.time(), tzinfo=timezone.utc).timestamp())
+    period2 = min(int(datetime(end_year + 1, 1, 15, tzinfo=timezone.utc).timestamp()), int(now_utc.timestamp()))
     url = YAHOO_URL_TEMPLATE.format(
         symbol=quote(YAHOO_SYMBOL, safe=""),
         period1=period1,
@@ -339,11 +395,13 @@ def download_yahoo_chart(output: Path, end_year: int, errors: list[str]) -> bool
         response.raise_for_status()
         payload = response.json()
         result = payload["chart"]["result"][0]
-        if result.get("meta", {}).get("symbol") != YAHOO_SYMBOL:
-            raise ValueError("Yahoo response symbol is not GC=F")
+        if not valid_gold_chart_identity(result.get("meta", {})):
+            raise ValueError("Yahoo response must identify GC=F FUTURE, 1d, America/New_York")
         timestamps = result["timestamp"]
         quote_data = result["indicators"]["quote"][0]
         closes = quote_data["close"]
+        if len(timestamps) != len(closes):
+            raise ValueError("Yahoo timestamps and close arrays differ in length")
     except (requests.RequestException, ValueError, KeyError, IndexError, TypeError) as exc:
         errors.append(f"{url}: {exc}")
         return False
@@ -351,13 +409,17 @@ def download_yahoo_chart(output: Path, end_year: int, errors: list[str]) -> bool
     rows = []
     ohlc_rows = []
     quarantined_ohlc = []
+    quarantined_close = []
     now_exchange = datetime.now(ZoneInfo("America/New_York"))
     for index, (timestamp, close) in enumerate(zip(timestamps, closes, strict=False)):
+        if not period1 <= timestamp < period2:
+            continue
         bar_date = pd.to_datetime(timestamp, unit="s", utc=True).tz_convert("America/New_York").date()
         # GC's trading day finishes at 17:00 ET; wait 15 minutes for a full bar.
         if bar_date > now_exchange.date() or (bar_date == now_exchange.date() and (now_exchange.hour, now_exchange.minute) < (17, 15)):
             continue
         if close is None or not math.isfinite(close) or close <= 0:
+            quarantined_close.append({"date": bar_date.isoformat(), "reason": "missing/nonpositive/nonfinite close"})
             continue
         # Yahoo's long history contains occasional internally inconsistent OHLC
         # records. Preserve the independently reported finite close for legacy
@@ -378,26 +440,72 @@ def download_yahoo_chart(output: Path, end_year: int, errors: list[str]) -> bool
         errors.append(f"{url}: no usable close/OHLC series returned (missing or invalid OHLC)")
         return False
 
-    buffer = io.StringIO()
-    writer = csv.DictWriter(buffer, fieldnames=["Date", "Close", "Source"])
-    writer.writeheader()
-    writer.writerows(rows)
     latest = max(row["Date"] for row in rows)
     if end_year >= date.today().year and (pd.Timestamp.now().normalize() - pd.Timestamp(latest)).days > 4:
         errors.append(f"{url}: latest complete GC=F daily bar {latest} is more than four calendar days old")
         return False
+    close_map = {row["Date"]: row for row in rows}
+    ohlc_map = {row["date"]: row for row in ohlc_rows}
+    if len(close_map) != len(rows) or len(ohlc_map) != len(ohlc_rows):
+        errors.append(f"{url}: duplicate daily observations; refusing ambiguous merge")
+        return False
+    recent_floor = (now_utc.date() - timedelta(days=120)).isoformat()
+    if any(row["date"] >= recent_floor for row in quarantined_ohlc + quarantined_close):
+        errors.append(f"{url}: invalid recent close/OHLC; retained previous complete snapshot")
+        return False
+    previous_snapshot = None
+    if cache:
+        old_close = {row["Date"]: row for row in cache["rows"]}
+        old_ohlc = {row["date"]: row for row in cache["ohlc"]}
+        # A partial provider response must not silently erase a known session.
+        missing_close = set(day for day in old_close if day >= start.isoformat()) - set(close_map)
+        missing_ohlc = set(day for day in old_ohlc if day >= start.isoformat()) - set(ohlc_map)
+        if missing_close or missing_ohlc:
+            errors.append(f"{url}: overlap lost known close/OHLC dates: {sorted(missing_close | missing_ohlc)[:10]}")
+            return False
+        previous_snapshot = {field: cache["metadata"][field] for field in ("sha256", "ohlc_sha256")}
+        previous_snapshot["metadata_sha256"] = hashlib.sha256(json.dumps(cache["metadata"], sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+        old_close.update(close_map)
+        old_ohlc.update(ohlc_map)
+        close_map, ohlc_map = old_close, old_ohlc
+        quarantined_ohlc = [row for row in cache["quarantine"] if row["date"] < start.isoformat()] + quarantined_ohlc
+        quarantined_close = [row for row in cache["metadata"].get("close_quarantined_records", []) if row["date"] < start.isoformat()] + quarantined_close
+    elif min(close_map) > START_DATE:
+        errors.append(f"{url}: cold start did not return the required full daily history")
+        return False
+    rows = [close_map[day] for day in sorted(close_map)]
+    ohlc_rows = [ohlc_map[day] for day in sorted(ohlc_map)]
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=["Date", "Close", "Source"], lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(rows)
     atomic_write(output, buffer.getvalue().encode("utf-8"))
-    ohlc_path = PROJECT_ROOT / "data" / "processed" / "gold_daily_ohlc.csv"
     atomic_write(ohlc_path, pd.DataFrame(ohlc_rows).to_csv(index=False).encode("utf-8"))
     raw_path = output.parent / "gc_daily_yahoo.json"
     atomic_write(raw_path, response.content)
     atomic_write(output.parent / "gc_daily_ohlc_quarantine.json", (json.dumps(quarantined_ohlc, indent=2) + "\n").encode("utf-8"))
+    capture = {"url": url, "sha256": hashlib.sha256(response.content).hexdigest(),
+               "requested_start_utc": datetime.fromtimestamp(period1, timezone.utc).isoformat(),
+               "requested_end_utc_exclusive": datetime.fromtimestamp(period2, timezone.utc).isoformat(),
+               "fetched_at_utc": now_utc.isoformat()}
+    captures = list(cache["metadata"].get("capture_ledger", [])) if cache else []
+    if cache and not captures:
+        captures.append({"url": cache["metadata"].get("url"), "sha256": cache["metadata"]["response_sha256"],
+                         "fetched_at_utc": cache["metadata"].get("fetched_at_utc"), "role": "pre_incremental_baseline"})
+    captures.append(capture)
     record_source("gold", {
         "url": url, "symbol": YAHOO_SYMBOL, "instrument": "COMEX gold futures proxy",
         "observation_date": latest, "fetched_at_utc": datetime.now(timezone.utc).isoformat(),
         "sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
         "response_sha256": hashlib.sha256(response.content).hexdigest(),
         "ohlc_sha256": hashlib.sha256(ohlc_path.read_bytes()).hexdigest(),
+        "dataset_mode": "incremental_merge" if cache else "full_history_capture",
+        "previous_snapshot": previous_snapshot, "capture_ledger": captures,
+        "response_scope": "latest capture only; merged series is identified by sha256 and ohlc_sha256",
+        "raw_retention": "Latest raw response only in this snapshot; capture ledger retains prior hashes and URLs, not prior raw bytes.",
+        "refresh_overlap_days": 120, "request_start_date": start.isoformat(),
+        "close_quarantined_records": quarantined_close,
+        "coverage_validation": "Known cached dates in the requested overlap must recur; recent invalid bars fail. Absent never-before-seen sessions are not proven present by the four-day freshness limit; downstream week coverage remains explicit.",
         "bar_interval": "1d", "close_semantics": "Yahoo daily close; not an asserted official settlement",
         "extreme_time_precision": "day", "exchange_timezone": "America/New_York",
         "ohlc_quarantined_count": len(quarantined_ohlc), "ohlc_quarantined_records": quarantined_ohlc,

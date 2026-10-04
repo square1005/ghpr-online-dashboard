@@ -421,6 +421,33 @@ def restore_archived_hourly(row: dict, previous: dict, previous_payload: dict,
     row["archive_status"] = "CURRENT_DAILY_WITH_ARCHIVED_HOURLY"
 
 
+def daily_coverage_detail(status: str, missing: list[str], expected: dict, calendar_data: dict | None) -> dict:
+    evidence = (calendar_data or {}).get('historical_price_quality_evidence', {})
+    absent = set(missing)
+    bad = sorted(absent & set(evidence.get('quarantined_ohlc_dates', [])))
+    nulls = sorted(absent & set(evidence.get('source_null_dates', [])))
+    unknown = sorted(absent - set(bad) - set(nulls))
+    if status == 'PENDING':
+        category, note = 'PENDING', '交易週尚未開始，行情保持空值。'
+    elif status == 'COMPLETE_DAILY':
+        if expected['holiday_affected']:
+            category, note = 'VERIFIED_HOLIDAY_SHORTENED_COMPLETE', '符合已核的假日日 K 標籤預期；不表示全天無交易或小時行情完整。'
+        else:
+            category, note = 'COMPLETE_EXPECTED_LABELS', '本週五個預期日 K 標籤均齊全；小時行情精度另行核對。'
+    elif bad:
+        category = 'QUARANTINED_OHLC_AND_UNVERIFIED_GAP' if unknown or nulls else 'QUARANTINED_OHLC'
+        note = '來源 OHLC 上下界異常已隔離，不補造價格。'
+        if unknown or nulls: note += '另有缺日尚未核實交易日曆，不直接認定為供應商漏價。'
+    elif nulls:
+        category, note = 'SOURCE_NULL_UNVERIFIED_CALENDAR', '保存的來源回應在缺日有空值；交易日曆仍待核實，不能直接認定當日應有行情。'
+    else:
+        category, note = 'UNVERIFIED_CALENDAR_OR_SOURCE_GAP', '保存的來源回應沒有這些日 K 標籤；尚未核實是假日或來源缺漏，未將少於五日直接認定為漏價。'
+    return {'daily_coverage_category':category, 'daily_coverage_note':note,
+            'quarantined_ohlc_dates':bad, 'source_null_dates':nulls,
+            'unverified_missing_session_dates':unknown,
+            'daily_coverage_semantics':'Vendor daily-label coverage, not all intraday trading or exact extrema-time coverage'}
+
+
 def build_outcomes(cot_dates: list[date], daily_input: list[dict], hourly_input: list[dict], *,
                    as_of: datetime, cot_start: date | None = None, cot_end: date | None = None,
                    calendar_data: dict | None = None, provenance: dict | None = None,
@@ -511,6 +538,7 @@ def build_outcomes(cot_dates: list[date], daily_input: list[dict], hourly_input:
             "window_start_utc": iso_time(session_open), "window_end_utc": iso_time(session_close),
             "week_start_at": iso_time(session_open), "week_end_at": iso_time(session_close),
             "bars": [{"date": r["date"], **{key: r[key] for key in PRICE_KEYS}} for r in week_daily],
+            **daily_coverage_detail(status, missing_dates, expected, calendar_data),
             **availability,
         }
         if week_daily:

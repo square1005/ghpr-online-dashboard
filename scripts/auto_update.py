@@ -258,6 +258,60 @@ def prune_runs(runtime: Path, keep: int = 14) -> None:
         shutil.rmtree(resolved)
 
 
+def restore_daily_cache(stage: Path, runtime: Path, previous: dict) -> dict:
+    """Resume the last successful private snapshot without dirtying the repo.
+
+    last_good is advanced only after all validation/publication succeeds, and its
+    run is protected from pruning. This also works after a status-only publish.
+    An absent/unverified snapshot is ignored; the source fetch then cold-starts.
+    """
+    result = {"restored": False, "reason": "no verified previous successful daily cache"}
+    try:
+        if previous.get("status") != "success" or not previous.get("stage_path"):
+            return result
+        source = Path(previous["stage_path"]).resolve()
+        runs = (runtime / "runs").resolve()
+        if not stage.resolve().is_relative_to(runs) or stage.resolve() == runs:
+            return {**result, "reason": "cache destination is outside isolated runtime runs"}
+        if not source.is_relative_to(runs) or source == runs or source == stage.resolve():
+            return {**result, "reason": "previous cache path is outside retained runtime runs"}
+        if not previous.get("run_id") or source != (runs / previous["run_id"] / "stage").resolve():
+            return {**result, "reason": "previous cache path does not match successful run"}
+        metadata_relative = "outputs/reports/source_status.json"
+        gold = json.loads((source / metadata_relative).read_text(encoding="utf-8"))["gold"]
+        if gold.get("symbol") != "GC=F":
+            return {**result, "reason": "previous cache is not verified GC=F"}
+        recorded_gold = previous.get("source_status", {}).get("gold")
+        if recorded_gold and any(recorded_gold.get(field) != gold.get(field)
+                                 for field in ("sha256", "ohlc_sha256", "response_sha256")):
+            return {**result, "reason": "previous cache differs from the successful run record"}
+        files = {"data/raw/gold_price/gold_price.csv": "sha256",
+                 "data/processed/gold_daily_ohlc.csv": "ohlc_sha256",
+                 "data/raw/gold_price/gc_daily_yahoo.json": "response_sha256"}
+        contents = {}
+        for relative, field in files.items():
+            contents[relative] = (source / relative).read_bytes()
+            if hashlib.sha256(contents[relative]).hexdigest() != gold.get(field):
+                return {**result, "reason": f"previous cache hash mismatch: {field}"}
+        quarantine = "data/raw/gold_price/gc_daily_ohlc_quarantine.json"
+        contents[quarantine] = (source / quarantine).read_bytes()
+        if json.loads(contents[quarantine]) != gold.get("ohlc_quarantined_records", []):
+            return {**result, "reason": "previous quarantine metadata mismatch"}
+        target_metadata = stage / metadata_relative
+        metadata = json.loads(target_metadata.read_text(encoding="utf-8")) if target_metadata.exists() else {}
+        # Only private staging changes; source repo and unrelated CFTC state stay intact.
+        for relative, content in contents.items():
+            target = stage / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(content)
+        metadata["gold"] = gold
+        write_json(target_metadata, metadata)
+        return {"restored": True, "source_run_id": previous.get("run_id"),
+                "sha256": gold["sha256"], "ohlc_sha256": gold["ohlc_sha256"]}
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        return {**result, "reason": f"previous cache unavailable: {type(exc).__name__}"}
+
+
 def run_once(config: dict) -> dict:
     repo = Path(config["source_repo"]).resolve()
     runtime = Path(config["runtime_root"]).resolve()
@@ -298,6 +352,7 @@ def run_once(config: dict) -> dict:
             status["source_commit"] = source_commit
             env["GHPR_SOURCE_COMMIT"] = source_commit
             shutil.copytree(repo, stage, ignore=shutil.ignore_patterns(".git", ".venv", "venv", "__pycache__", "node_modules", ".pytest_cache", ".env", ".env.*", "secrets.toml", "*.pem", "*.key"))
+            status["daily_cache"] = restore_daily_cache(stage, runtime, previous)
             window_time = datetime.now(timezone.utc)
             previous_outcomes_path = stage / 'data/processed/ghpr_next_week_outcomes.json'
             previous_outcomes = json.loads(previous_outcomes_path.read_text(encoding='utf-8')) if previous_outcomes_path.exists() else {}

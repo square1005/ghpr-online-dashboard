@@ -26,6 +26,9 @@ import requests
 from src import build_master_dataset as master
 from src import data_freshness_diagnostics as freshness
 
+SOURCE_META = {"symbol": "GC=F", "instrumentType": "FUTURE", "dataGranularity": "1d",
+               "exchangeTimezoneName": "America/New_York"}
+
 
 class DataVolumeFixtures(unittest.TestCase):
     def setUp(self):
@@ -137,12 +140,12 @@ class ProviderPayloadValidationTests(DataVolumeFixtures):
         output.write_bytes(b"verified GC cache")
         response = Mock()
         response.raise_for_status.return_value = None
-        response.json.return_value = {"chart": {"result": [{"meta": {"symbol": "XAUUSD=X"}}]}}
+        response.json.return_value = {"chart": {"result": [{"meta": {**SOURCE_META, "symbol": "XAUUSD=X"}}]}}
         errors = []
         with patch.object(master.requests, "get", return_value=response):
             self.assertFalse(master.download_yahoo_chart(output, 2026, errors))
         self.assertEqual(output.read_bytes(), b"verified GC cache")
-        self.assertTrue(any("not GC=F" in error for error in errors))
+        self.assertTrue(any("GC=F" in error and "FUTURE" in error for error in errors))
 
     def test_impossible_ohlc_is_rejected_before_replacing_gc_cache(self):
         output = self.root / "gold_price.csv"
@@ -150,7 +153,7 @@ class ProviderPayloadValidationTests(DataVolumeFixtures):
         response = Mock()
         response.raise_for_status.return_value = None
         response.json.return_value = {"chart": {"result": [{
-            "meta": {"symbol": "GC=F"}, "timestamp": [int(datetime(2026, 9, 22, 12, tzinfo=timezone.utc).timestamp())],
+            "meta": dict(SOURCE_META), "timestamp": [int(datetime(2026, 9, 22, 12, tzinfo=timezone.utc).timestamp())],
             "indicators": {"quote": [{"open": [100], "high": [99], "low": [98], "close": [101], "volume": [1]}]},
         }]}}
         errors = []

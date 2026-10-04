@@ -117,19 +117,19 @@ def normalize_interval(output_dir:Path,interval:str,calendar:dict|None=None):
  if interval=='1h':summary['per_provisional_session_counts']=dict(sorted(Counter(r['session_date_candidate'] for r in rows).items()))
  return summary
 
-def normalize_directory(output_dir:Path,calendar_path:Path|None=None):
+def normalize_directory(output_dir:Path,calendar_path:Path|None=None,intervals:tuple[str,...]=('1d','1h')):
  set_process_temp(output_dir)
  calendar=load_source_calendar(calendar_path)
  report={'schema_version':2,'normalization_version':'ghpr-prices-v2','normalized_at_utc':dt.datetime.now(UTC).isoformat(),'symbol':SYMBOL,'source':'Yahoo Finance chart','notes':['No COT outcome table is produced by this script.','Daily OHLC dates are labels, not intraday extreme timestamps.','Hourly timestamps denote one-hour buckets, not exact extreme times.','Hourly regular-session filtering does not establish holiday-specific coverage completeness.','No interpolation or fill or other instruments are used.']}
- for interval in ('1d','1h'):report[interval]=normalize_interval(output_dir,interval,calendar)
+ for interval in intervals:report[interval]=normalize_interval(output_dir,interval,calendar)
  write_json(output_dir/'source_calendar.json',calendar)
  write_json(output_dir/'price_coverage.json',report)
  return report
 
-def fetch_prices(start:dt.date,end_exclusive:dt.date,output_dir:Path,calendar_path:Path|None=None):
+def fetch_prices(start:dt.date,end_exclusive:dt.date,output_dir:Path,calendar_path:Path|None=None,intervals:tuple[str,...]=('1d','1h')):
  set_process_temp(output_dir)
- for interval in ('1d','1h'):fetch_chart(start,end_exclusive,interval,output_dir)
- return normalize_directory(output_dir,calendar_path)
+ for interval in intervals:fetch_chart(start,end_exclusive,interval,output_dir)
+ return normalize_directory(output_dir,calendar_path,intervals)
 
 def main(argv=None):
  p=argparse.ArgumentParser(description=__doc__)
@@ -137,12 +137,13 @@ def main(argv=None):
  p.add_argument('--end-exclusive',type=dt.date.fromisoformat)
  p.add_argument('--output-dir',type=Path,default=Path(__file__).resolve().parent)
  p.add_argument('--calendar',type=Path)
+ p.add_argument('--interval',action='append',choices=['1d','1h'],help='Optional selected interval; default captures both')
  p.add_argument('--from-capture',action='store_true',help='Normalize saved raw JSON with no network requests')
  args=p.parse_args(argv)
- if args.from_capture:result=normalize_directory(args.output_dir.resolve(),args.calendar)
+ if args.from_capture:result=normalize_directory(args.output_dir.resolve(),args.calendar,tuple(args.interval or ('1d','1h')))
  else:
   if not args.start or not args.end_exclusive:p.error('--start and --end-exclusive are required unless --from-capture')
-  result=fetch_prices(args.start,args.end_exclusive,args.output_dir.resolve(),args.calendar)
+  result=fetch_prices(args.start,args.end_exclusive,args.output_dir.resolve(),args.calendar,tuple(args.interval or ('1d','1h')))
  print(json.dumps({k:v for k,v in result.items() if k in ('1d','1h')},ensure_ascii=False))
  return 0
 if __name__=='__main__':raise SystemExit(main())

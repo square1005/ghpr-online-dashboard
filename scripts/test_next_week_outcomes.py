@@ -390,5 +390,40 @@ class OutcomeTests(unittest.TestCase):
         self.assertIsNone(changed['high_time_utc'])
 
 
+class CalendarRecoveryTests(unittest.TestCase):
+    def test_normal_trading_or_settlement_missing_bar_is_confirmed_gap(self):
+        bars=daily_fixture(); missing=bars.pop(1)['date']
+        for proof in [{'settlement_status':'normal_schedule'}, {'normal_trading_confirmed':True}]:
+            with self.subTest(proof=proof):
+                calendar={'holidays':[{'date':missing,'exclude_daily':False,'source_url':'https://example.invalid/official-notice',**proof}]}
+                row=build(bars,calendar=calendar)['rows'][0]
+                self.assertEqual(row['coverage_status'],'PARTIAL')
+                self.assertEqual(row['daily_coverage_category'],'CONFIRMED_SOURCE_GAP')
+                self.assertEqual(row['confirmed_source_gap_dates'],[missing])
+                self.assertEqual(row['unverified_missing_session_dates'],[])
+                self.assertEqual(row['observed_sessions'],4)
+                self.assertEqual(row['expected_sessions'],5)
+                self.assertEqual(row['open'],bars[0]['open'])
+                self.assertEqual(row['close'],bars[-1]['close'])
+
+    def test_copied_price_holiday_changes_labels_without_filling_prices(self):
+        bars=daily_fixture(); missing=bars.pop(1)['date']
+        calendar={'holidays':[{'date':missing,'exclude_daily':True,'settlement_status':'copied_from_previous_trade_date','source_url':'https://example.invalid/official-notice'}]}
+        row=build(bars,calendar=calendar)['rows'][0]
+        self.assertEqual(row['coverage_status'],'COMPLETE_DAILY')
+        self.assertEqual(row['daily_coverage_category'],'VERIFIED_HOLIDAY_SHORTENED_COMPLETE')
+        self.assertEqual(row['observed_sessions'],4)
+        self.assertEqual(row['expected_sessions'],4)
+        self.assertEqual(len(row['bars']),4)
+        self.assertTrue(all(b['date']!=missing for b in row['bars']))
+
+    def test_future_week_has_no_historical_gap_diagnosis(self):
+        row=build(cot=date(2026,9,29))['rows'][0]
+        self.assertEqual(row['coverage_status'],'PENDING')
+        for field in ['missing_session_dates','quarantined_ohlc_dates','source_null_dates','confirmed_source_gap_dates','unverified_missing_session_dates']:
+            self.assertEqual(row[field],[])
+        self.assertIsNone(row['open'])
+
+
 if __name__ == "__main__":
     unittest.main()

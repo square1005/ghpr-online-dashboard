@@ -1,0 +1,1158 @@
+{
+  "checked_at_utc": "2026-10-04T17:29:15.507069+00:00",
+  "scope": "GHPR GC=F daily-label completeness reconciliation, no price values added or altered",
+  "evidence_files": [
+    {
+      "file": "calendar-recovery-2009-2012.json",
+      "sha256": "c5c15f2fc977346e4ce68f2cf5e5b5ab91699879c39167d1b3a60d0a3a49a619"
+    },
+    {
+      "file": "calendar-recovery-2013-2016.json",
+      "sha256": "a9aa045e1b2957d83905378ae40c742e969a2732974366b00703ac82ab2e3c83"
+    },
+    {
+      "file": "calendar-recovery-2017-2020.json",
+      "sha256": "9035bd136cc383cfe1207330b40ae2eea41b835c721f9df9b8b6f88dd7ca4777"
+    },
+    {
+      "file": "calendar-recovery-2021-2024.json",
+      "sha256": "034105e7af08721bf86511ed8d6f2786db31cf3b431fa8946ebc1edf32794028"
+    }
+  ],
+  "calendar_dates_reviewed": 135,
+  "new_excluded_daily_labels": 52,
+  "new_confirmed_normal_dates": 2,
+  "price_recovery": {
+    "checked_at_utc": "2026-10-04T17:29:15.507069+00:00",
+    "same_feed": "Yahoo Finance GC=F/FUTURE/1d/America_New_York",
+    "historical_target_dates": 162,
+    "requests": 83,
+    "recovered_valid_ohlc": 0,
+    "narrow_audit_sha256": "427e534f910a4396bd5f81f8e1519c2626adeb836336999b499122d81380a318",
+    "gap_audit_sha256": "24a71f3edca3994638540e5d31f806bffd04d0664e501e786adfb49077716b75",
+    "methods": "31 anomaly/null dates queried on query1 and query2; 131 other absent dates queried through 16 annual query1 windows plus five targeted query2 windows. No H1 retry, surrogate instrument, interpolation or close-to-OHLC replacement."
+  },
+  "dates": [
+    {
+      "date": "2009-09-07",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2009-11-26",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2009-12-25",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2010-01-01",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2010-01-18",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2010-02-15",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2010-04-02",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/lookups/advisories/market-data/Q2010-49.html",
+      "evidence": [],
+      "limitation": "The exception receiving new settlements covers CME FX/interest rates and CBOT financials, not COMEX. Settlement dissemination continues using the preceding day."
+    },
+    {
+      "date": "2010-05-31",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2010-07-05",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2010-09-06",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2010-11-25",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2010-12-24",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2011-01-17",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2011-02-21",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2011-04-22",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2011-05-30",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2011-07-04",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2011-09-05",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2011-11-24",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2011-12-26",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2012-01-02",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2012-01-16",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2012-02-20",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/Chadv12-067.html",
+      "evidence": [],
+      "limitation": "CME states Monday end-of-day settlement price files and an EOD cycle remain. Sunday/Monday Globex trades cited by the advisory clear Tuesday February 21. No full-day closure is inferred."
+    },
+    {
+      "date": "2012-04-06",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/files/Chadv12-114.pdf",
+      "evidence": [],
+      "limitation": "Official March 16 advisory supports copied prior-day settlements. Normal clearing processes/reports continue; it does not support a claim that no settlement file exists."
+    },
+    {
+      "date": "2012-05-28",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2012-07-04",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2012-09-03",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2012-10-29",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/Chadv12-463.html",
+      "evidence": [],
+      "limitation": "The copied-Friday settlement instruction concerns equities. It cannot be generalized to COMEX gold. Retain the missing Yahoo label and do not exempt this date."
+    },
+    {
+      "date": "2012-10-30",
+      "classification": "CONFIRMED_SOURCE_GAP",
+      "source_url": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/Chadv12-464.html",
+      "evidence": [],
+      "limitation": "Do not turn physical-floor closure into a GC electronic-market holiday. Retain the missing Yahoo daily label."
+    },
+    {
+      "date": "2012-11-22",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No sufficient dated COMEX/GC electronic trading or settlement evidence was retrieved. U.S. federal-holiday or trading-floor-closure labels alone are insufficient."
+    },
+    {
+      "date": "2012-12-25",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/files/Chadv12-550.pdf",
+      "evidence": [],
+      "limitation": "EOD files and settlement cycle still run. NYMEX/COMEX/DME Globex reopens 17:00 CST on December 25 for business day December 26; no standalone December 25 GC observation is inferred."
+    },
+    {
+      "date": "2013-01-01",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2013-01-21",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2013-02-18",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2013-03-29",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "CME-authored Good Friday schedule found only as third-party mirror; excluded under official-host requirement. Official-domain original not verified."
+    },
+    {
+      "date": "2013-05-27",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2013-07-04",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2013-09-02",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2013-11-28",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2013-12-25",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2014-01-01",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2014-01-20",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2014-02-17",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2014-04-18",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2014-05-26",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2014-07-04",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2014-09-01",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2014-11-27",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2014-12-25",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2015-01-01",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2015-01-19",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2015-02-16",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2015-04-03",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2015-05-25",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2015-07-03",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2015-09-07",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2015-11-26",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2015-12-25",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2016-01-01",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2016-01-18",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/files/Chadv16-023A.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/files/Chadv16-023A.pdf",
+          "page": 1,
+          "notice": "16-023 revised January 14, 2016",
+          "quote": "Same prices from Friday’s File",
+          "finding": "January 18 EOD settlement file carries forward Friday prices; settlement variation does not move. This proves no new daily clearing settlement, not that Globex trading was wholly closed."
+        }
+      ],
+      "limitation": "Proposed missing Yahoo daily-label exclusion supported by official carried-forward settlement. Do not fabricate an OHLC bar."
+    },
+    {
+      "date": "2016-02-15",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/files/Chadv16-045.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/lookups/advisories/clearing/files/Chadv16-045.pdf",
+          "page": 3,
+          "finding": "Modified COMEX/NYMEX metal delivery cycle. Delivery changes do not establish no daily settlement.",
+          "sufficient_for_classification": false
+        }
+      ],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2016-03-25",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2016-05-30",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2016-07-04",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2016-09-05",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2016-10-10",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": "https://www.cmegroup.com/ja/files/ja-2016-clearport-holiday-schedule.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/ja/files/ja-2016-clearport-holiday-schedule.pdf",
+          "page": 1,
+          "finding": "ClearPort annual service schedule states unchanged operation for next trade date. Not proof of GC Globex trading or new settlement.",
+          "sufficient_for_classification": false
+        }
+      ],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2016-11-11",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": "https://www.cmegroup.com/ja/files/ja-2016-clearport-holiday-schedule.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/ja/files/ja-2016-clearport-holiday-schedule.pdf",
+          "page": 1,
+          "finding": "ClearPort annual service schedule states unchanged operation for next trade date. Not proof of GC Globex trading or new settlement.",
+          "sufficient_for_classification": false
+        }
+      ],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2016-11-24",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2016-12-26",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "No qualifying official product-applicable closure or settlement evidence verified in this bounded pass. A federal holiday alone is insufficient."
+    },
+    {
+      "date": "2017-01-02",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2017-01-16",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2017-02-20",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2017-04-14",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2017-05-29",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": "https://www.cmegroup.com/notices/market-regulation/2017/05/SER-7924.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/notices/market-regulation/2017/05/SER-7924.pdf",
+          "pdf_page": 1,
+          "quote": "certain CME Group markets will experience amended pre-open sessions on CME Globex."
+        }
+      ],
+      "limitation": "SER-7924只證開盤前時段調整，未證GC無結算、全日休市或日標籤歸屬；保留unknown。"
+    },
+    {
+      "date": "2017-07-04",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2017-09-04",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2017-11-23",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2017-12-25",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2018-01-01",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2018-01-15",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2018-mlk-day-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2018-mlk-day-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "Prices will be carried forward from Friday"
+        }
+      ],
+      "limitation": "官方證據僅確認沒有新的日結算價格；不表示全日無盤中交易。"
+    },
+    {
+      "date": "2018-01-29",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2018-02-19",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2018-presidents-day-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2018-presidents-day-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "Prices will be carried forward from Friday"
+        }
+      ],
+      "limitation": "官方證據僅確認沒有新的日結算價格；不表示全日無盤中交易。"
+    },
+    {
+      "date": "2018-03-30",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2018-05-28",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2018-07-04",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2018-09-03",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2018-labor-day-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2018-labor-day-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "Same prices from Friday’s File"
+        }
+      ],
+      "limitation": "第1頁 settlement file 欄沿用Friday；variation欄卻寫Wednesday，原文件有衝突。僅證無新價，不指定copied_from_date。"
+    },
+    {
+      "date": "2018-11-22",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2018-12-05",
+      "classification": "CONFIRMED_SOURCE_GAP",
+      "source_url": "https://www.cmegroup.com/notices/ser/2018/12/SER-8289.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/notices/ser/2018/12/SER-8289.pdf",
+          "pdf_page": 2,
+          "quote": "all NYMEX/COMEX products will have normal trading hours on Wednesday, December 5, 2018."
+        },
+        {
+          "url": "https://www.cmegroup.com/notices/clearing/2018/12/Chadv18-474.pdf",
+          "pdf_page": 1,
+          "quote": "CME Clearing will run an Intra-day settlement cycle (ITD) on Wednesday, December 5"
+        }
+      ],
+      "limitation": "Bush funeral休市不適用COMEX。正常交易官方明證，缺日K須保留來源缺口；日內clearing cycle不能冒充GC當日日結算价已驗證。"
+    },
+    {
+      "date": "2018-12-25",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "evidence": [],
+      "limitation": "未找到足以判定 COMEX Gold 當日交易或新結算價的直接官方證據；不可依聯邦假日或缺資料本身排除。"
+    },
+    {
+      "date": "2019-01-01",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-new-years-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-new-years-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "No settle file"
+        }
+      ],
+      "limitation": "第1頁主題及clearing cycle為2019-01-01且EOD無settle file；其他頁外幣日期有copy-paste年份錯誤，不使用。"
+    },
+    {
+      "date": "2019-01-21",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-mlk-day-holiday-settlement-times.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-mlk-day-holiday-settlement-times.pdf",
+          "pdf_page": 1,
+          "quote": "No settlements for CME/CBOT/NYMEX/COMEX"
+        }
+      ],
+      "limitation": "官方證據僅確認沒有新的日結算價格；不表示全日無盤中交易。"
+    },
+    {
+      "date": "2019-02-18",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-presidents-day-holiday-settlement-times.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-presidents-day-holiday-settlement-times.pdf",
+          "pdf_page": 1,
+          "quote": "No other CME/CBOT/NYMEX/COMEX settlements occur"
+        }
+      ],
+      "limitation": "只有 Eurodollar 最終結算例外；GC不在例外之中。"
+    },
+    {
+      "date": "2019-04-19",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-good-friday-holiday-settlement-times.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-good-friday-holiday-settlement-times.pdf",
+          "pdf_page": 1,
+          "quote": "there will be no settlements for CME Group on Friday 4/19/2019"
+        }
+      ],
+      "limitation": "官方證據僅確認沒有新的日結算價格；不表示全日無盤中交易。"
+    },
+    {
+      "date": "2019-05-27",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-memorial-day-holiday-settlement-times.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-memorial-day-holiday-settlement-times.pdf",
+          "pdf_page": 1,
+          "quote": "will not derive or disseminate settlement prices for CME, CBOT, NYMEX or COMEX"
+        }
+      ],
+      "limitation": "官方證據僅確認沒有新的日結算價格；不表示全日無盤中交易。"
+    },
+    {
+      "date": "2019-07-04",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-4th-of-july-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-4th-of-july-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "will be for trade date Friday, July 5th, 2019."
+        }
+      ],
+      "limitation": "第1頁EOD前日價carry，且當日Globex/ClearPort成交歸2019-07-05交易日。"
+    },
+    {
+      "date": "2019-09-02",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-labor-day-holiday-settlement-times.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-labor-day-holiday-settlement-times.pdf",
+          "pdf_page": 1,
+          "quote": "will not derive or disseminate settlement prices for CME, CBOT, NYMEX or COMEX"
+        }
+      ],
+      "limitation": "官方證據僅確認沒有新的日結算價格；不表示全日無盤中交易。"
+    },
+    {
+      "date": "2019-11-28",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-thanksgiving-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-thanksgiving-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "Normal Processing"
+        },
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-thanksgiving-holiday-settlement-times.pdf",
+          "pdf_page": 1,
+          "quote": "Friday, 11/29/2019 (the day after Thanksgiving) Settlement Times"
+        }
+      ],
+      "limitation": "Clearing advisory第1頁EOD為Normal Processing；settlement times公告僅列11/29，未明證11/28無新GC價。不能由無ITD或聯邦假日排除11/28；保持unknown。"
+    },
+    {
+      "date": "2019-12-25",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-christmas-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2019-christmas-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "Prices will be carried forward from Tuesday"
+        }
+      ],
+      "limitation": "官方證據僅確認沒有新的日結算價格；不表示全日無盤中交易。"
+    },
+    {
+      "date": "2020-01-01",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-new-years-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-new-years-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "No settle file"
+        }
+      ],
+      "limitation": "第1頁SUBJECT、Wednesday日期、MOSA與erosion均明確2020-01-01，但Clearing Processing Cycles子標誤留2019；EOD無settle file。"
+    },
+    {
+      "date": "2020-01-20",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-mlk-day-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-mlk-day-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "Prices will be carried forward from Friday"
+        }
+      ],
+      "limitation": "官方證據僅確認沒有新的日結算價格；不表示全日無盤中交易。"
+    },
+    {
+      "date": "2020-02-17",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/presidents-day-holiday-settlement-times-2020.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/presidents-day-holiday-settlement-times-2020.pdf",
+          "pdf_page": 1,
+          "quote": "No other CME/CBOT/NYMEX/COMEX settlements occur"
+        }
+      ],
+      "limitation": "只有 Eurodollar 最終結算例外；GC不在例外之中。"
+    },
+    {
+      "date": "2020-04-10",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/good-friday-holiday-settlement-times-2020.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/good-friday-holiday-settlement-times-2020.pdf",
+          "pdf_page": 1,
+          "quote": "there will be no settlements for CME Group on Friday 4/10/2020"
+        }
+      ],
+      "limitation": "官方證據僅確認沒有新的日結算價格；不表示全日無盤中交易。"
+    },
+    {
+      "date": "2020-05-25",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-memorial-day-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-memorial-day-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "Prices will be carried forward from Friday"
+        }
+      ],
+      "limitation": "官方證據僅確認沒有新的日結算價格；不表示全日無盤中交易。"
+    },
+    {
+      "date": "2020-07-03",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-4th-of-july-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-4th-of-july-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "will be for trade date Monday, July 6th, 2020."
+        }
+      ],
+      "limitation": "第1頁EOD settlement file沿用Thursday，variation有Thurdday拼字錯；Globex/ClearPort成交歸2020-07-06。"
+    },
+    {
+      "date": "2020-09-07",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/labor-day-holiday-settlement-times-2020.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/labor-day-holiday-settlement-times-2020.pdf",
+          "pdf_page": 1,
+          "quote": "will not derive or disseminate settlement prices for CME, CBOT, NYMEX or COMEX"
+        }
+      ],
+      "limitation": "官方證據僅確認沒有新的日結算價格；不表示全日無盤中交易。"
+    },
+    {
+      "date": "2020-11-26",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-thanksgiving-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-thanksgiving-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "Prices will be carried forward from Wednesday"
+        }
+      ],
+      "limitation": "第1頁主題與processing cycle為2020-11-26；第2頁collateral段年份誤留2019，不用該段推論。"
+    },
+    {
+      "date": "2020-12-25",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-christmas-advisory.pdf",
+      "evidence": [
+        {
+          "url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2020-christmas-advisory.pdf",
+          "pdf_page": 1,
+          "quote": "Prices will be carried forward from Thursday"
+        }
+      ],
+      "limitation": "官方證據僅確認沒有新的日結算價格；不表示全日無盤中交易。"
+    },
+    {
+      "date": "2021-01-01",
+      "classification": "UNVERIFIED_CALENDAR",
+      "source_url": null,
+      "limitation": "No qualifying dated COMEX primary-source calendar evidence verified in this review."
+    },
+    {
+      "date": "2021-01-18",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/mlk-day-holiday-settlement-times-2021.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2021-02-15",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/presidents-day-holiday-settlement-times-2021.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2021-04-02",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/good-friday-holiday-settlement-times-2021.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2021-05-31",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/memorial-day-holiday-settlement-times-2021.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2021-07-05",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2021-4th-of-july-advisory.pdf",
+      "evidence": [],
+      "limitation": "Official CME Group Clearing EOD price carry-forward, not a fresh daily price. Supports exclusion of the absent vendor daily label; not an assertion that trading was closed or intraday coverage complete."
+    },
+    {
+      "date": "2021-09-06",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/labor-day-holiday-settlement-times-2021.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2021-11-25",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2021-thanksgiving-advisory.pdf",
+      "evidence": [],
+      "limitation": "Official CME Group Clearing EOD price carry-forward, not a fresh daily price. Supports exclusion of the absent vendor daily label; not an assertion that trading was closed or intraday coverage complete."
+    },
+    {
+      "date": "2021-12-24",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2021-christmas-advisory.pdf",
+      "evidence": [],
+      "limitation": "Official CME Group Clearing EOD price carry-forward, not a fresh daily price. Supports exclusion of the absent vendor daily label; not an assertion that trading was closed or intraday coverage complete."
+    },
+    {
+      "date": "2022-01-17",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/mlk-day-holiday-settlement-times-2022.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2022-02-21",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/presidents-day-holiday-settlement-times-2022.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2022-04-15",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/good-friday-holiday-settlement-times-2022.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2022-05-30",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/memorial-day-holiday-settlement-times-2022.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2022-06-20",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2022-juneteenth-advisory.pdf",
+      "evidence": [],
+      "limitation": "Official CME Group Clearing EOD price carry-forward, not a fresh daily price. Supports exclusion of the absent vendor daily label; not an assertion that trading was closed or intraday coverage complete."
+    },
+    {
+      "date": "2022-07-04",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2022-4th-of-july-advisory.pdf",
+      "evidence": [],
+      "limitation": "Official CME Group Clearing EOD price carry-forward, not a fresh daily price. Supports exclusion of the absent vendor daily label; not an assertion that trading was closed or intraday coverage complete."
+    },
+    {
+      "date": "2022-09-05",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/labor-day-holiday-settlement-times-2022.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2022-11-24",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/thanksgiving-holiday-settlement-times-2022.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2022-12-26",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/christmas-holiday-settlement-times-2022.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2023-01-02",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/new-years-eve-holiday-settlement-times-2023.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2023-01-16",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/mlk-day-holiday-settlement-times-2023.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2023-02-20",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/presidents-day-holiday-settlement-times-2023.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2023-04-07",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/good-friday-holiday-settlement-times-2023.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2023-05-29",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/memorial-day-holiday-settlement-times-2023.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2023-06-19",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2023-juneteenth-advisory.pdf",
+      "evidence": [],
+      "limitation": "Official CME Group Clearing EOD price carry-forward, not a fresh daily price. Supports exclusion of the absent vendor daily label; not an assertion that trading was closed or intraday coverage complete."
+    },
+    {
+      "date": "2023-07-04",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2023-4th-of-july-advisory.pdf",
+      "evidence": [],
+      "limitation": "Official CME Group Clearing EOD price carry-forward, not a fresh daily price. Supports exclusion of the absent vendor daily label; not an assertion that trading was closed or intraday coverage complete."
+    },
+    {
+      "date": "2023-09-04",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/labor-day-holiday-settlement-times-2023.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2023-12-25",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/christmas-holiday-settlement-times-2023.pdf",
+      "evidence": [],
+      "limitation": "COMEX settlement status verified. Together with the observed absent Yahoo GC=F daily label this supports vendor-daily-label exclusion only. It does not prove an all-day trading closure, complete exchange trading observations, or complete H1."
+    },
+    {
+      "date": "2024-12-25",
+      "classification": "VERIFIED_NO_NEW_SETTLEMENT_LABEL",
+      "source_url": "https://www.cmegroup.com/tools-information/holiday-calendar/files/2024-christmas-advisory.pdf",
+      "evidence": [],
+      "limitation": "Official CME Group Clearing EOD price carry-forward, not a fresh daily price. Supports exclusion of the absent vendor daily label; not an assertion that trading was closed or intraday coverage complete."
+    }
+  ]
+}

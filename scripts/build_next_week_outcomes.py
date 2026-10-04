@@ -126,7 +126,19 @@ def calendar_rules(calendar_data: dict | None) -> tuple[set[str], dict, list]:
 
 
 def week_expectations(start: date, end: date, calendar_data: dict | None) -> dict:
-    excluded, overrides, sources = calendar_rules(calendar_data)
+    excluded, overrides, all_sources = calendar_rules(calendar_data)
+    # Keep the applicable notices with each row, rather than duplicating every
+    # historical calendar URL in every week of the downloadable dataset.
+    data = calendar_data or {}
+    applicable_sources = set(data.get('sources', []))
+    applicable_sources.add(data.get('normal_session', {}).get('source_url'))
+    relevant_overrides = any(start.isoformat() <= d <= end.isoformat() for d in data.get('trade_date_overrides', {}))
+    if relevant_overrides or start.isoformat() in overrides:
+        applicable_sources.add(data.get('override_source_url'))
+    for entry in data.get('holidays', []):
+        if start.isoformat() <= entry['date'] <= end.isoformat():
+            applicable_sources.add(entry.get('source_url'))
+    sources = [source for source in all_sources if source in applicable_sources]
     expected = [(start + timedelta(days=n)).isoformat() for n in range(5) if (start + timedelta(days=n)).isoformat() not in excluded]
     override = overrides.get(start.isoformat(), {})
     if "expected_daily_dates" in override:
@@ -422,29 +434,40 @@ def restore_archived_hourly(row: dict, previous: dict, previous_payload: dict,
 
 
 def daily_coverage_detail(status: str, missing: list[str], expected: dict, calendar_data: dict | None) -> dict:
-    evidence = (calendar_data or {}).get('historical_price_quality_evidence', {})
-    absent = set(missing)
+    calendar_data = calendar_data or {}
+    evidence = calendar_data.get('historical_price_quality_evidence', {})
+    absent = set(missing) if status != 'PENDING' else set()
     bad = sorted(absent & set(evidence.get('quarantined_ohlc_dates', [])))
     nulls = sorted(absent & set(evidence.get('source_null_dates', [])))
-    unknown = sorted(absent - set(bad) - set(nulls))
+    verified_normal = {entry['date'] for entry in calendar_data.get('holidays', [])
+                       if entry.get('exclude_daily') is False
+                       and (entry.get('settlement_status') == 'normal_schedule' or entry.get('normal_trading_confirmed') is True)
+                       and entry.get('source_url')}
+    confirmed = sorted(absent & verified_normal - set(bad))
+    unknown = sorted(absent - set(bad) - set(nulls) - set(confirmed))
     if status == 'PENDING':
-        category, note = 'PENDING', '交易週尚未開始，行情保持空值。'
+        category, note = 'PENDING', '目標週尚未開始，行情保留空值。'
     elif status == 'COMPLETE_DAILY':
         if expected['holiday_affected']:
-            category, note = 'VERIFIED_HOLIDAY_SHORTENED_COMPLETE', '符合已核的假日日 K 標籤預期；不表示全天無交易或小時行情完整。'
+            category, note = 'VERIFIED_HOLIDAY_SHORTENED_COMPLETE', '符合已核對假日日 K 標籤預期；不表示全天無交易或小時行情完整。'
         else:
-            category, note = 'COMPLETE_EXPECTED_LABELS', '本週五個預期日 K 標籤均齊全；小時行情精度另行核對。'
+            category, note = 'COMPLETE_EXPECTED_LABELS', '本週五個預期日 K 標籤均存在；小時行情完整度另行核對。'
     elif bad:
-        category = 'QUARANTINED_OHLC_AND_UNVERIFIED_GAP' if unknown or nulls else 'QUARANTINED_OHLC'
-        note = '來源 OHLC 上下界異常已隔離，不補造價格。'
-        if unknown or nulls: note += '另有缺日尚未核實交易日曆，不直接認定為供應商漏價。'
+        category = 'QUARANTINED_OHLC_AND_UNVERIFIED_GAP' if unknown or set(nulls)-set(confirmed) else ('QUARANTINED_OHLC_AND_CONFIRMED_GAP' if confirmed else 'QUARANTINED_OHLC')
+        note = '來源 OHLC 上下界異常已隔離，未補造價格。'
+        if unknown or set(nulls)-set(confirmed): note += '另有缺日尚未核對日曆，不能直接認定是正常交易日漏值。'
+        if confirmed: note += '另有官方確認正常交易或結算、但來源缺少有效日 K 的日期。'
+    elif confirmed:
+        category = 'CONFIRMED_SOURCE_GAP_AND_UNVERIFIED_GAP' if unknown or set(nulls)-set(confirmed) else 'CONFIRMED_SOURCE_GAP'
+        note = '官方確認正常交易或結算，但同一 GC=F 來源缺少有效日 K；保留缺口，不以推算價格補齊。'
+        if unknown or set(nulls)-set(confirmed): note += '另有日期的日曆仍待核對。'
     elif nulls:
-        category, note = 'SOURCE_NULL_UNVERIFIED_CALENDAR', '保存的來源回應在缺日有空值；交易日曆仍待核實，不能直接認定當日應有行情。'
+        category, note = 'SOURCE_NULL_UNVERIFIED_CALENDAR', '保存的來源回應在缺日有空值；當日市場日曆仍待核對，不能直接認定為正常交易日漏價。'
     else:
-        category, note = 'UNVERIFIED_CALENDAR_OR_SOURCE_GAP', '保存的來源回應沒有這些日 K 標籤；尚未核實是假日或來源缺漏，未將少於五日直接認定為漏價。'
+        category, note = 'UNVERIFIED_CALENDAR_OR_SOURCE_GAP', '保存的來源回應沒有這些日 K 標籤；尚未核對是假日或來源漏值，不將少於五天直接認定為漏價。'
     return {'daily_coverage_category':category, 'daily_coverage_note':note,
             'quarantined_ohlc_dates':bad, 'source_null_dates':nulls,
-            'unverified_missing_session_dates':unknown,
+            'confirmed_source_gap_dates':confirmed, 'unverified_missing_session_dates':unknown,
             'daily_coverage_semantics':'Vendor daily-label coverage, not all intraday trading or exact extrema-time coverage'}
 
 
@@ -527,7 +550,7 @@ def build_outcomes(cot_dates: list[date], daily_input: list[dict], hourly_input:
             "week_state": "PENDING" if pending else "ENDED" if as_of >= session_close else "IN_PROGRESS",
             "archive_status": "CURRENT_QUERY",
             "observed_session_dates": observed_dates, "expected_session_dates": expected["dates"],
-            "missing_session_dates": missing_dates, "unexpected_session_dates": extra_dates,
+            "missing_session_dates": [] if pending else missing_dates, "unexpected_session_dates": extra_dates,
             "hourly_coverage_status": hour_coverage, "observed_hourly_bars": len(week_hourly),
             "expected_hourly_bars": expected["hours"], "holiday_affected": expected["holiday_affected"],
             "calendar_note": expected["note"], "calendar_sources": expected["sources"],

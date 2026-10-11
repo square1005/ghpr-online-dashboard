@@ -6,19 +6,19 @@ Historical COT Weekly Change Research only. Not a trading signal. Not financial 
 
 - Source: `data/processed/ghpr_master_weekly.csv`
 - Output: `data/processed/mm_weekly_change_dataset.csv`
-- Data period: `2009-09-01` to `2026-09-29`
-- Rows: `892`
+- Data period: `2009-09-01` to `2026-10-06`
+- Rows: `893`
 
 ## Latest Weekly Change
 
-- Latest date: `2026-09-29`
-- Previous date: `2026-09-22`
-- MM Long: `131,711`
-- MM Short: `11,393`
-- MM Net: `120,318`
-- Long 1W change: `-3,988` (-2.94%)
-- Short 1W change: `3,083` (37.10%)
-- Net 1W change: `-7,071` (-5.55%)
+- Latest date: `2026-10-06`
+- Previous date: `2026-09-29`
+- MM Long: `127,101`
+- MM Short: `16,114`
+- MM Net: `110,987`
+- Long 1W change: `-4,610` (-3.50%)
+- Short 1W change: `4,721` (41.44%)
+- Net 1W change: `-9,331` (-7.76%)
 - Weekly structure state: `LONG_LIQUIDATION_SHORT_BUILDING`
 
 ## Classification Rules
@@ -35,7 +35,7 @@ Historical COT Weekly Change Research only. Not a trading signal. Not financial 
 
 | State | Count |
 | --- | ---: |
-| `LONG_LIQUIDATION_SHORT_BUILDING` | 295 |
+| `LONG_LIQUIDATION_SHORT_BUILDING` | 296 |
 | `LONG_BUILDING_SHORT_COVERING` | 278 |
 | `LONG_BUILDING_SHORT_BUILDING` | 171 |
 | `LONG_LIQUIDATION_SHORT_COVERING` | 147 |

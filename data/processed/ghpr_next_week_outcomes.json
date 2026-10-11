@@ -4,8 +4,8 @@
   "source": "Yahoo Finance chart",
   "scope": {
     "cot_start": "2009-09-01",
-    "cot_end": "2026-09-29",
-    "as_of": "2026-10-04T17:29:15.821469+00:00",
+    "cot_end": "2026-10-06",
+    "as_of": "2026-10-11T01:30:56.256044+00:00",
     "scope_months": null,
     "scope_mode": "ALL_MASTER",
     "coverage_scope": "ALL_MASTER",
@@ -120382,7 +120382,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-10-07",
         "2024-10-08",
@@ -120516,7 +120516,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Monday",
       "low_date": "2024-10-10",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -120546,7 +120545,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Thursday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -120566,7 +120571,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-10-14",
         "2024-10-15",
@@ -120700,7 +120705,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Saturday",
       "low_date": "2024-10-15",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -120730,7 +120734,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Saturday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -120750,7 +120760,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-10-21",
         "2024-10-22",
@@ -120884,7 +120894,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Wednesday",
       "low_date": "2024-10-23",
       "low_weekday": "Wednesday",
       "low_dates": [
@@ -120914,7 +120923,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Wednesday",
       "low_weekday_taipei": "Wednesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -120934,7 +120949,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-10-28",
         "2024-10-29",
@@ -121068,7 +121083,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2024-10-28",
       "low_weekday": "Monday",
       "low_dates": [
@@ -121098,7 +121112,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Thursday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -121118,7 +121138,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-11-04",
         "2024-11-05",
@@ -121252,7 +121272,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Tuesday",
       "low_date": "2024-11-07",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -121282,7 +121301,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Tuesday",
       "low_weekday_taipei": "Thursday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -121302,7 +121327,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-11-11",
         "2024-11-12",
@@ -121436,7 +121461,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Monday",
       "low_date": "2024-11-14",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -121466,7 +121490,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Thursday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -121486,7 +121516,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-11-18",
         "2024-11-19",
@@ -121620,7 +121650,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Saturday",
       "low_date": "2024-11-18",
       "low_weekday": "Monday",
       "low_dates": [
@@ -121650,7 +121679,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Saturday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -121670,7 +121705,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-11-25",
         "2024-11-26",
@@ -121796,7 +121831,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Monday",
       "low_date": "2024-11-26",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -121826,7 +121860,13 @@
         }
       ],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -121846,7 +121886,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-12-02",
         "2024-12-03",
@@ -121980,7 +122020,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Wednesday",
       "low_date": "2024-12-06",
       "low_weekday": "Friday",
       "low_dates": [
@@ -121996,7 +122035,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Wednesday",
       "low_hourly_comparison_price": 2617.5,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -122016,7 +122061,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-12-09",
         "2024-12-10",
@@ -122150,7 +122195,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2024-12-09",
       "low_weekday": "Monday",
       "low_dates": [
@@ -122166,7 +122210,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Thursday",
       "low_hourly_comparison_price": 2630.800048828125,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -122186,7 +122236,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-12-16",
         "2024-12-17",
@@ -122327,7 +122377,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Monday",
       "low_date": "2024-12-19",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -122357,7 +122406,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Thursday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -122377,7 +122432,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-12-23",
         "2024-12-24",
@@ -122503,7 +122558,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Friday",
       "low_date": "2024-12-23",
       "low_weekday": "Monday",
       "low_dates": [
@@ -122533,7 +122587,13 @@
         }
       ],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Friday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -122553,7 +122613,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2024-12-30",
         "2024-12-31",
@@ -122679,7 +122739,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Friday",
       "low_date": "2024-12-30",
       "low_weekday": "Monday",
       "low_dates": [
@@ -122709,7 +122768,13 @@
         }
       ],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Friday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -122729,7 +122794,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-01-06",
         "2025-01-07",
@@ -122863,7 +122928,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Friday",
       "low_date": "2025-01-06",
       "low_weekday": "Monday",
       "low_dates": [
@@ -122893,7 +122957,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Friday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -122913,7 +122983,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-01-13",
         "2025-01-14",
@@ -123049,7 +123119,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Saturday",
       "low_date": "2025-01-14",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -123079,7 +123148,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Saturday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -123099,7 +123174,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-01-21",
         "2025-01-22",
@@ -123225,7 +123300,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Friday",
       "low_date": "2025-01-21",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -123241,7 +123315,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Friday",
       "low_hourly_comparison_price": 2725.5,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -123261,7 +123341,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-01-27",
         "2025-01-28",
@@ -123381,7 +123461,6 @@
       "high_hour_bucket_tie_count": 0,
       "high_observed_hour_buckets": [],
       "high_first_hour_bucket_verified": false,
-      "high_hourly_comparison_price": 2862.89990234375,
       "low_date": "2025-01-27",
       "low_weekday": "Monday",
       "low_dates": [
@@ -123411,7 +123490,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_hourly_comparison_price": 2862.89990234375,
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -123431,7 +123516,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-02-03",
         "2025-02-04",
@@ -123565,7 +123650,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Friday",
       "low_date": "2025-02-03",
       "low_weekday": "Monday",
       "low_dates": [
@@ -123581,7 +123665,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Friday",
       "low_hourly_comparison_price": 2780.89990234375,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -123601,7 +123691,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-02-10",
         "2025-02-11",
@@ -123735,7 +123825,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Tuesday",
       "low_date": "2025-02-10",
       "low_weekday": "Monday",
       "low_dates": [
@@ -123765,7 +123854,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Tuesday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -123785,7 +123880,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-02-18",
         "2025-02-19",
@@ -123911,7 +124006,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2025-02-18",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -123927,6 +124021,12 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Thursday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -123946,7 +124046,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-02-24",
         "2025-02-25",
@@ -124080,7 +124180,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Monday",
       "low_date": "2025-02-28",
       "low_weekday": "Friday",
       "low_dates": [
@@ -124110,7 +124209,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Friday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -124130,7 +124235,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-03-03",
         "2025-03-04",
@@ -124264,7 +124369,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2025-03-03",
       "low_weekday": "Monday",
       "low_dates": [
@@ -124294,7 +124398,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Thursday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -124314,7 +124424,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-03-10",
         "2025-03-11",
@@ -124448,7 +124558,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Friday",
       "low_date": "2025-03-11",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -124478,7 +124587,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Friday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -124498,7 +124613,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-03-17",
         "2025-03-18",
@@ -124639,7 +124754,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2025-03-17",
       "low_weekday": "Monday",
       "low_dates": [
@@ -124669,7 +124783,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Thursday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -124689,7 +124809,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-03-24",
         "2025-03-25",
@@ -124809,7 +124929,6 @@
       "high_hour_bucket_tie_count": 0,
       "high_observed_hour_buckets": [],
       "high_first_hour_bucket_verified": false,
-      "high_hourly_comparison_price": 3122.39990234375,
       "low_date": "2025-03-24",
       "low_weekday": "Monday",
       "low_dates": [
@@ -124839,7 +124958,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_hourly_comparison_price": 3122.39990234375,
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -124859,7 +124984,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-03-31",
         "2025-04-01",
@@ -124993,7 +125118,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2025-04-04",
       "low_weekday": "Friday",
       "low_dates": [
@@ -125009,7 +125133,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Thursday",
       "low_hourly_comparison_price": 3011.0,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -125029,7 +125159,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-04-07",
         "2025-04-08",
@@ -125163,7 +125293,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Saturday",
       "low_date": "2025-04-07",
       "low_weekday": "Monday",
       "low_dates": [
@@ -125179,7 +125308,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Saturday",
       "low_hourly_comparison_price": 2949.699951171875,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -125199,7 +125334,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-04-14",
         "2025-04-15",
@@ -125325,7 +125460,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2025-04-14",
       "low_weekday": "Monday",
       "low_dates": [
@@ -125341,7 +125475,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Thursday",
       "low_hourly_comparison_price": 3194.5,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -125361,7 +125501,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-04-21",
         "2025-04-22",
@@ -125495,7 +125635,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Tuesday",
       "low_date": "2025-04-23",
       "low_weekday": "Wednesday",
       "low_dates": [
@@ -125525,7 +125664,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Tuesday",
       "low_weekday_taipei": "Wednesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -125545,7 +125690,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-04-28",
         "2025-04-29",
@@ -125679,7 +125824,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Tuesday",
       "low_date": "2025-05-01",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -125709,7 +125853,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Tuesday",
       "low_weekday_taipei": "Thursday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -125729,7 +125879,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-05-05",
         "2025-05-06",
@@ -125863,7 +126013,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Wednesday",
       "low_date": "2025-05-05",
       "low_weekday": "Monday",
       "low_dates": [
@@ -125893,7 +126042,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Wednesday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -125913,7 +126068,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-05-12",
         "2025-05-13",
@@ -126047,7 +126202,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Monday",
       "low_date": "2025-05-15",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -126077,7 +126231,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Thursday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -126097,7 +126257,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-05-19",
         "2025-05-20",
@@ -126238,7 +126398,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Saturday",
       "low_date": "2025-05-20",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -126268,7 +126427,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Saturday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -126288,7 +126453,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-05-27",
         "2025-05-28",
@@ -126400,7 +126565,6 @@
       "high_hour_bucket_tie_count": 0,
       "high_observed_hour_buckets": [],
       "high_first_hour_bucket_verified": false,
-      "high_hourly_comparison_price": 3356.300048828125,
       "low_date": "2025-05-29",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -126430,7 +126594,13 @@
         }
       ],
       "low_first_hour_bucket_verified": false,
+      "high_hourly_comparison_price": 3356.300048828125,
       "low_weekday_taipei": "Thursday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -126450,7 +126620,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-06-02",
         "2025-06-03",
@@ -126584,7 +126754,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2025-06-02",
       "low_weekday": "Monday",
       "low_dates": [
@@ -126614,7 +126783,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Thursday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -126634,7 +126809,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-06-09",
         "2025-06-10",
@@ -126768,7 +126943,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Friday",
       "low_date": "2025-06-09",
       "low_weekday": "Monday",
       "low_dates": [
@@ -126798,7 +126972,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Friday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -126818,7 +126998,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-06-16",
         "2025-06-17",
@@ -126944,7 +127124,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Monday",
       "low_date": "2025-06-20",
       "low_weekday": "Friday",
       "low_dates": [
@@ -126974,7 +127153,13 @@
         }
       ],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Friday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -126994,7 +127179,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-06-23",
         "2025-06-24",
@@ -127128,7 +127313,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Monday",
       "low_date": "2025-06-27",
       "low_weekday": "Friday",
       "low_dates": [
@@ -127158,7 +127342,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Friday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -127178,7 +127368,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-06-30",
         "2025-07-01",
@@ -127312,7 +127502,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2025-06-30",
       "low_weekday": "Monday",
       "low_dates": [
@@ -127342,7 +127531,13 @@
         }
       ],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Thursday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -127362,7 +127557,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-07-07",
         "2025-07-08",
@@ -127496,7 +127691,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Friday",
       "low_date": "2025-07-09",
       "low_weekday": "Wednesday",
       "low_dates": [
@@ -127526,7 +127720,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Friday",
       "low_weekday_taipei": "Wednesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -127546,7 +127746,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-07-14",
         "2025-07-15",
@@ -127666,7 +127866,6 @@
       "high_hour_bucket_tie_count": 0,
       "high_observed_hour_buckets": [],
       "high_first_hour_bucket_verified": false,
-      "high_hourly_comparison_price": 3386.39990234375,
       "low_date": "2025-07-17",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -127696,7 +127895,13 @@
         }
       ],
       "low_first_hour_bucket_verified": false,
+      "high_hourly_comparison_price": 3386.39990234375,
       "low_weekday_taipei": "Thursday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -127716,7 +127921,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-07-21",
         "2025-07-22",
@@ -127850,7 +128055,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Wednesday",
       "low_date": "2025-07-25",
       "low_weekday": "Friday",
       "low_dates": [
@@ -127880,7 +128084,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Wednesday",
       "low_weekday_taipei": "Friday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -127900,7 +128110,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-07-28",
         "2025-07-29",
@@ -128034,7 +128244,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Saturday",
       "low_date": "2025-07-30",
       "low_weekday": "Wednesday",
       "low_dates": [
@@ -128050,7 +128259,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Saturday",
       "low_hourly_comparison_price": 3300.0,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -128070,7 +128285,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-08-04",
         "2025-08-05",
@@ -128204,7 +128419,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Friday",
       "low_date": "2025-08-04",
       "low_weekday": "Monday",
       "low_dates": [
@@ -128234,7 +128448,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Friday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -128254,7 +128474,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-08-11",
         "2025-08-12",
@@ -128374,7 +128594,6 @@
       "high_hour_bucket_tie_count": 0,
       "high_observed_hour_buckets": [],
       "high_first_hour_bucket_verified": false,
-      "high_hourly_comparison_price": 3491.300048828125,
       "low_date": "2025-08-14",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -128404,7 +128623,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_hourly_comparison_price": 3491.300048828125,
       "low_weekday_taipei": "Friday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -128424,7 +128649,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-08-18",
         "2025-08-19",
@@ -128558,7 +128783,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Friday",
       "low_date": "2025-08-20",
       "low_weekday": "Wednesday",
       "low_dates": [
@@ -128588,7 +128812,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Friday",
       "low_weekday_taipei": "Wednesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -128608,7 +128838,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-08-25",
         "2025-08-26",
@@ -128742,7 +128972,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Saturday",
       "low_date": "2025-08-26",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -128772,7 +129001,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Saturday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -128792,7 +129027,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-09-02",
         "2025-09-03",
@@ -128918,7 +129153,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Saturday",
       "low_date": "2025-09-02",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -128934,7 +129168,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Saturday",
       "low_hourly_comparison_price": 3537.5,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -128954,7 +129194,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-09-08",
         "2025-09-09",
@@ -129088,7 +129328,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Tuesday",
       "low_date": "2025-09-08",
       "low_weekday": "Monday",
       "low_dates": [
@@ -129118,7 +129357,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Tuesday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -129138,7 +129383,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-09-15",
         "2025-09-16",
@@ -129272,7 +129517,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2025-09-18",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -129302,7 +129546,13 @@
         }
       ],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Thursday",
       "low_weekday_taipei": "Thursday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -129322,7 +129572,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-09-22",
         "2025-09-23",
@@ -129456,7 +129706,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Tuesday",
       "low_date": "2025-09-22",
       "low_weekday": "Monday",
       "low_dates": [
@@ -129472,7 +129721,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Tuesday",
       "low_hourly_comparison_price": 3705.800048828125,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -129492,7 +129747,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-09-29",
         "2025-09-30",
@@ -129626,7 +129881,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2025-09-29",
       "low_weekday": "Monday",
       "low_dates": [
@@ -129642,7 +129896,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Thursday",
       "low_hourly_comparison_price": 3792.89990234375,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -129662,7 +129922,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-10-06",
         "2025-10-07",
@@ -129799,7 +130059,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2025-10-06",
       "low_weekday": "Monday",
       "low_dates": [
@@ -129815,7 +130074,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Thursday",
       "low_hourly_comparison_price": 3908.89990234375,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -129835,7 +130100,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-10-13",
         "2025-10-14",
@@ -129973,7 +130238,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Friday",
       "low_date": "2025-10-13",
       "low_weekday": "Monday",
       "low_dates": [
@@ -129989,7 +130253,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Friday",
       "low_hourly_comparison_price": 4000.39990234375,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -130009,7 +130279,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-10-20",
         "2025-10-21",
@@ -130146,7 +130416,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Tuesday",
       "low_date": "2025-10-22",
       "low_weekday": "Wednesday",
       "low_dates": [
@@ -130176,7 +130445,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Tuesday",
       "low_weekday_taipei": "Wednesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -130196,7 +130471,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-10-27",
         "2025-10-28",
@@ -130319,7 +130594,6 @@
       "high_hour_bucket_tie_count": 0,
       "high_observed_hour_buckets": [],
       "high_first_hour_bucket_verified": false,
-      "high_hourly_comparison_price": 4137.7998046875,
       "low_date": "2025-10-28",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -130349,7 +130623,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_hourly_comparison_price": 4137.7998046875,
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -130369,7 +130649,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-11-03",
         "2025-11-04",
@@ -130506,7 +130786,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Monday",
       "low_date": "2025-11-05",
       "low_weekday": "Wednesday",
       "low_dates": [
@@ -130536,7 +130815,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Wednesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -130556,7 +130841,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-11-10",
         "2025-11-11",
@@ -130694,7 +130979,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2025-11-10",
       "low_weekday": "Monday",
       "low_dates": [
@@ -130710,7 +130994,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Thursday",
       "low_hourly_comparison_price": 4009.800048828125,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -130730,7 +131020,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-11-17",
         "2025-11-18",
@@ -130867,7 +131157,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Wednesday",
       "low_date": "2025-11-18",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -130897,7 +131186,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Wednesday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -130917,7 +131212,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-11-24",
         "2025-11-25",
@@ -131032,7 +131327,6 @@
       "high_hour_bucket_tie_count": 0,
       "high_observed_hour_buckets": [],
       "high_first_hour_bucket_verified": false,
-      "high_hourly_comparison_price": 4257.5,
       "low_date": "2025-11-24",
       "low_weekday": "Monday",
       "low_dates": [
@@ -131062,7 +131356,13 @@
         }
       ],
       "low_first_hour_bucket_verified": false,
+      "high_hourly_comparison_price": 4257.5,
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -131082,7 +131382,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-12-01",
         "2025-12-02",
@@ -131219,7 +131519,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Monday",
       "low_date": "2025-12-02",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -131235,7 +131534,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Monday",
       "low_hourly_comparison_price": 4167.0,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -131255,7 +131560,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-12-08",
         "2025-12-09",
@@ -131392,7 +131697,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Friday",
       "low_date": "2025-12-09",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -131408,7 +131712,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Friday",
       "low_hourly_comparison_price": 4195.2998046875,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -131428,7 +131738,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-12-15",
         "2025-12-16",
@@ -131565,7 +131875,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Friday",
       "low_date": "2025-12-16",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -131595,7 +131904,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Friday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -131615,7 +131930,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-12-22",
         "2025-12-23",
@@ -131744,7 +132059,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Saturday",
       "low_date": "2025-12-22",
       "low_weekday": "Monday",
       "low_dates": [
@@ -131760,7 +132074,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Saturday",
       "low_hourly_comparison_price": 4372.7998046875,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -131780,7 +132100,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2025-12-29",
         "2025-12-30",
@@ -131895,7 +132215,6 @@
       "high_hour_bucket_tie_count": 0,
       "high_observed_hour_buckets": [],
       "high_first_hour_bucket_verified": false,
-      "high_hourly_comparison_price": 4571.7998046875,
       "low_date": "2025-12-31",
       "low_weekday": "Wednesday",
       "low_dates": [
@@ -131925,7 +132244,13 @@
         }
       ],
       "low_first_hour_bucket_verified": false,
+      "high_hourly_comparison_price": 4571.7998046875,
       "low_weekday_taipei": "Wednesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -131945,7 +132270,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-01-05",
         "2026-01-06",
@@ -132081,7 +132406,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Friday",
       "low_date": "2026-01-05",
       "low_weekday": "Monday",
       "low_dates": [
@@ -132097,7 +132421,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Friday",
       "low_hourly_comparison_price": 4363.2998046875,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -132117,7 +132447,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-01-12",
         "2026-01-13",
@@ -132251,7 +132581,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2026-01-12",
       "low_weekday": "Monday",
       "low_dates": [
@@ -132267,7 +132596,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Thursday",
       "low_hourly_comparison_price": 4531.39990234375,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -132287,7 +132622,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-01-20",
         "2026-01-21",
@@ -132413,7 +132748,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Saturday",
       "low_date": "2026-01-20",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -132429,7 +132763,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Saturday",
       "low_hourly_comparison_price": 4595.39990234375,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -132449,7 +132789,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-01-26",
         "2026-01-27",
@@ -132569,7 +132909,6 @@
       "high_hour_bucket_tie_count": 0,
       "high_observed_hour_buckets": [],
       "high_first_hour_bucket_verified": false,
-      "high_hourly_comparison_price": 5626.7998046875,
       "low_date": "2026-01-30",
       "low_weekday": "Friday",
       "low_dates": [
@@ -132585,7 +132924,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_hourly_comparison_price": 5626.7998046875,
       "low_hourly_comparison_price": 4962.7001953125,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "day",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -132605,7 +132950,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-02-02",
         "2026-02-03",
@@ -132739,7 +133084,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Wednesday",
       "low_date": "2026-02-02",
       "low_weekday": "Monday",
       "low_dates": [
@@ -132755,7 +133099,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Wednesday",
       "low_hourly_comparison_price": 4653.5,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -132775,7 +133125,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-02-09",
         "2026-02-10",
@@ -132909,7 +133259,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Wednesday",
       "low_date": "2026-02-12",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -132939,7 +133288,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Wednesday",
       "low_weekday_taipei": "Friday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -132959,7 +133314,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-02-17",
         "2026-02-18",
@@ -133085,7 +133440,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Saturday",
       "low_date": "2026-02-17",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -133115,7 +133469,13 @@
         }
       ],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Saturday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -133135,7 +133495,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-02-23",
         "2026-02-24",
@@ -133269,7 +133629,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Saturday",
       "low_date": "2026-02-24",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -133299,7 +133658,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Saturday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -133319,7 +133684,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-03-02",
         "2026-03-03",
@@ -133453,7 +133818,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Monday",
       "low_date": "2026-03-03",
       "low_weekday": "Tuesday",
       "low_dates": [
@@ -133483,7 +133847,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -133503,7 +133873,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-03-09",
         "2026-03-10",
@@ -133637,7 +134007,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Tuesday",
       "low_date": "2026-03-13",
       "low_weekday": "Friday",
       "low_dates": [
@@ -133667,7 +134036,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Tuesday",
       "low_weekday_taipei": "Saturday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -133687,7 +134062,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-03-16",
         "2026-03-17",
@@ -133821,7 +134196,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Tuesday",
       "low_date": "2026-03-20",
       "low_weekday": "Friday",
       "low_dates": [
@@ -133851,7 +134225,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Tuesday",
       "low_weekday_taipei": "Saturday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -133871,7 +134251,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-03-23",
         "2026-03-24",
@@ -134005,7 +134385,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Wednesday",
       "low_date": "2026-03-23",
       "low_weekday": "Monday",
       "low_dates": [
@@ -134035,7 +134414,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Wednesday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -134055,7 +134440,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-03-30",
         "2026-03-31",
@@ -134181,7 +134566,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2026-03-30",
       "low_weekday": "Monday",
       "low_dates": [
@@ -134197,7 +134581,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Thursday",
       "low_hourly_comparison_price": 4444.7001953125,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -134217,7 +134607,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-04-06",
         "2026-04-07",
@@ -134351,7 +134741,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Wednesday",
       "low_date": "2026-04-06",
       "low_weekday": "Monday",
       "low_dates": [
@@ -134381,7 +134770,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Wednesday",
       "low_weekday_taipei": "Monday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -134401,7 +134796,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-04-13",
         "2026-04-14",
@@ -134535,7 +134930,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Friday",
       "low_date": "2026-04-13",
       "low_weekday": "Monday",
       "low_dates": [
@@ -134551,7 +134945,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Friday",
       "low_hourly_comparison_price": 4664.60009765625,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -134571,7 +134971,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-04-20",
         "2026-04-21",
@@ -134691,7 +135091,6 @@
       "high_hour_bucket_tie_count": 0,
       "high_observed_hour_buckets": [],
       "high_first_hour_bucket_verified": false,
-      "high_hourly_comparison_price": 4879.60009765625,
       "low_date": "2026-04-24",
       "low_weekday": "Friday",
       "low_dates": [
@@ -134721,7 +135120,13 @@
         }
       ],
       "low_first_hour_bucket_verified": false,
+      "high_hourly_comparison_price": 4879.60009765625,
       "low_weekday_taipei": "Friday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -134741,7 +135146,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-04-27",
         "2026-04-28",
@@ -134875,7 +135280,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Monday",
       "low_date": "2026-04-29",
       "low_weekday": "Wednesday",
       "low_dates": [
@@ -134905,7 +135309,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Wednesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -134925,7 +135335,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-05-04",
         "2026-05-05",
@@ -135059,7 +135469,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2026-05-04",
       "low_weekday": "Monday",
       "low_dates": [
@@ -135089,7 +135498,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Thursday",
       "low_weekday_taipei": "Tuesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -135109,7 +135524,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-05-11",
         "2026-05-12",
@@ -135243,7 +135658,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Tuesday",
       "low_date": "2026-05-15",
       "low_weekday": "Friday",
       "low_dates": [
@@ -135273,7 +135687,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Tuesday",
       "low_weekday_taipei": "Friday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -135293,7 +135713,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-05-18",
         "2026-05-19",
@@ -135427,7 +135847,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Tuesday",
       "low_date": "2026-05-20",
       "low_weekday": "Wednesday",
       "low_dates": [
@@ -135457,7 +135876,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Tuesday",
       "low_weekday_taipei": "Wednesday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -135477,7 +135902,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-05-26",
         "2026-05-27",
@@ -135603,7 +136028,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Friday",
       "low_date": "2026-05-28",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -135619,7 +136043,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Friday",
       "low_hourly_comparison_price": 4395.60009765625,
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "LOW_THEN_HIGH"
     },
@@ -135639,7 +136069,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-06-01",
         "2026-06-02",
@@ -135773,7 +136203,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Monday",
       "low_date": "2026-06-05",
       "low_weekday": "Friday",
       "low_dates": [
@@ -135803,7 +136232,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Saturday",
+      "hourly_archive_reference": {
+        "provenance_id": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_sha256": "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187",
+        "source_snapshot_as_of": "2026-10-04T17:29:15.821469+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -138850,6 +139285,190 @@
       "cot_date": "2026-09-29",
       "week_start": "2026-10-05",
       "week_end": "2026-10-09",
+      "open": 4169.39990234375,
+      "high": 4233.7001953125,
+      "low": 4091.199951171875,
+      "close": 4216.2998046875,
+      "change": 46.89990234375,
+      "change_pct": 0.011248597746017719,
+      "range": 142.500244140625,
+      "range_pct": 0.03417763886369383,
+      "coverage_status": "COMPLETE_DAILY",
+      "observed_sessions": 5,
+      "expected_sessions": 5,
+      "week_state": "ENDED",
+      "archive_status": "CURRENT_QUERY",
+      "observed_session_dates": [
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09"
+      ],
+      "expected_session_dates": [
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-07",
+        "2026-10-08",
+        "2026-10-09"
+      ],
+      "missing_session_dates": [],
+      "unexpected_session_dates": [],
+      "hourly_coverage_status": "COMPLETE_OBSERVED_HOURLY",
+      "observed_hourly_bars": 115,
+      "expected_hourly_bars": 115,
+      "holiday_affected": false,
+      "calendar_note": "Weekday daily-bar labels; normal COMEX 18:00–17:00 America/New_York sessions.",
+      "calendar_sources": [
+        "https://www.cmegroup.com/market-regulation/files/gold-futures-and-options-fact-card.pdf"
+      ],
+      "source": "Yahoo Finance GC=F",
+      "price_feed": "GC=F",
+      "currency": "USD",
+      "price_semantics": "First daily session open and last daily vendor close; not an official CME settlement series.",
+      "time_semantics": "Source intraday bucket of at most one hour, not the exact minute of an extremum. First matching observed bucket only when daily prices reconcile.",
+      "week_timezone": "America/New_York",
+      "display_timezone": "Asia/Taipei",
+      "window_start_utc": "2026-10-04T22:00:00+00:00",
+      "window_end_utc": "2026-10-09T21:00:00+00:00",
+      "week_start_at": "2026-10-04T22:00:00+00:00",
+      "week_end_at": "2026-10-09T21:00:00+00:00",
+      "bars": [
+        {
+          "date": "2026-10-05",
+          "open": 4169.39990234375,
+          "high": 4198.89990234375,
+          "low": 4150.39990234375,
+          "close": 4156.7998046875
+        },
+        {
+          "date": "2026-10-06",
+          "open": 4169.2001953125,
+          "high": 4212.39990234375,
+          "low": 4130.7001953125,
+          "close": 4187.10009765625
+        },
+        {
+          "date": "2026-10-07",
+          "open": 4195.0,
+          "high": 4197.7998046875,
+          "low": 4091.199951171875,
+          "close": 4140.7001953125
+        },
+        {
+          "date": "2026-10-08",
+          "open": 4139.89990234375,
+          "high": 4170.7001953125,
+          "low": 4128.10009765625,
+          "close": 4157.0
+        },
+        {
+          "date": "2026-10-09",
+          "open": 4159.7001953125,
+          "high": 4233.7001953125,
+          "low": 4156.10009765625,
+          "close": 4216.2998046875
+        }
+      ],
+      "daily_coverage_category": "COMPLETE_EXPECTED_LABELS",
+      "daily_coverage_note": "本週五個預期日 K 標籤均存在；小時行情完整度另行核對。",
+      "quarantined_ohlc_dates": [],
+      "source_null_dates": [],
+      "confirmed_source_gap_dates": [],
+      "unverified_missing_session_dates": [],
+      "daily_coverage_semantics": "Vendor daily-label coverage, not all intraday trading or exact extrema-time coverage",
+      "research_window_mode": "OBSERVATION_NEXT_CALENDAR_WEEK",
+      "research_availability_status": "RELEASE_TIME_UNVERIFIED",
+      "not_ex_ante_available": null,
+      "no_lookahead_eligible": null,
+      "original_scheduled_release_date": null,
+      "revised_publication_date": null,
+      "scheduled_release_date": null,
+      "planned_release_window_start": null,
+      "planned_release_window_end": null,
+      "actual_publication_date": null,
+      "scheduled_release_relation": "UNKNOWN",
+      "release_evidence_kind": null,
+      "release_evidence_sources": [],
+      "release_mapping_inferred": false,
+      "release_evidence_date_precision": null,
+      "release_evidence_note": null,
+      "publication_delayed": null,
+      "actual_cot_release_at_utc": null,
+      "actual_cot_release_source_url": null,
+      "revision_risk": false,
+      "point_in_time_vintage_unverified": false,
+      "revision_note": null,
+      "revision_publication_dates": [],
+      "revision_release_at_utc": null,
+      "research_availability_note": "Observation-next-calendar-week outcome only. Actual CFTC publication time is unverified; do not assume this row was available before the outcome week.",
+      "high_date": "2026-10-09",
+      "high_weekday": "Friday",
+      "high_dates": [
+        "2026-10-09"
+      ],
+      "high_daily_tie_count": 1,
+      "high_time_utc": "2026-10-09T05:00:00+00:00",
+      "high_time_taipei": "2026-10-09T13:00:00+08:00",
+      "high_time_range_taipei": {
+        "start": "2026-10-09T13:00:00+08:00",
+        "end": "2026-10-09T14:00:00+08:00"
+      },
+      "high_time_range_utc": {
+        "start": "2026-10-09T05:00:00+00:00",
+        "end": "2026-10-09T06:00:00+00:00"
+      },
+      "high_time_precision": "hour_bucket",
+      "high_time_reason": "MATCHED_FIRST_OBSERVED_HOUR_BUCKET",
+      "high_hour_bucket_tie_count": 1,
+      "high_observed_hour_buckets": [
+        {
+          "start_utc": "2026-10-09T05:00:00+00:00",
+          "end_utc": "2026-10-09T06:00:00+00:00",
+          "start_taipei": "2026-10-09T13:00:00+08:00",
+          "end_taipei": "2026-10-09T14:00:00+08:00",
+          "session_date": "2026-10-09"
+        }
+      ],
+      "high_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Friday",
+      "low_date": "2026-10-07",
+      "low_weekday": "Wednesday",
+      "low_dates": [
+        "2026-10-07"
+      ],
+      "low_daily_tie_count": 1,
+      "low_time_utc": "2026-10-07T12:00:00+00:00",
+      "low_time_taipei": "2026-10-07T20:00:00+08:00",
+      "low_time_range_taipei": {
+        "start": "2026-10-07T20:00:00+08:00",
+        "end": "2026-10-07T21:00:00+08:00"
+      },
+      "low_time_range_utc": {
+        "start": "2026-10-07T12:00:00+00:00",
+        "end": "2026-10-07T13:00:00+00:00"
+      },
+      "low_time_precision": "hour_bucket",
+      "low_time_reason": "MATCHED_FIRST_OBSERVED_HOUR_BUCKET",
+      "low_hour_bucket_tie_count": 1,
+      "low_observed_hour_buckets": [
+        {
+          "start_utc": "2026-10-07T12:00:00+00:00",
+          "end_utc": "2026-10-07T13:00:00+00:00",
+          "start_taipei": "2026-10-07T20:00:00+08:00",
+          "end_taipei": "2026-10-07T21:00:00+08:00",
+          "session_date": "2026-10-07"
+        }
+      ],
+      "low_first_hour_bucket_verified": true,
+      "low_weekday_taipei": "Wednesday",
+      "time_precision": "hour_bucket",
+      "extreme_order": "LOW_THEN_HIGH"
+    },
+    {
+      "cot_date": "2026-10-06",
+      "week_start": "2026-10-12",
+      "week_end": "2026-10-16",
       "open": null,
       "high": null,
       "low": null,
@@ -138865,11 +139484,11 @@
       "archive_status": "CURRENT_QUERY",
       "observed_session_dates": [],
       "expected_session_dates": [
-        "2026-10-05",
-        "2026-10-06",
-        "2026-10-07",
-        "2026-10-08",
-        "2026-10-09"
+        "2026-10-12",
+        "2026-10-13",
+        "2026-10-14",
+        "2026-10-15",
+        "2026-10-16"
       ],
       "missing_session_dates": [],
       "unexpected_session_dates": [],
@@ -138888,10 +139507,10 @@
       "time_semantics": "Source intraday bucket of at most one hour, not the exact minute of an extremum. First matching observed bucket only when daily prices reconcile.",
       "week_timezone": "America/New_York",
       "display_timezone": "Asia/Taipei",
-      "window_start_utc": "2026-10-04T22:00:00+00:00",
-      "window_end_utc": "2026-10-09T21:00:00+00:00",
-      "week_start_at": "2026-10-04T22:00:00+00:00",
-      "week_end_at": "2026-10-09T21:00:00+00:00",
+      "window_start_utc": "2026-10-11T22:00:00+00:00",
+      "window_end_utc": "2026-10-16T21:00:00+00:00",
+      "week_start_at": "2026-10-11T22:00:00+00:00",
+      "week_end_at": "2026-10-16T21:00:00+00:00",
       "bars": [],
       "daily_coverage_category": "PENDING",
       "daily_coverage_note": "目標週尚未開始，行情保留空值。",
@@ -138956,483 +139575,68 @@
     }
   ],
   "coverage_summary": {
-    "rows": 892,
-    "COMPLETE_DAILY": 792,
+    "rows": 893,
+    "COMPLETE_DAILY": 793,
     "PARTIAL": 99,
     "PENDING": 1,
     "MISSING": 0,
-    "hour_bucket_highs": 91,
-    "hour_bucket_lows": 76
+    "hour_bucket_highs": 92,
+    "hour_bucket_lows": 77
   },
   "provenance": {
     "master": {
       "file": "ghpr_master_weekly.csv",
-      "sha256": "06079901552df0089e85fbb14d762db98f47e234d2747a1143fc8ab5a2de6aa2"
+      "sha256": "236adac23f402e3d5d7d12c28040755855e4c746b49a2232df24cf696ae827b5"
     },
     "daily": {
       "file": "gold_daily_ohlc.csv",
-      "sha256": "5ae1ae0c7da700f29563f524dd874d99b7754b11727e7fd44e11cb8275c0725d"
+      "sha256": "c5f5b8c6d0b30d85de06aebe62a02f28eba24cfe4bae1271c50e6aa926db411b"
     },
     "hourly": {
       "file": "gc_f_1h_normalized.csv",
-      "sha256": "2c04d7e35d97d1c4889b8cf675f19295f70d82fc377db6749f13eda37f2d8f41"
+      "sha256": "a49e05a3f6e5a94b450218035ae2428d3114f7359e17aa5ef276cfa6c17a551c"
     },
     "calendar": {
-      "file": "gc_price_calendar.json",
+      "file": "source_calendar.json",
       "sha256": "0d7783d774c4c40aefcb48f949c750bb92f36fea577c3c43828c7c4fd0c3cbed"
     },
     "price_coverage": {
-      "schema_version": 3,
+      "schema_version": 2,
+      "normalization_version": "ghpr-prices-v2",
+      "normalized_at_utc": "2026-10-11T01:33:11.202411+00:00",
       "symbol": "GC=F",
-      "1d": {
-        "normalized_rows": 4281,
-        "first": "2009-08-18",
-        "last": "2026-10-02",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1250553600&period2=1799971200&interval=1d",
-        "fetched_at_utc": "2026-10-04T15:24:41.588650+00:00",
-        "raw_sha256": "fa2233a033bcdfe885adc440fd5a532223fd82832807b15f50d6527d97515294",
-        "normalized_sha256": "5ae1ae0c7da700f29563f524dd874d99b7754b11727e7fd44e11cb8275c0725d",
-        "ohlc_quarantined_count": 27,
-        "source_window_start": "2009-08-18"
-      },
+      "source": "Yahoo Finance chart",
+      "notes": [
+        "No COT outcome table is produced by this script.",
+        "Daily OHLC dates are labels, not intraday extreme timestamps.",
+        "Hourly timestamps denote one-hour buckets, not exact extreme times.",
+        "Hourly regular-session filtering does not establish holiday-specific coverage completeness.",
+        "No interpolation or fill or other instruments are used."
+      ],
       "1h": {
-        "schema_version": 3,
-        "normalization": "minute_aligned_vendor_h1",
-        "normalized_at_utc": "2026-10-04T16:22:04.241020+00:00",
-        "symbol": "GC=F",
-        "normalized_rows": 11411,
-        "first_bar_start_utc": "2024-10-06T22:00:00+00:00",
-        "last_bar_start_utc": "2026-10-02T20:00:00+00:00",
-        "non_hour_grid_bars": 20,
-        "shortened_buckets": 5,
+        "raw_rows": 2502,
+        "normalized_rows": 2007,
+        "excluded_rows": 495,
+        "exclusion_counts": {
+          "missing_ohlc_chart_slot": 491,
+          "outside_cme_regular_session": 4
+        },
+        "first": "2026-06-07T22:00:00+00:00",
+        "last": "2026-10-09T20:00:00+00:00",
+        "normalized_file": "gc_f_1h_normalized.csv",
+        "normalized_json_file": "gc_f_1h_normalized.json",
+        "normalized_sha256": "a49e05a3f6e5a94b450218035ae2428d3114f7359e17aa5ef276cfa6c17a551c",
+        "raw_sha256": "b67577a4b2dc1128f4eb8d1e20b92cfbc2e9ab391c9f64c690c0b4d99b10cae5",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1780790400&period2=1791676800&interval=1h&events=history",
+        "fetched_at_utc": "2026-10-11T01:33:10.872865+00:00",
+        "requested_start_utc": "2026-06-07T00:00:00+00:00",
+        "requested_end_exclusive_utc": "2026-10-11T00:00:00+00:00",
+        "exchange": "COMEX",
+        "exchange_timezone": "America/New_York",
+        "currency": "USD",
+        "instrument_type": "FUTURE",
+        "ohlc_bounds_issues": 0,
         "per_provisional_session_counts": {
-          "2024-10-07": 23,
-          "2024-10-08": 23,
-          "2024-10-09": 23,
-          "2024-10-10": 23,
-          "2024-10-11": 23,
-          "2024-10-14": 23,
-          "2024-10-15": 23,
-          "2024-10-16": 23,
-          "2024-10-17": 23,
-          "2024-10-18": 23,
-          "2024-10-21": 23,
-          "2024-10-22": 23,
-          "2024-10-23": 23,
-          "2024-10-24": 23,
-          "2024-10-25": 23,
-          "2024-10-28": 23,
-          "2024-10-29": 23,
-          "2024-10-30": 23,
-          "2024-10-31": 23,
-          "2024-11-01": 23,
-          "2024-11-04": 23,
-          "2024-11-05": 23,
-          "2024-11-06": 23,
-          "2024-11-07": 23,
-          "2024-11-08": 23,
-          "2024-11-11": 23,
-          "2024-11-12": 23,
-          "2024-11-13": 23,
-          "2024-11-14": 23,
-          "2024-11-15": 23,
-          "2024-11-18": 23,
-          "2024-11-19": 23,
-          "2024-11-20": 23,
-          "2024-11-21": 23,
-          "2024-11-22": 23,
-          "2024-11-25": 23,
-          "2024-11-26": 23,
-          "2024-11-27": 23,
-          "2024-11-28": 6,
-          "2024-11-29": 5,
-          "2024-12-02": 23,
-          "2024-12-03": 23,
-          "2024-12-04": 23,
-          "2024-12-05": 23,
-          "2024-12-06": 23,
-          "2024-12-09": 23,
-          "2024-12-10": 23,
-          "2024-12-11": 23,
-          "2024-12-12": 23,
-          "2024-12-13": 23,
-          "2024-12-16": 23,
-          "2024-12-17": 23,
-          "2024-12-18": 23,
-          "2024-12-19": 23,
-          "2024-12-20": 23,
-          "2024-12-23": 23,
-          "2024-12-24": 11,
-          "2024-12-26": 17,
-          "2024-12-27": 23,
-          "2024-12-30": 23,
-          "2024-12-31": 23,
-          "2025-01-02": 17,
-          "2025-01-03": 23,
-          "2025-01-06": 23,
-          "2025-01-07": 23,
-          "2025-01-08": 23,
-          "2025-01-09": 23,
-          "2025-01-10": 23,
-          "2025-01-13": 23,
-          "2025-01-14": 23,
-          "2025-01-15": 23,
-          "2025-01-16": 23,
-          "2025-01-17": 23,
-          "2025-01-20": 6,
-          "2025-01-21": 17,
-          "2025-01-22": 23,
-          "2025-01-23": 23,
-          "2025-01-24": 23,
-          "2025-01-27": 23,
-          "2025-01-28": 23,
-          "2025-01-29": 23,
-          "2025-01-30": 23,
-          "2025-01-31": 23,
-          "2025-02-03": 23,
-          "2025-02-04": 23,
-          "2025-02-05": 23,
-          "2025-02-06": 23,
-          "2025-02-07": 23,
-          "2025-02-10": 23,
-          "2025-02-11": 23,
-          "2025-02-12": 23,
-          "2025-02-13": 23,
-          "2025-02-14": 23,
-          "2025-02-17": 6,
-          "2025-02-18": 17,
-          "2025-02-19": 23,
-          "2025-02-20": 23,
-          "2025-02-21": 23,
-          "2025-02-24": 23,
-          "2025-02-25": 23,
-          "2025-02-26": 23,
-          "2025-02-27": 23,
-          "2025-02-28": 23,
-          "2025-03-03": 23,
-          "2025-03-04": 23,
-          "2025-03-05": 23,
-          "2025-03-06": 23,
-          "2025-03-07": 23,
-          "2025-03-10": 23,
-          "2025-03-11": 23,
-          "2025-03-12": 23,
-          "2025-03-13": 23,
-          "2025-03-14": 23,
-          "2025-03-17": 23,
-          "2025-03-18": 23,
-          "2025-03-19": 23,
-          "2025-03-20": 23,
-          "2025-03-21": 23,
-          "2025-03-24": 23,
-          "2025-03-25": 23,
-          "2025-03-26": 23,
-          "2025-03-27": 23,
-          "2025-03-28": 23,
-          "2025-03-31": 23,
-          "2025-04-01": 23,
-          "2025-04-02": 23,
-          "2025-04-03": 23,
-          "2025-04-04": 23,
-          "2025-04-07": 23,
-          "2025-04-08": 23,
-          "2025-04-09": 23,
-          "2025-04-10": 23,
-          "2025-04-11": 23,
-          "2025-04-14": 23,
-          "2025-04-15": 23,
-          "2025-04-16": 23,
-          "2025-04-17": 23,
-          "2025-04-21": 23,
-          "2025-04-22": 23,
-          "2025-04-23": 23,
-          "2025-04-24": 23,
-          "2025-04-25": 23,
-          "2025-04-28": 23,
-          "2025-04-29": 23,
-          "2025-04-30": 23,
-          "2025-05-01": 23,
-          "2025-05-02": 23,
-          "2025-05-05": 23,
-          "2025-05-06": 23,
-          "2025-05-07": 23,
-          "2025-05-08": 23,
-          "2025-05-09": 23,
-          "2025-05-12": 23,
-          "2025-05-13": 23,
-          "2025-05-14": 23,
-          "2025-05-15": 23,
-          "2025-05-16": 23,
-          "2025-05-19": 23,
-          "2025-05-20": 23,
-          "2025-05-21": 23,
-          "2025-05-22": 23,
-          "2025-05-23": 23,
-          "2025-05-26": 21,
-          "2025-05-27": 23,
-          "2025-05-28": 23,
-          "2025-05-29": 23,
-          "2025-05-30": 23,
-          "2025-06-02": 23,
-          "2025-06-03": 23,
-          "2025-06-04": 23,
-          "2025-06-05": 23,
-          "2025-06-06": 23,
-          "2025-06-09": 23,
-          "2025-06-10": 23,
-          "2025-06-11": 23,
-          "2025-06-12": 23,
-          "2025-06-13": 23,
-          "2025-06-16": 23,
-          "2025-06-17": 23,
-          "2025-06-18": 23,
-          "2025-06-19": 21,
-          "2025-06-20": 23,
-          "2025-06-23": 23,
-          "2025-06-24": 23,
-          "2025-06-25": 23,
-          "2025-06-26": 23,
-          "2025-06-27": 23,
-          "2025-06-30": 23,
-          "2025-07-01": 23,
-          "2025-07-02": 23,
-          "2025-07-03": 11,
-          "2025-07-04": 13,
-          "2025-07-07": 23,
-          "2025-07-08": 23,
-          "2025-07-09": 23,
-          "2025-07-10": 23,
-          "2025-07-11": 23,
-          "2025-07-14": 17,
-          "2025-07-15": 23,
-          "2025-07-16": 23,
-          "2025-07-17": 23,
-          "2025-07-18": 23,
-          "2025-07-21": 23,
-          "2025-07-22": 23,
-          "2025-07-23": 23,
-          "2025-07-24": 23,
-          "2025-07-25": 23,
-          "2025-07-28": 21,
-          "2025-07-29": 23,
-          "2025-07-30": 23,
-          "2025-07-31": 23,
-          "2025-08-01": 23,
-          "2025-08-04": 23,
-          "2025-08-05": 23,
-          "2025-08-06": 23,
-          "2025-08-07": 23,
-          "2025-08-08": 23,
-          "2025-08-11": 23,
-          "2025-08-12": 23,
-          "2025-08-13": 23,
-          "2025-08-14": 23,
-          "2025-08-15": 23,
-          "2025-08-18": 23,
-          "2025-08-19": 23,
-          "2025-08-20": 23,
-          "2025-08-21": 23,
-          "2025-08-22": 23,
-          "2025-08-25": 23,
-          "2025-08-26": 23,
-          "2025-08-27": 23,
-          "2025-08-28": 23,
-          "2025-08-29": 23,
-          "2025-09-02": 17,
-          "2025-09-03": 23,
-          "2025-09-04": 23,
-          "2025-09-05": 23,
-          "2025-09-08": 23,
-          "2025-09-09": 23,
-          "2025-09-10": 23,
-          "2025-09-11": 23,
-          "2025-09-12": 23,
-          "2025-09-15": 23,
-          "2025-09-16": 22,
-          "2025-09-17": 23,
-          "2025-09-18": 23,
-          "2025-09-19": 23,
-          "2025-09-22": 23,
-          "2025-09-23": 23,
-          "2025-09-24": 23,
-          "2025-09-25": 23,
-          "2025-09-26": 23,
-          "2025-09-29": 23,
-          "2025-09-30": 23,
-          "2025-10-01": 23,
-          "2025-10-02": 23,
-          "2025-10-03": 23,
-          "2025-10-06": 23,
-          "2025-10-07": 14,
-          "2025-10-08": 23,
-          "2025-10-09": 23,
-          "2025-10-10": 23,
-          "2025-10-13": 23,
-          "2025-10-14": 23,
-          "2025-10-15": 23,
-          "2025-10-16": 23,
-          "2025-10-17": 23,
-          "2025-10-20": 23,
-          "2025-10-21": 23,
-          "2025-10-22": 23,
-          "2025-10-23": 23,
-          "2025-10-24": 23,
-          "2025-10-27": 23,
-          "2025-10-28": 23,
-          "2025-10-29": 23,
-          "2025-10-30": 23,
-          "2025-10-31": 23,
-          "2025-11-03": 23,
-          "2025-11-04": 23,
-          "2025-11-05": 23,
-          "2025-11-06": 23,
-          "2025-11-07": 23,
-          "2025-11-10": 23,
-          "2025-11-11": 23,
-          "2025-11-12": 23,
-          "2025-11-13": 23,
-          "2025-11-14": 23,
-          "2025-11-17": 23,
-          "2025-11-18": 23,
-          "2025-11-19": 23,
-          "2025-11-20": 23,
-          "2025-11-21": 23,
-          "2025-11-24": 23,
-          "2025-11-25": 23,
-          "2025-11-26": 23,
-          "2025-11-27": 6,
-          "2025-11-28": 5,
-          "2025-12-01": 23,
-          "2025-12-02": 23,
-          "2025-12-03": 23,
-          "2025-12-04": 23,
-          "2025-12-05": 23,
-          "2025-12-08": 23,
-          "2025-12-09": 23,
-          "2025-12-10": 23,
-          "2025-12-11": 23,
-          "2025-12-12": 23,
-          "2025-12-15": 23,
-          "2025-12-16": 23,
-          "2025-12-17": 23,
-          "2025-12-18": 23,
-          "2025-12-19": 23,
-          "2025-12-22": 23,
-          "2025-12-23": 23,
-          "2025-12-24": 11,
-          "2025-12-26": 17,
-          "2025-12-29": 23,
-          "2025-12-30": 23,
-          "2025-12-31": 23,
-          "2026-01-02": 17,
-          "2026-01-05": 23,
-          "2026-01-06": 23,
-          "2026-01-07": 23,
-          "2026-01-08": 23,
-          "2026-01-09": 23,
-          "2026-01-12": 23,
-          "2026-01-13": 23,
-          "2026-01-14": 23,
-          "2026-01-15": 23,
-          "2026-01-16": 23,
-          "2026-01-19": 1,
-          "2026-01-20": 17,
-          "2026-01-21": 23,
-          "2026-01-22": 23,
-          "2026-01-23": 23,
-          "2026-01-26": 23,
-          "2026-01-27": 23,
-          "2026-01-28": 23,
-          "2026-01-29": 23,
-          "2026-01-30": 17,
-          "2026-02-02": 4,
-          "2026-02-03": 23,
-          "2026-02-04": 23,
-          "2026-02-05": 23,
-          "2026-02-06": 23,
-          "2026-02-09": 23,
-          "2026-02-10": 23,
-          "2026-02-11": 23,
-          "2026-02-12": 23,
-          "2026-02-13": 23,
-          "2026-02-16": 6,
-          "2026-02-17": 17,
-          "2026-02-18": 23,
-          "2026-02-19": 23,
-          "2026-02-20": 23,
-          "2026-02-23": 23,
-          "2026-02-24": 23,
-          "2026-02-25": 23,
-          "2026-02-26": 23,
-          "2026-02-27": 23,
-          "2026-03-02": 23,
-          "2026-03-03": 23,
-          "2026-03-04": 23,
-          "2026-03-05": 23,
-          "2026-03-06": 23,
-          "2026-03-09": 23,
-          "2026-03-10": 23,
-          "2026-03-11": 23,
-          "2026-03-12": 23,
-          "2026-03-13": 23,
-          "2026-03-16": 23,
-          "2026-03-17": 23,
-          "2026-03-18": 23,
-          "2026-03-19": 23,
-          "2026-03-20": 23,
-          "2026-03-23": 23,
-          "2026-03-24": 23,
-          "2026-03-25": 23,
-          "2026-03-26": 23,
-          "2026-03-27": 23,
-          "2026-03-30": 23,
-          "2026-03-31": 23,
-          "2026-04-01": 23,
-          "2026-04-02": 23,
-          "2026-04-06": 23,
-          "2026-04-07": 23,
-          "2026-04-08": 23,
-          "2026-04-09": 23,
-          "2026-04-10": 23,
-          "2026-04-13": 23,
-          "2026-04-14": 23,
-          "2026-04-15": 23,
-          "2026-04-16": 23,
-          "2026-04-17": 23,
-          "2026-04-20": 17,
-          "2026-04-21": 23,
-          "2026-04-22": 23,
-          "2026-04-23": 23,
-          "2026-04-24": 23,
-          "2026-04-27": 23,
-          "2026-04-28": 23,
-          "2026-04-29": 23,
-          "2026-04-30": 23,
-          "2026-05-01": 23,
-          "2026-05-04": 23,
-          "2026-05-05": 23,
-          "2026-05-06": 23,
-          "2026-05-07": 23,
-          "2026-05-08": 23,
-          "2026-05-11": 23,
-          "2026-05-12": 23,
-          "2026-05-13": 23,
-          "2026-05-14": 23,
-          "2026-05-15": 23,
-          "2026-05-18": 23,
-          "2026-05-19": 23,
-          "2026-05-20": 23,
-          "2026-05-21": 23,
-          "2026-05-22": 23,
-          "2026-05-26": 17,
-          "2026-05-27": 23,
-          "2026-05-28": 23,
-          "2026-05-29": 23,
-          "2026-06-01": 23,
-          "2026-06-02": 23,
-          "2026-06-03": 23,
-          "2026-06-04": 23,
-          "2026-06-05": 23,
           "2026-06-08": 23,
           "2026-06-09": 23,
           "2026-06-10": 23,
@@ -139516,63 +139720,18 @@
           "2026-09-29": 23,
           "2026-09-30": 23,
           "2026-10-01": 23,
-          "2026-10-02": 23
-        },
-        "raw_captures": [
-          {
-            "capture_dir": "D:\\Codex\\GHPR_ReadOnly_Diagnosis_20261004\\implementation\\prices-older-hourly",
-            "raw_path": "D:\\Codex\\GHPR_ReadOnly_Diagnosis_20261004\\implementation\\prices-older-hourly\\yahoo_gc_f_1h_raw.json",
-            "raw_sha256": "493bbcff9826ca3c19caf9f2b26d5a607fc0e5704fd2d10a3252ee02a2e0fbfa",
-            "fetch_path": "D:\\Codex\\GHPR_ReadOnly_Diagnosis_20261004\\implementation\\prices-older-hourly\\yahoo_gc_f_1h_fetch.json",
-            "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1728086400&period2=1759276800&interval=1h&events=history",
-            "fetched_at_utc": "2026-10-04T16:11:30.892029+00:00",
-            "requested_start_utc": "2024-10-05T00:00:00+00:00",
-            "requested_end_exclusive_utc": "2025-10-01T00:00:00+00:00",
-            "raw_rows": 7171,
-            "normalized_rows": 5675,
-            "excluded_rows": 1496,
-            "excluded_counts": {
-              "missing_or_invalid_ohlc_chart_slot": 1492,
-              "outside_cme_regular_session": 2,
-              "outside_requested_source_window": 2
-            }
-          },
-          {
-            "capture_dir": "D:\\Codex\\GHPR_ReadOnly_Diagnosis_20261004\\implementation\\prices-year",
-            "raw_path": "D:\\Codex\\GHPR_ReadOnly_Diagnosis_20261004\\implementation\\prices-year\\yahoo_gc_f_1h_raw.json",
-            "raw_sha256": "5bbdfa223695a2343b4be17b7fe44ba542736bda2005d7a764312adaebaf59a4",
-            "fetch_path": "D:\\Codex\\GHPR_ReadOnly_Diagnosis_20261004\\implementation\\prices-year\\yahoo_gc_f_1h_fetch.json",
-            "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1759276800&period2=1791072000&interval=1h&events=history",
-            "fetched_at_utc": "2026-10-04T16:00:55.292889+00:00",
-            "requested_start_utc": "2025-10-01T00:00:00+00:00",
-            "requested_end_exclusive_utc": "2026-10-04T00:00:00+00:00",
-            "raw_rows": 7280,
-            "normalized_rows": 5736,
-            "excluded_rows": 1544,
-            "excluded_counts": {
-              "missing_or_invalid_ohlc_chart_slot": 1540,
-              "outside_cme_regular_session": 3,
-              "non_minute_quote_snapshot": 1
-            }
-          }
-        ],
-        "overlap_resolution": [],
-        "normalized_csv_sha256": "2c04d7e35d97d1c4889b8cf675f19295f70d82fc377db6749f13eda37f2d8f41",
-        "limitations": [
-          "Vendor H1 bucket bounds do not identify an exact trade or tick timestamp.",
-          "Holiday-specific actual closing times are not encoded; bucket ends are nominal upper bounds.",
-          "A matching price observed in partial hourly coverage does not establish the first or every occurrence.",
-          "No synthetic prices or time interpolation were applied."
-        ]
+          "2026-10-02": 23,
+          "2026-10-05": 23,
+          "2026-10-06": 23,
+          "2026-10-07": 23,
+          "2026-10-08": 23,
+          "2026-10-09": 23
+        }
       }
     },
     "cot_release_calendar": {
       "file": "cot_release_evidence.json",
       "sha256": "a73b6093bf7bbc744321326e86c48ebb823ba17dba7e799c75070d5d3ca13b2e"
-    },
-    "historical_price_recovery_review": {
-      "file": "historical_price_recovery_review.json",
-      "sha256": "16c0ba33345b519036dd120c673329cc952f1f38dbda784836141ed49b243302"
     }
   },
   "calendar": {
@@ -140942,6 +141101,57 @@
       }
     ],
     "daily_excluded_dates": [
+      "2010-04-02",
+      "2012-02-20",
+      "2012-04-06",
+      "2012-12-25",
+      "2016-01-18",
+      "2018-01-15",
+      "2018-02-19",
+      "2018-09-03",
+      "2019-01-01",
+      "2019-01-21",
+      "2019-02-18",
+      "2019-04-19",
+      "2019-05-27",
+      "2019-07-04",
+      "2019-09-02",
+      "2019-12-25",
+      "2020-01-01",
+      "2020-01-20",
+      "2020-02-17",
+      "2020-04-10",
+      "2020-05-25",
+      "2020-07-03",
+      "2020-09-07",
+      "2020-11-26",
+      "2020-12-25",
+      "2021-01-18",
+      "2021-02-15",
+      "2021-04-02",
+      "2021-05-31",
+      "2021-07-05",
+      "2021-09-06",
+      "2021-11-25",
+      "2021-12-24",
+      "2022-01-17",
+      "2022-02-21",
+      "2022-04-15",
+      "2022-05-30",
+      "2022-06-20",
+      "2022-07-04",
+      "2022-09-05",
+      "2022-11-24",
+      "2022-12-26",
+      "2023-01-02",
+      "2023-01-16",
+      "2023-02-20",
+      "2023-04-07",
+      "2023-05-29",
+      "2023-06-19",
+      "2023-07-04",
+      "2023-09-04",
+      "2023-12-25",
       "2024-01-01",
       "2024-01-15",
       "2024-02-19",
@@ -140951,6 +141161,7 @@
       "2024-07-04",
       "2024-09-02",
       "2024-11-28",
+      "2024-12-25",
       "2025-01-01",
       "2025-01-20",
       "2025-02-17",
@@ -141925,18 +142136,630 @@
     ]
   },
   "source_window_start": null,
-  "hourly_source_window_start": "2024-10-06T22:00:00+00:00",
-  "archived_provenance": {},
+  "hourly_source_window_start": "2026-06-07T00:00:00+00:00",
+  "archived_provenance": {
+    "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187": {
+      "master": {
+        "file": "ghpr_master_weekly.csv",
+        "sha256": "06079901552df0089e85fbb14d762db98f47e234d2747a1143fc8ab5a2de6aa2"
+      },
+      "daily": {
+        "file": "gold_daily_ohlc.csv",
+        "sha256": "5ae1ae0c7da700f29563f524dd874d99b7754b11727e7fd44e11cb8275c0725d"
+      },
+      "hourly": {
+        "file": "gc_f_1h_normalized.csv",
+        "sha256": "2c04d7e35d97d1c4889b8cf675f19295f70d82fc377db6749f13eda37f2d8f41"
+      },
+      "calendar": {
+        "file": "gc_price_calendar.json",
+        "sha256": "0d7783d774c4c40aefcb48f949c750bb92f36fea577c3c43828c7c4fd0c3cbed"
+      },
+      "price_coverage": {
+        "schema_version": 3,
+        "symbol": "GC=F",
+        "1d": {
+          "normalized_rows": 4281,
+          "first": "2009-08-18",
+          "last": "2026-10-02",
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1250553600&period2=1799971200&interval=1d",
+          "fetched_at_utc": "2026-10-04T15:24:41.588650+00:00",
+          "raw_sha256": "fa2233a033bcdfe885adc440fd5a532223fd82832807b15f50d6527d97515294",
+          "normalized_sha256": "5ae1ae0c7da700f29563f524dd874d99b7754b11727e7fd44e11cb8275c0725d",
+          "ohlc_quarantined_count": 27,
+          "source_window_start": "2009-08-18"
+        },
+        "1h": {
+          "schema_version": 3,
+          "normalization": "minute_aligned_vendor_h1",
+          "normalized_at_utc": "2026-10-04T16:22:04.241020+00:00",
+          "symbol": "GC=F",
+          "normalized_rows": 11411,
+          "first_bar_start_utc": "2024-10-06T22:00:00+00:00",
+          "last_bar_start_utc": "2026-10-02T20:00:00+00:00",
+          "non_hour_grid_bars": 20,
+          "shortened_buckets": 5,
+          "per_provisional_session_counts": {
+            "2024-10-07": 23,
+            "2024-10-08": 23,
+            "2024-10-09": 23,
+            "2024-10-10": 23,
+            "2024-10-11": 23,
+            "2024-10-14": 23,
+            "2024-10-15": 23,
+            "2024-10-16": 23,
+            "2024-10-17": 23,
+            "2024-10-18": 23,
+            "2024-10-21": 23,
+            "2024-10-22": 23,
+            "2024-10-23": 23,
+            "2024-10-24": 23,
+            "2024-10-25": 23,
+            "2024-10-28": 23,
+            "2024-10-29": 23,
+            "2024-10-30": 23,
+            "2024-10-31": 23,
+            "2024-11-01": 23,
+            "2024-11-04": 23,
+            "2024-11-05": 23,
+            "2024-11-06": 23,
+            "2024-11-07": 23,
+            "2024-11-08": 23,
+            "2024-11-11": 23,
+            "2024-11-12": 23,
+            "2024-11-13": 23,
+            "2024-11-14": 23,
+            "2024-11-15": 23,
+            "2024-11-18": 23,
+            "2024-11-19": 23,
+            "2024-11-20": 23,
+            "2024-11-21": 23,
+            "2024-11-22": 23,
+            "2024-11-25": 23,
+            "2024-11-26": 23,
+            "2024-11-27": 23,
+            "2024-11-28": 6,
+            "2024-11-29": 5,
+            "2024-12-02": 23,
+            "2024-12-03": 23,
+            "2024-12-04": 23,
+            "2024-12-05": 23,
+            "2024-12-06": 23,
+            "2024-12-09": 23,
+            "2024-12-10": 23,
+            "2024-12-11": 23,
+            "2024-12-12": 23,
+            "2024-12-13": 23,
+            "2024-12-16": 23,
+            "2024-12-17": 23,
+            "2024-12-18": 23,
+            "2024-12-19": 23,
+            "2024-12-20": 23,
+            "2024-12-23": 23,
+            "2024-12-24": 11,
+            "2024-12-26": 17,
+            "2024-12-27": 23,
+            "2024-12-30": 23,
+            "2024-12-31": 23,
+            "2025-01-02": 17,
+            "2025-01-03": 23,
+            "2025-01-06": 23,
+            "2025-01-07": 23,
+            "2025-01-08": 23,
+            "2025-01-09": 23,
+            "2025-01-10": 23,
+            "2025-01-13": 23,
+            "2025-01-14": 23,
+            "2025-01-15": 23,
+            "2025-01-16": 23,
+            "2025-01-17": 23,
+            "2025-01-20": 6,
+            "2025-01-21": 17,
+            "2025-01-22": 23,
+            "2025-01-23": 23,
+            "2025-01-24": 23,
+            "2025-01-27": 23,
+            "2025-01-28": 23,
+            "2025-01-29": 23,
+            "2025-01-30": 23,
+            "2025-01-31": 23,
+            "2025-02-03": 23,
+            "2025-02-04": 23,
+            "2025-02-05": 23,
+            "2025-02-06": 23,
+            "2025-02-07": 23,
+            "2025-02-10": 23,
+            "2025-02-11": 23,
+            "2025-02-12": 23,
+            "2025-02-13": 23,
+            "2025-02-14": 23,
+            "2025-02-17": 6,
+            "2025-02-18": 17,
+            "2025-02-19": 23,
+            "2025-02-20": 23,
+            "2025-02-21": 23,
+            "2025-02-24": 23,
+            "2025-02-25": 23,
+            "2025-02-26": 23,
+            "2025-02-27": 23,
+            "2025-02-28": 23,
+            "2025-03-03": 23,
+            "2025-03-04": 23,
+            "2025-03-05": 23,
+            "2025-03-06": 23,
+            "2025-03-07": 23,
+            "2025-03-10": 23,
+            "2025-03-11": 23,
+            "2025-03-12": 23,
+            "2025-03-13": 23,
+            "2025-03-14": 23,
+            "2025-03-17": 23,
+            "2025-03-18": 23,
+            "2025-03-19": 23,
+            "2025-03-20": 23,
+            "2025-03-21": 23,
+            "2025-03-24": 23,
+            "2025-03-25": 23,
+            "2025-03-26": 23,
+            "2025-03-27": 23,
+            "2025-03-28": 23,
+            "2025-03-31": 23,
+            "2025-04-01": 23,
+            "2025-04-02": 23,
+            "2025-04-03": 23,
+            "2025-04-04": 23,
+            "2025-04-07": 23,
+            "2025-04-08": 23,
+            "2025-04-09": 23,
+            "2025-04-10": 23,
+            "2025-04-11": 23,
+            "2025-04-14": 23,
+            "2025-04-15": 23,
+            "2025-04-16": 23,
+            "2025-04-17": 23,
+            "2025-04-21": 23,
+            "2025-04-22": 23,
+            "2025-04-23": 23,
+            "2025-04-24": 23,
+            "2025-04-25": 23,
+            "2025-04-28": 23,
+            "2025-04-29": 23,
+            "2025-04-30": 23,
+            "2025-05-01": 23,
+            "2025-05-02": 23,
+            "2025-05-05": 23,
+            "2025-05-06": 23,
+            "2025-05-07": 23,
+            "2025-05-08": 23,
+            "2025-05-09": 23,
+            "2025-05-12": 23,
+            "2025-05-13": 23,
+            "2025-05-14": 23,
+            "2025-05-15": 23,
+            "2025-05-16": 23,
+            "2025-05-19": 23,
+            "2025-05-20": 23,
+            "2025-05-21": 23,
+            "2025-05-22": 23,
+            "2025-05-23": 23,
+            "2025-05-26": 21,
+            "2025-05-27": 23,
+            "2025-05-28": 23,
+            "2025-05-29": 23,
+            "2025-05-30": 23,
+            "2025-06-02": 23,
+            "2025-06-03": 23,
+            "2025-06-04": 23,
+            "2025-06-05": 23,
+            "2025-06-06": 23,
+            "2025-06-09": 23,
+            "2025-06-10": 23,
+            "2025-06-11": 23,
+            "2025-06-12": 23,
+            "2025-06-13": 23,
+            "2025-06-16": 23,
+            "2025-06-17": 23,
+            "2025-06-18": 23,
+            "2025-06-19": 21,
+            "2025-06-20": 23,
+            "2025-06-23": 23,
+            "2025-06-24": 23,
+            "2025-06-25": 23,
+            "2025-06-26": 23,
+            "2025-06-27": 23,
+            "2025-06-30": 23,
+            "2025-07-01": 23,
+            "2025-07-02": 23,
+            "2025-07-03": 11,
+            "2025-07-04": 13,
+            "2025-07-07": 23,
+            "2025-07-08": 23,
+            "2025-07-09": 23,
+            "2025-07-10": 23,
+            "2025-07-11": 23,
+            "2025-07-14": 17,
+            "2025-07-15": 23,
+            "2025-07-16": 23,
+            "2025-07-17": 23,
+            "2025-07-18": 23,
+            "2025-07-21": 23,
+            "2025-07-22": 23,
+            "2025-07-23": 23,
+            "2025-07-24": 23,
+            "2025-07-25": 23,
+            "2025-07-28": 21,
+            "2025-07-29": 23,
+            "2025-07-30": 23,
+            "2025-07-31": 23,
+            "2025-08-01": 23,
+            "2025-08-04": 23,
+            "2025-08-05": 23,
+            "2025-08-06": 23,
+            "2025-08-07": 23,
+            "2025-08-08": 23,
+            "2025-08-11": 23,
+            "2025-08-12": 23,
+            "2025-08-13": 23,
+            "2025-08-14": 23,
+            "2025-08-15": 23,
+            "2025-08-18": 23,
+            "2025-08-19": 23,
+            "2025-08-20": 23,
+            "2025-08-21": 23,
+            "2025-08-22": 23,
+            "2025-08-25": 23,
+            "2025-08-26": 23,
+            "2025-08-27": 23,
+            "2025-08-28": 23,
+            "2025-08-29": 23,
+            "2025-09-02": 17,
+            "2025-09-03": 23,
+            "2025-09-04": 23,
+            "2025-09-05": 23,
+            "2025-09-08": 23,
+            "2025-09-09": 23,
+            "2025-09-10": 23,
+            "2025-09-11": 23,
+            "2025-09-12": 23,
+            "2025-09-15": 23,
+            "2025-09-16": 22,
+            "2025-09-17": 23,
+            "2025-09-18": 23,
+            "2025-09-19": 23,
+            "2025-09-22": 23,
+            "2025-09-23": 23,
+            "2025-09-24": 23,
+            "2025-09-25": 23,
+            "2025-09-26": 23,
+            "2025-09-29": 23,
+            "2025-09-30": 23,
+            "2025-10-01": 23,
+            "2025-10-02": 23,
+            "2025-10-03": 23,
+            "2025-10-06": 23,
+            "2025-10-07": 14,
+            "2025-10-08": 23,
+            "2025-10-09": 23,
+            "2025-10-10": 23,
+            "2025-10-13": 23,
+            "2025-10-14": 23,
+            "2025-10-15": 23,
+            "2025-10-16": 23,
+            "2025-10-17": 23,
+            "2025-10-20": 23,
+            "2025-10-21": 23,
+            "2025-10-22": 23,
+            "2025-10-23": 23,
+            "2025-10-24": 23,
+            "2025-10-27": 23,
+            "2025-10-28": 23,
+            "2025-10-29": 23,
+            "2025-10-30": 23,
+            "2025-10-31": 23,
+            "2025-11-03": 23,
+            "2025-11-04": 23,
+            "2025-11-05": 23,
+            "2025-11-06": 23,
+            "2025-11-07": 23,
+            "2025-11-10": 23,
+            "2025-11-11": 23,
+            "2025-11-12": 23,
+            "2025-11-13": 23,
+            "2025-11-14": 23,
+            "2025-11-17": 23,
+            "2025-11-18": 23,
+            "2025-11-19": 23,
+            "2025-11-20": 23,
+            "2025-11-21": 23,
+            "2025-11-24": 23,
+            "2025-11-25": 23,
+            "2025-11-26": 23,
+            "2025-11-27": 6,
+            "2025-11-28": 5,
+            "2025-12-01": 23,
+            "2025-12-02": 23,
+            "2025-12-03": 23,
+            "2025-12-04": 23,
+            "2025-12-05": 23,
+            "2025-12-08": 23,
+            "2025-12-09": 23,
+            "2025-12-10": 23,
+            "2025-12-11": 23,
+            "2025-12-12": 23,
+            "2025-12-15": 23,
+            "2025-12-16": 23,
+            "2025-12-17": 23,
+            "2025-12-18": 23,
+            "2025-12-19": 23,
+            "2025-12-22": 23,
+            "2025-12-23": 23,
+            "2025-12-24": 11,
+            "2025-12-26": 17,
+            "2025-12-29": 23,
+            "2025-12-30": 23,
+            "2025-12-31": 23,
+            "2026-01-02": 17,
+            "2026-01-05": 23,
+            "2026-01-06": 23,
+            "2026-01-07": 23,
+            "2026-01-08": 23,
+            "2026-01-09": 23,
+            "2026-01-12": 23,
+            "2026-01-13": 23,
+            "2026-01-14": 23,
+            "2026-01-15": 23,
+            "2026-01-16": 23,
+            "2026-01-19": 1,
+            "2026-01-20": 17,
+            "2026-01-21": 23,
+            "2026-01-22": 23,
+            "2026-01-23": 23,
+            "2026-01-26": 23,
+            "2026-01-27": 23,
+            "2026-01-28": 23,
+            "2026-01-29": 23,
+            "2026-01-30": 17,
+            "2026-02-02": 4,
+            "2026-02-03": 23,
+            "2026-02-04": 23,
+            "2026-02-05": 23,
+            "2026-02-06": 23,
+            "2026-02-09": 23,
+            "2026-02-10": 23,
+            "2026-02-11": 23,
+            "2026-02-12": 23,
+            "2026-02-13": 23,
+            "2026-02-16": 6,
+            "2026-02-17": 17,
+            "2026-02-18": 23,
+            "2026-02-19": 23,
+            "2026-02-20": 23,
+            "2026-02-23": 23,
+            "2026-02-24": 23,
+            "2026-02-25": 23,
+            "2026-02-26": 23,
+            "2026-02-27": 23,
+            "2026-03-02": 23,
+            "2026-03-03": 23,
+            "2026-03-04": 23,
+            "2026-03-05": 23,
+            "2026-03-06": 23,
+            "2026-03-09": 23,
+            "2026-03-10": 23,
+            "2026-03-11": 23,
+            "2026-03-12": 23,
+            "2026-03-13": 23,
+            "2026-03-16": 23,
+            "2026-03-17": 23,
+            "2026-03-18": 23,
+            "2026-03-19": 23,
+            "2026-03-20": 23,
+            "2026-03-23": 23,
+            "2026-03-24": 23,
+            "2026-03-25": 23,
+            "2026-03-26": 23,
+            "2026-03-27": 23,
+            "2026-03-30": 23,
+            "2026-03-31": 23,
+            "2026-04-01": 23,
+            "2026-04-02": 23,
+            "2026-04-06": 23,
+            "2026-04-07": 23,
+            "2026-04-08": 23,
+            "2026-04-09": 23,
+            "2026-04-10": 23,
+            "2026-04-13": 23,
+            "2026-04-14": 23,
+            "2026-04-15": 23,
+            "2026-04-16": 23,
+            "2026-04-17": 23,
+            "2026-04-20": 17,
+            "2026-04-21": 23,
+            "2026-04-22": 23,
+            "2026-04-23": 23,
+            "2026-04-24": 23,
+            "2026-04-27": 23,
+            "2026-04-28": 23,
+            "2026-04-29": 23,
+            "2026-04-30": 23,
+            "2026-05-01": 23,
+            "2026-05-04": 23,
+            "2026-05-05": 23,
+            "2026-05-06": 23,
+            "2026-05-07": 23,
+            "2026-05-08": 23,
+            "2026-05-11": 23,
+            "2026-05-12": 23,
+            "2026-05-13": 23,
+            "2026-05-14": 23,
+            "2026-05-15": 23,
+            "2026-05-18": 23,
+            "2026-05-19": 23,
+            "2026-05-20": 23,
+            "2026-05-21": 23,
+            "2026-05-22": 23,
+            "2026-05-26": 17,
+            "2026-05-27": 23,
+            "2026-05-28": 23,
+            "2026-05-29": 23,
+            "2026-06-01": 23,
+            "2026-06-02": 23,
+            "2026-06-03": 23,
+            "2026-06-04": 23,
+            "2026-06-05": 23,
+            "2026-06-08": 23,
+            "2026-06-09": 23,
+            "2026-06-10": 23,
+            "2026-06-11": 23,
+            "2026-06-12": 23,
+            "2026-06-15": 23,
+            "2026-06-16": 23,
+            "2026-06-17": 23,
+            "2026-06-18": 23,
+            "2026-06-19": 6,
+            "2026-06-22": 23,
+            "2026-06-23": 23,
+            "2026-06-24": 23,
+            "2026-06-25": 23,
+            "2026-06-26": 23,
+            "2026-06-29": 23,
+            "2026-06-30": 23,
+            "2026-07-01": 23,
+            "2026-07-02": 23,
+            "2026-07-03": 6,
+            "2026-07-06": 23,
+            "2026-07-07": 23,
+            "2026-07-08": 23,
+            "2026-07-09": 23,
+            "2026-07-10": 23,
+            "2026-07-13": 23,
+            "2026-07-14": 23,
+            "2026-07-15": 23,
+            "2026-07-16": 23,
+            "2026-07-17": 23,
+            "2026-07-20": 23,
+            "2026-07-21": 23,
+            "2026-07-22": 23,
+            "2026-07-23": 23,
+            "2026-07-24": 23,
+            "2026-07-27": 23,
+            "2026-07-28": 23,
+            "2026-07-29": 23,
+            "2026-07-30": 23,
+            "2026-07-31": 23,
+            "2026-08-03": 23,
+            "2026-08-04": 23,
+            "2026-08-05": 23,
+            "2026-08-06": 23,
+            "2026-08-07": 23,
+            "2026-08-10": 23,
+            "2026-08-11": 23,
+            "2026-08-12": 23,
+            "2026-08-13": 23,
+            "2026-08-14": 23,
+            "2026-08-17": 23,
+            "2026-08-18": 23,
+            "2026-08-19": 23,
+            "2026-08-20": 23,
+            "2026-08-21": 23,
+            "2026-08-24": 23,
+            "2026-08-25": 23,
+            "2026-08-26": 23,
+            "2026-08-27": 23,
+            "2026-08-28": 23,
+            "2026-08-31": 23,
+            "2026-09-01": 23,
+            "2026-09-02": 23,
+            "2026-09-03": 23,
+            "2026-09-04": 23,
+            "2026-09-08": 17,
+            "2026-09-09": 23,
+            "2026-09-10": 23,
+            "2026-09-11": 23,
+            "2026-09-14": 23,
+            "2026-09-15": 23,
+            "2026-09-16": 23,
+            "2026-09-17": 23,
+            "2026-09-18": 23,
+            "2026-09-21": 23,
+            "2026-09-22": 23,
+            "2026-09-23": 23,
+            "2026-09-24": 23,
+            "2026-09-25": 23,
+            "2026-09-28": 23,
+            "2026-09-29": 23,
+            "2026-09-30": 23,
+            "2026-10-01": 23,
+            "2026-10-02": 23
+          },
+          "raw_captures": [
+            {
+              "capture_dir": "D:\\Codex\\GHPR_ReadOnly_Diagnosis_20261004\\implementation\\prices-older-hourly",
+              "raw_path": "D:\\Codex\\GHPR_ReadOnly_Diagnosis_20261004\\implementation\\prices-older-hourly\\yahoo_gc_f_1h_raw.json",
+              "raw_sha256": "493bbcff9826ca3c19caf9f2b26d5a607fc0e5704fd2d10a3252ee02a2e0fbfa",
+              "fetch_path": "D:\\Codex\\GHPR_ReadOnly_Diagnosis_20261004\\implementation\\prices-older-hourly\\yahoo_gc_f_1h_fetch.json",
+              "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1728086400&period2=1759276800&interval=1h&events=history",
+              "fetched_at_utc": "2026-10-04T16:11:30.892029+00:00",
+              "requested_start_utc": "2024-10-05T00:00:00+00:00",
+              "requested_end_exclusive_utc": "2025-10-01T00:00:00+00:00",
+              "raw_rows": 7171,
+              "normalized_rows": 5675,
+              "excluded_rows": 1496,
+              "excluded_counts": {
+                "missing_or_invalid_ohlc_chart_slot": 1492,
+                "outside_cme_regular_session": 2,
+                "outside_requested_source_window": 2
+              }
+            },
+            {
+              "capture_dir": "D:\\Codex\\GHPR_ReadOnly_Diagnosis_20261004\\implementation\\prices-year",
+              "raw_path": "D:\\Codex\\GHPR_ReadOnly_Diagnosis_20261004\\implementation\\prices-year\\yahoo_gc_f_1h_raw.json",
+              "raw_sha256": "5bbdfa223695a2343b4be17b7fe44ba542736bda2005d7a764312adaebaf59a4",
+              "fetch_path": "D:\\Codex\\GHPR_ReadOnly_Diagnosis_20261004\\implementation\\prices-year\\yahoo_gc_f_1h_fetch.json",
+              "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1759276800&period2=1791072000&interval=1h&events=history",
+              "fetched_at_utc": "2026-10-04T16:00:55.292889+00:00",
+              "requested_start_utc": "2025-10-01T00:00:00+00:00",
+              "requested_end_exclusive_utc": "2026-10-04T00:00:00+00:00",
+              "raw_rows": 7280,
+              "normalized_rows": 5736,
+              "excluded_rows": 1544,
+              "excluded_counts": {
+                "missing_or_invalid_ohlc_chart_slot": 1540,
+                "outside_cme_regular_session": 3,
+                "non_minute_quote_snapshot": 1
+              }
+            }
+          ],
+          "overlap_resolution": [],
+          "normalized_csv_sha256": "2c04d7e35d97d1c4889b8cf675f19295f70d82fc377db6749f13eda37f2d8f41",
+          "limitations": [
+            "Vendor H1 bucket bounds do not identify an exact trade or tick timestamp.",
+            "Holiday-specific actual closing times are not encoded; bucket ends are nominal upper bounds.",
+            "A matching price observed in partial hourly coverage does not establish the first or every occurrence.",
+            "No synthetic prices or time interpolation were applied."
+          ]
+        }
+      },
+      "cot_release_calendar": {
+        "file": "cot_release_evidence.json",
+        "sha256": "a73b6093bf7bbc744321326e86c48ebb823ba17dba7e799c75070d5d3ca13b2e"
+      },
+      "historical_price_recovery_review": {
+        "file": "historical_price_recovery_review.json",
+        "sha256": "16c0ba33345b519036dd120c673329cc952f1f38dbda784836141ed49b243302"
+      }
+    }
+  },
   "retained_history_rows": [],
   "archive_summary": {
     "preserved_complete_rows": 0,
-    "daily_recomputed_hourly_archived_rows": 0,
+    "daily_recomputed_hourly_archived_rows": 87,
     "outside_active_scope_rows": 0,
     "rule": "Full-history D1 is recalculated. Outside the H1 query window, prior hourly evidence is retained only when daily prices and coverage agree; PARTIAL stays PARTIAL. Current-window gaps are never masked."
   },
   "input_audit": {
-    "daily_accepted": 4281,
-    "hourly_accepted": 11411,
+    "daily_accepted": 4286,
+    "hourly_accepted": 2007,
     "daily_rejections": [],
     "hourly_rejections": []
   }

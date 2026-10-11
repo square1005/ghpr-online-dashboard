@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import math
 from pathlib import Path
 
 import matplotlib
@@ -27,6 +28,7 @@ CONTEXT_COLUMNS = ["gold_return_1w", "gold_return_2w", "gold_return_4w", "gold_r
 REQUIRED_COLUMNS = ["date", "gold_close", *FEATURE_COLUMNS]
 FORWARD_HORIZONS = [1, 2, 4, 8]
 MAX_DISTANCE_POINTS = 300
+SIMILARITY_RANK_SCALE = 10**10
 DEFAULT_EXCLUDE_RECENT_WEEKS = 52
 
 REPORTS_DIR = PROJECT_ROOT / "outputs" / "reports"
@@ -65,6 +67,11 @@ def add_forward_returns(frame: pd.DataFrame) -> pd.DataFrame:
     for weeks in FORWARD_HORIZONS:
         out[f"forward_return_{weeks}w"] = out["gold_close"].shift(-weeks) / out["gold_close"] - 1
     return out
+
+
+def similarity_rank_key(score: float) -> int:
+    """Shared Python/JavaScript half-up key; only ordering is quantized."""
+    return math.floor(float(score) * SIMILARITY_RANK_SCALE + 0.5)
 
 
 def compute_current_similarity(
@@ -119,7 +126,13 @@ def compute_current_similarity(
         if optional in candidates.columns:
             output_columns.append(optional)
 
-    result = candidates.sort_values(["distance", "date"], ascending=[True, True]).head(top_n).copy()
+    # Preserve the model's raw distance and score. Quantize only the sorting key
+    # so CSV parsing/arithmetic noise cannot choose a different top-N tie in JS.
+    # Explicit floor(x + 0.5) matches the browser and avoids Python tie-to-even.
+    candidates["_similarity_rank_key"] = candidates["similarity_score"].map(similarity_rank_key)
+    result = candidates.sort_values(
+        ["_similarity_rank_key", "date"], ascending=[False, True]
+    ).head(top_n).copy()
     result = result[output_columns].copy()
     result.insert(0, "rank", range(1, len(result) + 1))
 

@@ -26,20 +26,20 @@ Net 8W is the current swing baseline. Net 26W is the research candidate because 
 
 | Field | Value |
 |---|---|
-| date | `2026-10-06` |
-| gold_close | `4,187.10` |
-| long_baseline_8w | `-25.00 pct points` |
-| long_candidate_26w | `1.28 pct points` |
-| long_alignment_status | `BASELINE_NEGATIVE_CANDIDATE_POSITIVE` |
-| short_baseline_8w | `10.90 pct points` |
-| short_candidate_2w | `11.54 pct points` |
-| short_candidate_4w | `10.90 pct points` |
-| short_candidate_fast_avg | `11.22 pct points` |
+| date | `2026-10-13` |
+| gold_close | `4,177.30` |
+| long_baseline_8w | `-32.69 pct points` |
+| long_candidate_26w | `-8.97 pct points` |
+| long_alignment_status | `SAME_DIRECTION_NEGATIVE` |
+| short_baseline_8w | `14.10 pct points` |
+| short_candidate_2w | `12.18 pct points` |
+| short_candidate_4w | `16.03 pct points` |
+| short_candidate_fast_avg | `14.10 pct points` |
 | short_alignment_status | `SAME_DIRECTION_POSITIVE` |
-| net_baseline_8w | `-28.85 pct points` |
-| net_candidate_26w | `12.18 pct points` |
+| net_baseline_8w | `-35.26 pct points` |
+| net_candidate_26w | `1.28 pct points` |
 | net_alignment_status | `BASELINE_NEGATIVE_CANDIDATE_POSITIVE` |
-| overall_velocity_reading | `MEDIUM_TERM_PARTICIPATION_BUILDING` |
+| overall_velocity_reading | `MIXED_STRUCTURE` |
 
 ## 7. Overall Reading Distribution
 
@@ -47,16 +47,16 @@ Net 8W is the current swing baseline. Net 26W is the research candidate because 
 |---|---:|
 | MEDIUM_TERM_STRUCTURE_WEAKENING | 393 |
 | MEDIUM_TERM_PARTICIPATION_BUILDING | 333 |
-| MIXED_STRUCTURE | 108 |
+| MIXED_STRUCTURE | 109 |
 | SHORT_TERM_RECOVERY_MEDIUM_TERM_UNCONFIRMED | 53 |
 | SHORT_TERM_ONLY_REACTION | 6 |
 
 ## 8. Are Long / Short / Net Aligned?
 
-- Long alignment: `BASELINE_NEGATIVE_CANDIDATE_POSITIVE`.
+- Long alignment: `SAME_DIRECTION_NEGATIVE`.
 - Short alignment: `SAME_DIRECTION_POSITIVE`.
 - Net alignment: `BASELINE_NEGATIVE_CANDIDATE_POSITIVE`.
-- Overall reading: `MEDIUM_TERM_PARTICIPATION_BUILDING`.
+- Overall reading: `MIXED_STRUCTURE`.
 
 ## 9. Should GHPR Replace 8W Now?
 

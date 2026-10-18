@@ -1,16 +1,16 @@
 {
-  "generated_at_utc": "2026-10-11T01:33:10.304343+00:00",
-  "expected_latest_date": "2026-10-06",
+  "generated_at_utc": "2026-10-18T23:28:07.993436+00:00",
+  "expected_latest_date": "2026-10-13",
   "overall_status": "OK",
   "source_check": {
     "sources": {
       "cftc": {
         "url": "https://www.cftc.gov/dea/newcot/f_disagg.txt",
-        "observation_date": "2026-10-06",
-        "fetched_at_utc": "2026-10-11T01:31:01.535125+00:00",
-        "sha256": "fa52a3a4735649d00652bf3620647c719b3f30ca9715f45e5214256ab1debeae",
-        "response_sha256": "46e2ba8d4deb6826c4bb16610e90fbfa450efe1439724abb10ff28296874bb7b",
-        "response_last_modified": "Fri, 09 Oct 2026 19:27:49 GMT",
+        "observation_date": "2026-10-13",
+        "fetched_at_utc": "2026-10-18T23:26:41.480552+00:00",
+        "sha256": "3d75674c89174733f78efee0d07f099cd6f093097e6d59a0cbd0d8becc59253c",
+        "response_sha256": "2b8b86929b5ee64ef7447b2b348c960627d6c9bc6893b2a979bee3281f8124f9",
+        "response_last_modified": "Fri, 16 Oct 2026 19:27:46 GMT",
         "actual_publication_at_utc": null,
         "publication_time_note": "Fetch time and HTTP Last-Modified are not verified actual publication time.",
         "report_type": "Disaggregated Futures Only",
@@ -18,19 +18,19 @@
       },
       "schema_version": 1,
       "gold": {
-        "url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1780531200&period2=1791682261&interval=1d",
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1781136000&period2=1792366001&interval=1d",
         "symbol": "GC=F",
         "instrument": "COMEX gold futures proxy",
-        "observation_date": "2026-10-09",
-        "fetched_at_utc": "2026-10-11T01:31:02.690986+00:00",
-        "sha256": "39ff97c9b4b14a82b25c177835c518aec046f9b2bcb2b6f22ac3164242980dc9",
-        "response_sha256": "eea040dca43b47f9eb4256cc05454003280afb7d68c5d24c39f58b666e398406",
-        "ohlc_sha256": "c5f5b8c6d0b30d85de06aebe62a02f28eba24cfe4bae1271c50e6aa926db411b",
+        "observation_date": "2026-10-16",
+        "fetched_at_utc": "2026-10-18T23:26:42.306243+00:00",
+        "sha256": "f46df74a5316a8630df53ed2aa26ee35d86038789900707d1b589fcc10d9cbcf",
+        "response_sha256": "d8f6fb58da949d439a6e8802c57f80323f91f243d7069d8998e016fff9b04343",
+        "ohlc_sha256": "d9f696c40f8573a9042e6fee71bb72ad181d74e3f74ba725624610c9c703f464",
         "dataset_mode": "incremental_merge",
         "previous_snapshot": {
-          "sha256": "3002e4b2115e59761bb09365f05883e1a6438ad67d9100f337fef4e535795924",
-          "ohlc_sha256": "5ae1ae0c7da700f29563f524dd874d99b7754b11727e7fd44e11cb8275c0725d",
-          "metadata_sha256": "c671137151c8fd704ea94192c68bb4668e4b760425211c01563eb6255523e8f7"
+          "sha256": "39ff97c9b4b14a82b25c177835c518aec046f9b2bcb2b6f22ac3164242980dc9",
+          "ohlc_sha256": "c5f5b8c6d0b30d85de06aebe62a02f28eba24cfe4bae1271c50e6aa926db411b",
+          "metadata_sha256": "003f6c3668f333b434b16cfefe48bde60e07c0f0d7d9eb9acc3d6a0ee9f17ca2"
         },
         "capture_ledger": [
           {
@@ -45,12 +45,19 @@
             "requested_start_utc": "2026-06-04T00:00:00+00:00",
             "requested_end_utc_exclusive": "2026-10-11T01:31:01+00:00",
             "fetched_at_utc": "2026-10-11T01:31:01.731427+00:00"
+          },
+          {
+            "url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1781136000&period2=1792366001&interval=1d",
+            "sha256": "d8f6fb58da949d439a6e8802c57f80323f91f243d7069d8998e016fff9b04343",
+            "requested_start_utc": "2026-06-11T00:00:00+00:00",
+            "requested_end_utc_exclusive": "2026-10-18T23:26:41+00:00",
+            "fetched_at_utc": "2026-10-18T23:26:41.613690+00:00"
           }
         ],
         "response_scope": "latest capture only; merged series is identified by sha256 and ohlc_sha256",
         "raw_retention": "Latest raw response only in this snapshot; capture ledger retains prior hashes and URLs, not prior raw bytes.",
         "refresh_overlap_days": 120,
-        "request_start_date": "2026-06-04",
+        "request_start_date": "2026-06-11",
         "close_quarantined_records": [],
         "coverage_validation": "Known cached dates in the requested overlap must recur; recent invalid bars fail. Absent never-before-seen sessions are not proven present by the four-day freshness limit; downstream week coverage remains explicit.",
         "bar_interval": "1d",
@@ -172,8 +179,8 @@
       }
     },
     "errors": [],
-    "latest_cftc_available_date": "2026-10-06",
-    "normal_schedule_observation_date": "2026-10-06",
+    "latest_cftc_available_date": "2026-10-13",
+    "normal_schedule_observation_date": "2026-10-13",
     "release_state": "available",
     "schedule_note": "Normal Friday 15:30 America/New_York schedule; holiday or delayed releases may differ. Actual publication time is not inferred."
   },
@@ -182,72 +189,72 @@
     {
       "component": "master",
       "file": "data/processed/ghpr_master_weekly.csv",
-      "latest_date": "2026-10-06",
-      "expected_latest_date": "2026-10-06",
+      "latest_date": "2026-10-13",
+      "expected_latest_date": "2026-10-13",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "hub_summary",
       "file": "outputs/reports/ghpr_summary_for_hub.json",
-      "latest_date": "2026-10-06",
-      "expected_latest_date": "2026-10-06",
+      "latest_date": "2026-10-13",
+      "expected_latest_date": "2026-10-13",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "historical_similarity",
       "file": "outputs/reports/historical_similarity_report.csv",
-      "latest_date": "2026-10-06",
-      "expected_latest_date": "2026-10-06",
+      "latest_date": "2026-10-13",
+      "expected_latest_date": "2026-10-13",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "hse_current_feature_vector",
       "file": "outputs/reports/hse_current_feature_vector.csv",
-      "latest_date": "2026-10-06",
-      "expected_latest_date": "2026-10-06",
+      "latest_date": "2026-10-13",
+      "expected_latest_date": "2026-10-13",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "mm_lifecycle",
       "file": "data/processed/mm_lifecycle_dataset.csv",
-      "latest_date": "2026-10-06",
-      "expected_latest_date": "2026-10-06",
+      "latest_date": "2026-10-13",
+      "expected_latest_date": "2026-10-13",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "mm_structure",
       "file": "data/processed/mm_structure_lifecycle_dataset.csv",
-      "latest_date": "2026-10-06",
-      "expected_latest_date": "2026-10-06",
+      "latest_date": "2026-10-13",
+      "expected_latest_date": "2026-10-13",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "velocity_reading",
       "file": "data/processed/mm_velocity_reading_layer.csv",
-      "latest_date": "2026-10-06",
-      "expected_latest_date": "2026-10-06",
+      "latest_date": "2026-10-13",
+      "expected_latest_date": "2026-10-13",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "velocity_window",
       "file": "data/processed/mm_velocity_window_dataset.csv",
-      "latest_date": "2026-10-06",
-      "expected_latest_date": "2026-10-06",
+      "latest_date": "2026-10-13",
+      "expected_latest_date": "2026-10-13",
       "is_current": true,
       "stale_reason": ""
     },
     {
       "component": "mm_weekly_change",
       "file": "data/processed/mm_weekly_change_dataset.csv",
-      "latest_date": "2026-10-06",
-      "expected_latest_date": "2026-10-06",
+      "latest_date": "2026-10-13",
+      "expected_latest_date": "2026-10-13",
       "is_current": true,
       "stale_reason": ""
     }

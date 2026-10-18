@@ -12,6 +12,7 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 from urllib.parse import parse_qs, urlparse
+from zoneinfo import ZoneInfo
 
 sys.dont_write_bytecode = True
 DRAFT = Path(__file__).resolve().parents[1]
@@ -47,6 +48,57 @@ def write_csv(path, rows):
         writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
+
+
+class CompleteDailyBarTests(unittest.TestCase):
+    zone = ZoneInfo("America/New_York")
+
+    def stamp(self, text):
+        return int(datetime.fromisoformat(text).replace(tzinfo=self.zone).timestamp())
+
+    def now(self, text):
+        return datetime.fromisoformat(text).replace(tzinfo=self.zone)
+
+    def test_sunday_and_weekday_evening_live_quotes_are_not_daily_bars(self):
+        for day in ("2026-10-18", "2026-10-19"):
+            stamp = self.stamp(day + "T19:06:00")
+            with self.subTest(day=day):
+                self.assertFalse(master.is_complete_gold_daily_bar(
+                    stamp, self.now(day + "T20:00:00"), regular_market_time=stamp, is_last=True))
+
+    def test_current_nonmidnight_tail_is_excluded_when_quote_metadata_is_missing_or_mismatched(self):
+        stamp = self.stamp("2026-10-18T19:06:00")
+        for market_time in (None, "1792364760", stamp - 60):
+            with self.subTest(metadata=market_time):
+                self.assertFalse(master.is_complete_gold_daily_bar(
+                    stamp, self.now("2026-10-18T20:00:00"), regular_market_time=market_time, is_last=True))
+
+    def test_completed_midnight_bar_remains_eligible_including_after_new_session_opens(self):
+        stamp = self.stamp("2026-10-16T00:00:00")
+        self.assertTrue(master.is_complete_gold_daily_bar(
+            stamp, self.now("2026-10-18T20:00:00"), regular_market_time=stamp, is_last=True))
+        monday = self.stamp("2026-10-19T00:00:00")
+        self.assertTrue(master.is_complete_gold_daily_bar(
+            monday, self.now("2026-10-19T20:00:00"), regular_market_time=monday, is_last=True))
+
+    def test_current_canonical_bar_waits_until_1715_and_future_bar_is_excluded(self):
+        stamp = self.stamp("2026-10-19T00:00:00")
+        self.assertFalse(master.is_complete_gold_daily_bar(stamp, self.now("2026-10-19T17:14:59")))
+        self.assertTrue(master.is_complete_gold_daily_bar(stamp, self.now("2026-10-19T17:15:00")))
+        self.assertFalse(master.is_complete_gold_daily_bar(stamp, self.now("2026-10-18T20:00:00")))
+
+    def test_historical_holiday_0930_bar_is_preserved_even_at_tail(self):
+        stamp = self.stamp("2016-11-25T09:30:00")
+        for is_last in (False, True):
+            self.assertTrue(master.is_complete_gold_daily_bar(
+                stamp, self.now("2026-10-18T20:00:00"), regular_market_time=1792364760, is_last=is_last))
+
+    def test_historical_nonmidnight_regular_market_tail_is_excluded(self):
+        stamp = self.stamp("2026-10-16T16:59:00")
+        self.assertFalse(master.is_complete_gold_daily_bar(
+            stamp, self.now("2026-10-18T20:00:00"), regular_market_time=stamp, is_last=True))
+        self.assertTrue(master.is_complete_gold_daily_bar(
+            stamp, self.now("2026-10-18T20:00:00"), regular_market_time=stamp, is_last=False))
 
 
 class DailyIncrementalTests(unittest.TestCase):
@@ -155,6 +207,47 @@ class DailyIncrementalTests(unittest.TestCase):
         second_metadata = json.loads((self.root / 'outputs/reports/source_status.json').read_text())['gold']
         self.assertEqual(second_metadata['dataset_mode'], 'incremental_merge')
         self.assertEqual(len(second_metadata['capture_ledger']), 3)
+
+    def test_live_tail_is_excluded_before_quarantine_while_retaining_history_and_raw_evidence(self):
+        zone = ZoneInfo("America/New_York")
+        today = date.today()
+        now = datetime(today.year, today.month, today.day, 20, tzinfo=zone)
+        live_stamp = int(now.replace(hour=19, minute=6).timestamp())
+
+        class FrozenDateTime(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return now.astimezone(tz) if tz else now.replace(tzinfo=None)
+
+        for live_close in (4200.6, None):
+            with self.subTest(live_close=live_close):
+                root = self.root / str(live_close)
+                output, ohlc, previous = self.make_cache(root)
+                response = self.response()
+                payload = response.json.return_value
+                result = payload["chart"]["result"][0]
+                result["meta"]["regularMarketTime"] = live_stamp
+                result["timestamp"].append(live_stamp)
+                for field, values in result["indicators"]["quote"][0].items():
+                    values.append(live_close if field != "volume" else 5)
+                response.content = json.dumps(payload).encode()
+                errors = []
+                with self.patch_master(root), patch.object(master, "datetime", FrozenDateTime), patch.object(
+                        master.requests, "get", return_value=response):
+                    self.assertTrue(master.download_yahoo_chart(output, today.year, errors), errors)
+                with output.open(newline="", encoding="utf-8") as handle:
+                    closes = list(csv.DictReader(handle))
+                with ohlc.open(newline="", encoding="utf-8") as handle:
+                    bars = list(csv.DictReader(handle))
+                self.assertNotIn(today.isoformat(), {row["Date"] for row in closes})
+                self.assertNotIn(today.isoformat(), {row["date"] for row in bars})
+                metadata = json.loads((root / "outputs/reports/source_status.json").read_text())["gold"]
+                self.assertEqual(metadata["observation_date"], self.newest.isoformat())
+                self.assertEqual(metadata["ohlc_quarantined_records"], previous["ohlc_quarantined_records"])
+                self.assertEqual(metadata["close_quarantined_records"], [])
+                self.assertEqual(next(row["Close"] for row in closes if row["Date"] == self.legacy.isoformat()), "101")
+                self.assertEqual((output.parent / "gc_daily_yahoo.json").read_bytes(), response.content)
+
 
     def test_missing_overlap_close_or_ohlc_rejects_without_changing_any_saved_bytes(self):
         for case in ('close_missing', 'ohlc_invalid'):

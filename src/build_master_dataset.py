@@ -375,6 +375,23 @@ def verified_gold_cache(output: Path, ohlc_path: Path) -> dict | None:
         return None
 
 
+def is_complete_gold_daily_bar(timestamp: int, now_exchange: datetime, *,
+                               regular_market_time: int | None = None, is_last: bool = False) -> bool:
+    """Exclude Yahoo's appended live quote without discarding historical holiday bars."""
+    bar = datetime.fromtimestamp(timestamp, ZoneInfo("America/New_York"))
+    now_exchange = now_exchange.astimezone(ZoneInfo("America/New_York"))
+    is_midnight = (bar.hour, bar.minute, bar.second, bar.microsecond) == (0, 0, 0, 0)
+    # Yahoo can append the current quote timestamp after its dated daily bars.
+    # After 18:00 ET that quote belongs to the newly opened futures session.
+    # A current-day nonmidnight tail is uncertain even if quote metadata is absent.
+    if is_last and not is_midnight and (
+            timestamp == regular_market_time or bar.date() == now_exchange.date()):
+        return False
+    # GC's trading day finishes at 17:00 ET; retain the existing 15-minute buffer.
+    return bar.date() < now_exchange.date() or (
+        bar.date() == now_exchange.date() and (now_exchange.hour, now_exchange.minute) >= (17, 15))
+
+
 def download_yahoo_chart(output: Path, end_year: int, errors: list[str]) -> bool:
     ohlc_path = PROJECT_ROOT / "data" / "processed" / "gold_daily_ohlc.csv"
     cache = verified_gold_cache(output, ohlc_path) if end_year >= date.today().year else None
@@ -414,10 +431,11 @@ def download_yahoo_chart(output: Path, end_year: int, errors: list[str]) -> bool
     for index, (timestamp, close) in enumerate(zip(timestamps, closes, strict=False)):
         if not period1 <= timestamp < period2:
             continue
-        bar_date = pd.to_datetime(timestamp, unit="s", utc=True).tz_convert("America/New_York").date()
-        # GC's trading day finishes at 17:00 ET; wait 15 minutes for a full bar.
-        if bar_date > now_exchange.date() or (bar_date == now_exchange.date() and (now_exchange.hour, now_exchange.minute) < (17, 15)):
+        if not is_complete_gold_daily_bar(timestamp, now_exchange,
+                                          regular_market_time=result["meta"].get("regularMarketTime"),
+                                          is_last=index == len(timestamps) - 1):
             continue
+        bar_date = datetime.fromtimestamp(timestamp, ZoneInfo("America/New_York")).date()
         if close is None or not math.isfinite(close) or close <= 0:
             quarantined_close.append({"date": bar_date.isoformat(), "reason": "missing/nonpositive/nonfinite close"})
             continue

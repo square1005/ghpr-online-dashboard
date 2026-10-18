@@ -2,10 +2,12 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from contextlib import chdir
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import sys
 import unittest
+from unittest.mock import patch
 
 sys.dont_write_bytecode = True
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +28,39 @@ def published_success(verified_at="2026-10-04T16:00:00+00:00", reason="manual"):
         "publication_state": "verified_on_github_main", "trigger_reason": reason,
         "scheduler_invocation": reason != "manual",
     }
+
+
+class SchedulerEntrypointTests(unittest.TestCase):
+    def test_default_config_uses_existing_implementation_directory(self):
+        with patch.object(scheduler, "run_scheduler", return_value=0) as run:
+            self.assertEqual(scheduler.main([]), 0)
+        run.assert_called_once_with(PROJECT_ROOT.parent / "auto-config.json", publish=False)
+
+    def test_default_config_is_independent_of_login_working_directory(self):
+        with chdir(PROJECT_ROOT / "tests"):
+            with patch.object(scheduler, "run_scheduler", return_value=0) as run:
+                self.assertEqual(scheduler.main(["--publish"]), 0)
+        run.assert_called_once_with(PROJECT_ROOT.parent / "auto-config.json", publish=True)
+
+    def test_explicit_config_still_overrides_default(self):
+        explicit = PROJECT_ROOT / "tests" / "explicit-config.json"
+        with patch.object(scheduler, "run_scheduler", return_value=0) as run:
+            self.assertEqual(scheduler.main(["--config", str(explicit), "--publish"]), 0)
+        run.assert_called_once_with(explicit, publish=True)
+
+    def test_existing_windows_run_command_fits_without_config_argument(self):
+        pythonw = r"C:\Users\Administrator\AppData\Local\Programs\Python\Python314\pythonw.exe"
+        implementation = r"D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation"
+        script = implementation + r"\ghpr-engine-candidate\scripts\auto_scheduler.py"
+        config = implementation + r"\auto-config.json"
+        original = f'"{pythonw}" -B "{script}" --config "{config}" --publish'
+        shortened = f'"{pythonw}" -B "{script}" --publish'
+        self.assertEqual(len(original), 281)
+        self.assertGreater(len(original), 260)
+        self.assertEqual(len(shortened), 196)
+        self.assertLessEqual(len(shortened), 260)
+        self.assertTrue(shortened.endswith(" --publish"))
+        self.assertNotIn("--config", shortened)
 
 
 class WeeklyCalendarTests(unittest.TestCase):
@@ -148,6 +183,22 @@ class WeeklyPlanningTests(unittest.TestCase):
         self.assertTrue(plan["should_run"])
         self.assertEqual(plan["week_key"], "2026-10-11")
         self.assertEqual(plan["due"], NEXT_DUE)
+
+    def test_october_18_catchup_is_not_suppressed_by_october_11_manual_success(self):
+        now = datetime(2026, 10, 18, 23, 20, tzinfo=UTC)
+        due = datetime(2026, 10, 18, tzinfo=UTC)
+        previous = {"last_completed_week_key": "2026-10-11"}
+        last_good = published_success("2026-10-11T01:33:33.819708+00:00", "manual")
+        original = deepcopy(last_good)
+        plan = scheduler.weekly_plan(now, previous, last_good)
+        self.assertTrue(plan["should_run"])
+        self.assertEqual(plan["due"], due)
+        self.assertEqual(plan["planned_next_run_utc"], due.isoformat())
+        self.assertEqual(plan["last_completed_week_key"], "2026-10-11")
+        self.assertEqual(plan["completion_evidence"]["trigger_reason"], "manual")
+        self.assertEqual(plan["completion_evidence"]["run_id"], last_good["run_id"])
+        self.assertEqual(last_good, original, "Catchup planning must preserve the prior manual success")
+        self.assertEqual(previous, {"last_completed_week_key": "2026-10-11"})
 
     def test_older_last_good_does_not_overwrite_newer_persisted_completion(self):
         evidence = {"week_key": "2026-10-04", "run_id": "newer", "trigger_reason": "scheduled_slot"}

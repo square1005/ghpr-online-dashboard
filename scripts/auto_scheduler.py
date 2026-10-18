@@ -197,7 +197,10 @@ def run_scheduler(config_path: Path, publish: bool = False) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", required=True, type=Path)
+    # Keep the existing Windows Run command within its 260-character limit.
+    # Resolve from this file so login's working directory does not affect it.
+    parser.add_argument("--config", type=Path,
+                        default=Path(__file__).resolve().parents[2] / "auto-config.json")
     parser.add_argument("--publish", action="store_true", help="Enable the previously authorized GitHub publication")
     args = parser.parse_args(argv)
     try:

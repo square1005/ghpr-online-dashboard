@@ -4,8 +4,8 @@
   "source": "Yahoo Finance chart",
   "scope": {
     "cot_start": "2009-09-01",
-    "cot_end": "2026-10-13",
-    "as_of": "2026-10-18T23:26:36.992199+00:00",
+    "cot_end": "2026-10-20",
+    "as_of": "2026-10-25T00:00:03.576928+00:00",
     "scope_months": null,
     "scope_mode": "ALL_MASTER",
     "coverage_scope": "ALL_MASTER",
@@ -136447,7 +136447,7 @@
       "observed_sessions": 4,
       "expected_sessions": 4,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-06-15",
         "2026-06-16",
@@ -136573,7 +136573,6 @@
         }
       ],
       "high_first_hour_bucket_verified": false,
-      "high_weekday_taipei": "Thursday",
       "low_date": "2026-06-18",
       "low_weekday": "Thursday",
       "low_dates": [
@@ -136589,7 +136588,13 @@
       "low_hour_bucket_tie_count": 0,
       "low_observed_hour_buckets": [],
       "low_first_hour_bucket_verified": false,
+      "high_weekday_taipei": "Thursday",
       "low_hourly_comparison_price": 4162.7001953125,
+      "hourly_archive_reference": {
+        "provenance_id": "aaac87356e8ccbb2f1fea3880a8278a36ded4608bd8554968022f8767ea2b7db",
+        "source_snapshot_sha256": "aaac87356e8ccbb2f1fea3880a8278a36ded4608bd8554968022f8767ea2b7db",
+        "source_snapshot_as_of": "2026-10-18T23:26:36.992199+00:00"
+      },
       "time_precision": "mixed",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -139658,20 +139663,26 @@
       "cot_date": "2026-10-13",
       "week_start": "2026-10-19",
       "week_end": "2026-10-23",
-      "open": null,
-      "high": null,
-      "low": null,
-      "close": null,
-      "change": null,
-      "change_pct": null,
-      "range": null,
-      "range_pct": null,
-      "coverage_status": "PARTIAL",
-      "observed_sessions": 0,
+      "open": 4185.0,
+      "high": 4211.2001953125,
+      "low": 3989.10009765625,
+      "close": 4007.89990234375,
+      "change": -177.10009765625,
+      "change_pct": -0.04231782500746717,
+      "range": 222.10009765625,
+      "range_pct": 0.053070513179510156,
+      "coverage_status": "COMPLETE_DAILY",
+      "observed_sessions": 5,
       "expected_sessions": 5,
-      "week_state": "IN_PROGRESS",
+      "week_state": "ENDED",
       "archive_status": "CURRENT_QUERY",
-      "observed_session_dates": [],
+      "observed_session_dates": [
+        "2026-10-19",
+        "2026-10-20",
+        "2026-10-21",
+        "2026-10-22",
+        "2026-10-23"
+      ],
       "expected_session_dates": [
         "2026-10-19",
         "2026-10-20",
@@ -139679,16 +139690,10 @@
         "2026-10-22",
         "2026-10-23"
       ],
-      "missing_session_dates": [
-        "2026-10-19",
-        "2026-10-20",
-        "2026-10-21",
-        "2026-10-22",
-        "2026-10-23"
-      ],
+      "missing_session_dates": [],
       "unexpected_session_dates": [],
-      "hourly_coverage_status": "MISSING",
-      "observed_hourly_bars": 0,
+      "hourly_coverage_status": "COMPLETE_OBSERVED_HOURLY",
+      "observed_hourly_bars": 115,
       "expected_hourly_bars": 115,
       "holiday_affected": false,
       "calendar_note": "Weekday daily-bar labels; normal COMEX 18:00–17:00 America/New_York sessions.",
@@ -139706,19 +139711,191 @@
       "window_end_utc": "2026-10-23T21:00:00+00:00",
       "week_start_at": "2026-10-18T22:00:00+00:00",
       "week_end_at": "2026-10-23T21:00:00+00:00",
-      "bars": [],
-      "daily_coverage_category": "UNVERIFIED_CALENDAR_OR_SOURCE_GAP",
-      "daily_coverage_note": "保存的來源回應沒有這些日 K 標籤；尚未核對是假日或來源漏值，不將少於五天直接認定為漏價。",
+      "bars": [
+        {
+          "date": "2026-10-19",
+          "open": 4185.0,
+          "high": 4211.2001953125,
+          "low": 4155.60009765625,
+          "close": 4160.10009765625
+        },
+        {
+          "date": "2026-10-20",
+          "open": 4162.39990234375,
+          "high": 4174.89990234375,
+          "low": 4130.10009765625,
+          "close": 4142.60009765625
+        },
+        {
+          "date": "2026-10-21",
+          "open": 4143.39990234375,
+          "high": 4160.60009765625,
+          "low": 4122.2998046875,
+          "close": 4150.0
+        },
+        {
+          "date": "2026-10-22",
+          "open": 4159.0,
+          "high": 4164.2998046875,
+          "low": 4036.800048828125,
+          "close": 4060.39990234375
+        },
+        {
+          "date": "2026-10-23",
+          "open": 4042.199951171875,
+          "high": 4050.199951171875,
+          "low": 3989.10009765625,
+          "close": 4007.89990234375
+        }
+      ],
+      "daily_coverage_category": "COMPLETE_EXPECTED_LABELS",
+      "daily_coverage_note": "本週五個預期日 K 標籤均存在；小時行情完整度另行核對。",
       "quarantined_ohlc_dates": [],
       "source_null_dates": [],
       "confirmed_source_gap_dates": [],
-      "unverified_missing_session_dates": [
-        "2026-10-19",
-        "2026-10-20",
-        "2026-10-21",
-        "2026-10-22",
+      "unverified_missing_session_dates": [],
+      "daily_coverage_semantics": "Vendor daily-label coverage, not all intraday trading or exact extrema-time coverage",
+      "research_window_mode": "OBSERVATION_NEXT_CALENDAR_WEEK",
+      "research_availability_status": "RELEASE_TIME_UNVERIFIED",
+      "not_ex_ante_available": null,
+      "no_lookahead_eligible": null,
+      "original_scheduled_release_date": null,
+      "revised_publication_date": null,
+      "scheduled_release_date": null,
+      "planned_release_window_start": null,
+      "planned_release_window_end": null,
+      "actual_publication_date": null,
+      "scheduled_release_relation": "UNKNOWN",
+      "release_evidence_kind": null,
+      "release_evidence_sources": [],
+      "release_mapping_inferred": false,
+      "release_evidence_date_precision": null,
+      "release_evidence_note": null,
+      "publication_delayed": null,
+      "actual_cot_release_at_utc": null,
+      "actual_cot_release_source_url": null,
+      "revision_risk": false,
+      "point_in_time_vintage_unverified": false,
+      "revision_note": null,
+      "revision_publication_dates": [],
+      "revision_release_at_utc": null,
+      "research_availability_note": "Observation-next-calendar-week outcome only. Actual CFTC publication time is unverified; do not assume this row was available before the outcome week.",
+      "high_date": "2026-10-19",
+      "high_weekday": "Monday",
+      "high_dates": [
+        "2026-10-19"
+      ],
+      "high_daily_tie_count": 1,
+      "high_time_utc": "2026-10-19T07:00:00+00:00",
+      "high_time_taipei": "2026-10-19T15:00:00+08:00",
+      "high_time_range_taipei": {
+        "start": "2026-10-19T15:00:00+08:00",
+        "end": "2026-10-19T16:00:00+08:00"
+      },
+      "high_time_range_utc": {
+        "start": "2026-10-19T07:00:00+00:00",
+        "end": "2026-10-19T08:00:00+00:00"
+      },
+      "high_time_precision": "hour_bucket",
+      "high_time_reason": "MATCHED_FIRST_OBSERVED_HOUR_BUCKET",
+      "high_hour_bucket_tie_count": 1,
+      "high_observed_hour_buckets": [
+        {
+          "start_utc": "2026-10-19T07:00:00+00:00",
+          "end_utc": "2026-10-19T08:00:00+00:00",
+          "start_taipei": "2026-10-19T15:00:00+08:00",
+          "end_taipei": "2026-10-19T16:00:00+08:00",
+          "session_date": "2026-10-19"
+        }
+      ],
+      "high_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Monday",
+      "low_date": "2026-10-23",
+      "low_weekday": "Friday",
+      "low_dates": [
         "2026-10-23"
       ],
+      "low_daily_tie_count": 1,
+      "low_time_utc": "2026-10-23T14:00:00+00:00",
+      "low_time_taipei": "2026-10-23T22:00:00+08:00",
+      "low_time_range_taipei": {
+        "start": "2026-10-23T22:00:00+08:00",
+        "end": "2026-10-23T23:00:00+08:00"
+      },
+      "low_time_range_utc": {
+        "start": "2026-10-23T14:00:00+00:00",
+        "end": "2026-10-23T15:00:00+00:00"
+      },
+      "low_time_precision": "hour_bucket",
+      "low_time_reason": "MATCHED_FIRST_OBSERVED_HOUR_BUCKET",
+      "low_hour_bucket_tie_count": 1,
+      "low_observed_hour_buckets": [
+        {
+          "start_utc": "2026-10-23T14:00:00+00:00",
+          "end_utc": "2026-10-23T15:00:00+00:00",
+          "start_taipei": "2026-10-23T22:00:00+08:00",
+          "end_taipei": "2026-10-23T23:00:00+08:00",
+          "session_date": "2026-10-23"
+        }
+      ],
+      "low_first_hour_bucket_verified": true,
+      "low_weekday_taipei": "Friday",
+      "time_precision": "hour_bucket",
+      "extreme_order": "HIGH_THEN_LOW"
+    },
+    {
+      "cot_date": "2026-10-20",
+      "week_start": "2026-10-26",
+      "week_end": "2026-10-30",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": null,
+      "change": null,
+      "change_pct": null,
+      "range": null,
+      "range_pct": null,
+      "coverage_status": "PENDING",
+      "observed_sessions": 0,
+      "expected_sessions": 5,
+      "week_state": "PENDING",
+      "archive_status": "CURRENT_QUERY",
+      "observed_session_dates": [],
+      "expected_session_dates": [
+        "2026-10-26",
+        "2026-10-27",
+        "2026-10-28",
+        "2026-10-29",
+        "2026-10-30"
+      ],
+      "missing_session_dates": [],
+      "unexpected_session_dates": [],
+      "hourly_coverage_status": "PENDING",
+      "observed_hourly_bars": 0,
+      "expected_hourly_bars": 115,
+      "holiday_affected": false,
+      "calendar_note": "Weekday daily-bar labels; normal COMEX 18:00–17:00 America/New_York sessions.",
+      "calendar_sources": [
+        "https://www.cmegroup.com/market-regulation/files/gold-futures-and-options-fact-card.pdf"
+      ],
+      "source": "Yahoo Finance GC=F",
+      "price_feed": "GC=F",
+      "currency": "USD",
+      "price_semantics": "First daily session open and last daily vendor close; not an official CME settlement series.",
+      "time_semantics": "Source intraday bucket of at most one hour, not the exact minute of an extremum. First matching observed bucket only when daily prices reconcile.",
+      "week_timezone": "America/New_York",
+      "display_timezone": "Asia/Taipei",
+      "window_start_utc": "2026-10-25T22:00:00+00:00",
+      "window_end_utc": "2026-10-30T21:00:00+00:00",
+      "week_start_at": "2026-10-25T22:00:00+00:00",
+      "week_end_at": "2026-10-30T21:00:00+00:00",
+      "bars": [],
+      "daily_coverage_category": "PENDING",
+      "daily_coverage_note": "目標週尚未開始，行情保留空值。",
+      "quarantined_ohlc_dates": [],
+      "source_null_dates": [],
+      "confirmed_source_gap_dates": [],
+      "unverified_missing_session_dates": [],
       "daily_coverage_semantics": "Vendor daily-label coverage, not all intraday trading or exact extrema-time coverage",
       "research_window_mode": "OBSERVATION_NEXT_CALENDAR_WEEK",
       "research_availability_status": "RELEASE_TIME_UNVERIFIED",
@@ -139776,26 +139953,26 @@
     }
   ],
   "coverage_summary": {
-    "rows": 894,
-    "COMPLETE_DAILY": 794,
-    "PARTIAL": 100,
-    "PENDING": 0,
+    "rows": 895,
+    "COMPLETE_DAILY": 795,
+    "PARTIAL": 99,
+    "PENDING": 1,
     "MISSING": 0,
-    "hour_bucket_highs": 93,
-    "hour_bucket_lows": 78
+    "hour_bucket_highs": 94,
+    "hour_bucket_lows": 79
   },
   "provenance": {
     "master": {
       "file": "ghpr_master_weekly.csv",
-      "sha256": "5f4aa9d849c9bbb586e2233ea472fbf2b22f683eca36d18ef0c6ca7526f050e2"
+      "sha256": "35c076f67c52f17ed9730ccd02cc0d4e50a18efb9f8a8d5eb3478c75867e9a05"
     },
     "daily": {
       "file": "gold_daily_ohlc.csv",
-      "sha256": "d9f696c40f8573a9042e6fee71bb72ad181d74e3f74ba725624610c9c703f464"
+      "sha256": "5029f547a681d7038b65d1cf864b4c762fda87e989304b6532a6039fc77530dd"
     },
     "hourly": {
       "file": "gc_f_1h_normalized.csv",
-      "sha256": "ca1be626c18b984bf316b4135b698c3d29c42beb89ddeddbe23b42b1653ce152"
+      "sha256": "042bcc58ed6836a4a5007d2d72af3a77ffae640eea4753ec15cca0d6369b7e08"
     },
     "calendar": {
       "file": "source_calendar.json",
@@ -139804,7 +139981,7 @@
     "price_coverage": {
       "schema_version": 2,
       "normalization_version": "ghpr-prices-v2",
-      "normalized_at_utc": "2026-10-18T23:28:08.820211+00:00",
+      "normalized_at_utc": "2026-10-25T00:01:51.362996+00:00",
       "symbol": "GC=F",
       "source": "Yahoo Finance chart",
       "notes": [
@@ -139815,34 +139992,29 @@
         "No interpolation or fill or other instruments are used."
       ],
       "1h": {
-        "raw_rows": 2502,
-        "normalized_rows": 2007,
-        "excluded_rows": 495,
+        "raw_rows": 2526,
+        "normalized_rows": 2024,
+        "excluded_rows": 502,
         "exclusion_counts": {
-          "missing_ohlc_chart_slot": 490,
+          "missing_ohlc_chart_slot": 497,
           "outside_cme_regular_session": 5
         },
-        "first": "2026-06-14T22:00:00+00:00",
-        "last": "2026-10-16T20:00:00+00:00",
+        "first": "2026-06-21T22:00:00+00:00",
+        "last": "2026-10-23T20:00:00+00:00",
         "normalized_file": "gc_f_1h_normalized.csv",
         "normalized_json_file": "gc_f_1h_normalized.json",
-        "normalized_sha256": "ca1be626c18b984bf316b4135b698c3d29c42beb89ddeddbe23b42b1653ce152",
-        "raw_sha256": "e9f4b08d08c08335620aeb8a02a84a70fdb7c99d420ce7bfe9bf614f6ac96541",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1781395200&period2=1792281600&interval=1h&events=history",
-        "fetched_at_utc": "2026-10-18T23:28:08.429175+00:00",
-        "requested_start_utc": "2026-06-14T00:00:00+00:00",
-        "requested_end_exclusive_utc": "2026-10-18T00:00:00+00:00",
+        "normalized_sha256": "042bcc58ed6836a4a5007d2d72af3a77ffae640eea4753ec15cca0d6369b7e08",
+        "raw_sha256": "5483623bab09ebad50c5564316607de94519f65b92bdf1ef5d0e36cc8f7e3e65",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1782000000&period2=1792886400&interval=1h&events=history",
+        "fetched_at_utc": "2026-10-25T00:01:50.986478+00:00",
+        "requested_start_utc": "2026-06-21T00:00:00+00:00",
+        "requested_end_exclusive_utc": "2026-10-25T00:00:00+00:00",
         "exchange": "COMEX",
         "exchange_timezone": "America/New_York",
         "currency": "USD",
         "instrument_type": "FUTURE",
         "ohlc_bounds_issues": 0,
         "per_provisional_session_counts": {
-          "2026-06-15": 23,
-          "2026-06-16": 23,
-          "2026-06-17": 23,
-          "2026-06-18": 23,
-          "2026-06-19": 6,
           "2026-06-22": 23,
           "2026-06-23": 23,
           "2026-06-24": 23,
@@ -139926,7 +140098,12 @@
           "2026-10-13": 23,
           "2026-10-14": 23,
           "2026-10-15": 23,
-          "2026-10-16": 23
+          "2026-10-16": 23,
+          "2026-10-19": 23,
+          "2026-10-20": 23,
+          "2026-10-21": 23,
+          "2026-10-22": 23,
+          "2026-10-23": 23
         }
       }
     },
@@ -142337,7 +142514,7 @@
     ]
   },
   "source_window_start": null,
-  "hourly_source_window_start": "2026-06-14T00:00:00+00:00",
+  "hourly_source_window_start": "2026-06-21T00:00:00+00:00",
   "archived_provenance": {
     "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187": {
       "master": {
@@ -143100,18 +143277,169 @@
         "file": "cot_release_evidence.json",
         "sha256": "a73b6093bf7bbc744321326e86c48ebb823ba17dba7e799c75070d5d3ca13b2e"
       }
+    },
+    "aaac87356e8ccbb2f1fea3880a8278a36ded4608bd8554968022f8767ea2b7db": {
+      "master": {
+        "file": "ghpr_master_weekly.csv",
+        "sha256": "5f4aa9d849c9bbb586e2233ea472fbf2b22f683eca36d18ef0c6ca7526f050e2"
+      },
+      "daily": {
+        "file": "gold_daily_ohlc.csv",
+        "sha256": "d9f696c40f8573a9042e6fee71bb72ad181d74e3f74ba725624610c9c703f464"
+      },
+      "hourly": {
+        "file": "gc_f_1h_normalized.csv",
+        "sha256": "ca1be626c18b984bf316b4135b698c3d29c42beb89ddeddbe23b42b1653ce152"
+      },
+      "calendar": {
+        "file": "source_calendar.json",
+        "sha256": "0d7783d774c4c40aefcb48f949c750bb92f36fea577c3c43828c7c4fd0c3cbed"
+      },
+      "price_coverage": {
+        "schema_version": 2,
+        "normalization_version": "ghpr-prices-v2",
+        "normalized_at_utc": "2026-10-18T23:28:08.820211+00:00",
+        "symbol": "GC=F",
+        "source": "Yahoo Finance chart",
+        "notes": [
+          "No COT outcome table is produced by this script.",
+          "Daily OHLC dates are labels, not intraday extreme timestamps.",
+          "Hourly timestamps denote one-hour buckets, not exact extreme times.",
+          "Hourly regular-session filtering does not establish holiday-specific coverage completeness.",
+          "No interpolation or fill or other instruments are used."
+        ],
+        "1h": {
+          "raw_rows": 2502,
+          "normalized_rows": 2007,
+          "excluded_rows": 495,
+          "exclusion_counts": {
+            "missing_ohlc_chart_slot": 490,
+            "outside_cme_regular_session": 5
+          },
+          "first": "2026-06-14T22:00:00+00:00",
+          "last": "2026-10-16T20:00:00+00:00",
+          "normalized_file": "gc_f_1h_normalized.csv",
+          "normalized_json_file": "gc_f_1h_normalized.json",
+          "normalized_sha256": "ca1be626c18b984bf316b4135b698c3d29c42beb89ddeddbe23b42b1653ce152",
+          "raw_sha256": "e9f4b08d08c08335620aeb8a02a84a70fdb7c99d420ce7bfe9bf614f6ac96541",
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1781395200&period2=1792281600&interval=1h&events=history",
+          "fetched_at_utc": "2026-10-18T23:28:08.429175+00:00",
+          "requested_start_utc": "2026-06-14T00:00:00+00:00",
+          "requested_end_exclusive_utc": "2026-10-18T00:00:00+00:00",
+          "exchange": "COMEX",
+          "exchange_timezone": "America/New_York",
+          "currency": "USD",
+          "instrument_type": "FUTURE",
+          "ohlc_bounds_issues": 0,
+          "per_provisional_session_counts": {
+            "2026-06-15": 23,
+            "2026-06-16": 23,
+            "2026-06-17": 23,
+            "2026-06-18": 23,
+            "2026-06-19": 6,
+            "2026-06-22": 23,
+            "2026-06-23": 23,
+            "2026-06-24": 23,
+            "2026-06-25": 23,
+            "2026-06-26": 23,
+            "2026-06-29": 23,
+            "2026-06-30": 23,
+            "2026-07-01": 23,
+            "2026-07-02": 23,
+            "2026-07-03": 6,
+            "2026-07-06": 23,
+            "2026-07-07": 23,
+            "2026-07-08": 23,
+            "2026-07-09": 23,
+            "2026-07-10": 23,
+            "2026-07-13": 23,
+            "2026-07-14": 23,
+            "2026-07-15": 23,
+            "2026-07-16": 23,
+            "2026-07-17": 23,
+            "2026-07-20": 23,
+            "2026-07-21": 23,
+            "2026-07-22": 23,
+            "2026-07-23": 23,
+            "2026-07-24": 23,
+            "2026-07-27": 23,
+            "2026-07-28": 23,
+            "2026-07-29": 23,
+            "2026-07-30": 23,
+            "2026-07-31": 23,
+            "2026-08-03": 23,
+            "2026-08-04": 23,
+            "2026-08-05": 23,
+            "2026-08-06": 23,
+            "2026-08-07": 23,
+            "2026-08-10": 23,
+            "2026-08-11": 23,
+            "2026-08-12": 23,
+            "2026-08-13": 23,
+            "2026-08-14": 23,
+            "2026-08-17": 23,
+            "2026-08-18": 23,
+            "2026-08-19": 23,
+            "2026-08-20": 23,
+            "2026-08-21": 23,
+            "2026-08-24": 23,
+            "2026-08-25": 23,
+            "2026-08-26": 23,
+            "2026-08-27": 23,
+            "2026-08-28": 23,
+            "2026-08-31": 23,
+            "2026-09-01": 23,
+            "2026-09-02": 23,
+            "2026-09-03": 23,
+            "2026-09-04": 23,
+            "2026-09-08": 17,
+            "2026-09-09": 23,
+            "2026-09-10": 23,
+            "2026-09-11": 23,
+            "2026-09-14": 23,
+            "2026-09-15": 23,
+            "2026-09-16": 23,
+            "2026-09-17": 23,
+            "2026-09-18": 23,
+            "2026-09-21": 23,
+            "2026-09-22": 23,
+            "2026-09-23": 23,
+            "2026-09-24": 23,
+            "2026-09-25": 23,
+            "2026-09-28": 23,
+            "2026-09-29": 23,
+            "2026-09-30": 23,
+            "2026-10-01": 23,
+            "2026-10-02": 23,
+            "2026-10-05": 23,
+            "2026-10-06": 23,
+            "2026-10-07": 23,
+            "2026-10-08": 23,
+            "2026-10-09": 23,
+            "2026-10-12": 23,
+            "2026-10-13": 23,
+            "2026-10-14": 23,
+            "2026-10-15": 23,
+            "2026-10-16": 23
+          }
+        }
+      },
+      "cot_release_calendar": {
+        "file": "cot_release_evidence.json",
+        "sha256": "a73b6093bf7bbc744321326e86c48ebb823ba17dba7e799c75070d5d3ca13b2e"
+      }
     }
   },
   "retained_history_rows": [],
   "archive_summary": {
     "preserved_complete_rows": 0,
-    "daily_recomputed_hourly_archived_rows": 88,
+    "daily_recomputed_hourly_archived_rows": 89,
     "outside_active_scope_rows": 0,
     "rule": "Full-history D1 is recalculated. Outside the H1 query window, prior hourly evidence is retained only when daily prices and coverage agree; PARTIAL stays PARTIAL. Current-window gaps are never masked."
   },
   "input_audit": {
-    "daily_accepted": 4291,
-    "hourly_accepted": 2007,
+    "daily_accepted": 4296,
+    "hourly_accepted": 2024,
     "daily_rejections": [],
     "hourly_rejections": []
   }

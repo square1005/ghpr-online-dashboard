@@ -4,13 +4,13 @@ This report is Historical Lifecycle Research only. It does not create execution 
 
 ## Executive Summary
 
-- Data period: `2009-09-01` to `2026-10-13`.
-- Latest date: `2026-10-13`.
-- Latest MM percentile: `26.92%`.
+- Data period: `2009-09-01` to `2026-10-20`.
+- Latest date: `2026-10-20`.
+- Latest MM percentile: `24.36%`.
 - Latest MM lifecycle state: `MM_RESET`.
-- Latest MM velocity 8W: `-35.26%`.
-- Latest MM acceleration 8W: `-53.21%`.
-- Strongest velocity window summary: `mm_velocity_8w average absolute rank correlation 0.182`.
+- Latest MM velocity 8W: `-41.03%`.
+- Latest MM acceleration 8W: `-61.54%`.
+- Strongest velocity window summary: `mm_velocity_8w average absolute rank correlation 0.183`.
 - State outcome note: MM_CROWDED_EXPANSION has the largest absolute 8W median following return (6.16%) in this sample.
 - Lead-lag note: The strongest positive-lag row suggests MM lifecycle features have some historical lead-lag context, but it should be treated as sample evidence rather than a forecast.
 
@@ -34,7 +34,7 @@ The strongest positive-lag row suggests MM lifecycle features have some historic
 
 ### 5. Which MM velocity window has the most information?
 
-mm_velocity_8w average absolute rank correlation 0.182
+mm_velocity_8w average absolute rank correlation 0.183
 
 ### 6. Which MM Lifecycle State has the strongest historical sample tendency?
 
@@ -46,33 +46,33 @@ The latest state is `MM_RESET`. This is a historical positioning label based on 
 
 ### 8. What does the current MM Velocity imply?
 
-Latest 8W velocity is `-35.26%`. It describes recent positioning movement only; it does not independently determine market direction.
+Latest 8W velocity is `-41.03%`. It describes recent positioning movement only; it does not independently determine market direction.
 
 ### 9. What does the current MM Acceleration imply?
 
-Latest 8W acceleration is `-53.21%`. It describes whether the positioning movement is speeding up or slowing down.
+Latest 8W acceleration is `-61.54%`. It describes whether the positioning movement is speeding up or slowing down.
 
 ### 10. Which historical MM trajectories are most similar now?
 
 | window   | historical_start_date   | historical_end_date   |   similarity_score |   historical_gold_return_1w |   historical_gold_return_2w |   historical_gold_return_4w |   historical_gold_return_8w |
 |:---------|:------------------------|:----------------------|-------------------:|----------------------------:|----------------------------:|----------------------------:|----------------------------:|
-| 8W       | 2022-03-15              | 2022-05-10            |            94.4165 |                  -0.0158238 |                -0.033139    |                 -0.068367   |                  -0.0459657 |
-| 8W       | 2020-04-07              | 2020-06-02            |            94.2939 |                   0.0171281 |                -0.00584793  |                  0.0173668  |                   0.0415665 |
-| 8W       | 2020-06-30              | 2020-08-25            |            94.2054 |                  -0.0447072 |                -0.0119201   |                 -0.0110563  |                   0.0680922 |
-| 8W       | 2020-03-31              | 2020-05-26            |            94.1875 |                  -0.0225891 |                 0.000234701 |                 -0.00333233 |                   0.0766705 |
-| 8W       | 2018-03-20              | 2018-05-15            |            94.0928 |                  -0.0176067 |                -0.0114282   |                 -0.0432749  |                  -0.0169323 |
-| 8W       | 2022-03-08              | 2022-05-03            |            94.0775 |                  -0.0175936 |                -0.0451251   |                 -0.0295201  |                  -0.0845202 |
-| 8W       | 2020-06-23              | 2020-08-18            |            94.001  |                   0.0343215 |                -0.00390897  |                  0.091762   |                   0.129686  |
-| 8W       | 2016-11-08              | 2017-01-03            |            93.9387 |                   0.0203112 |                 0.0255413   |                 -0.00616645 |                  -0.0887388 |
-| 8W       | 2020-03-17              | 2020-05-12            |            93.6387 |                   0         |                -0.00356619  |                 -0.0297717  |                   0.117713  |
-| 8W       | 2020-03-24              | 2020-05-19            |            93.5998 |                   0.0233513 |                 0.0233513   |                  0.0393279  |                   0.0505963 |
+| 8W       | 2018-03-27              | 2018-05-22            |            94.8141 |                  0.00217234 |                 -0.0154726  |                 -0.0298183  |                  -0.0369791 |
+| 8W       | 2020-06-30              | 2020-08-25            |            94.5427 |                 -0.0447072  |                 -0.0119201  |                 -0.0110563  |                   0.0680922 |
+| 8W       | 2022-03-15              | 2022-05-10            |            94.2048 |                 -0.0158238  |                 -0.033139   |                 -0.068367   |                  -0.0459657 |
+| 8W       | 2016-11-15              | 2017-01-10            |            93.9075 |                  0.0205101  |                  0.0412379  |                  0.0237745  |                  -0.0325164 |
+| 8W       | 2020-04-14              | 2020-06-09            |            93.7156 |                 -0.00697807 |                  0.0100305  |                  0.0102675  |                  -0.0198098 |
+| 8W       | 2014-07-29              | 2014-09-23            |            93.6351 |                 -0.0114961  |                 -0.020693   |                 -0.0489173  |                  -0.0595394 |
+| 8W       | 2016-11-08              | 2017-01-03            |            93.6017 |                  0.0203112  |                  0.0255413  |                 -0.00616645 |                  -0.0887388 |
+| 8W       | 2022-03-22              | 2022-05-17            |            93.4908 |                 -0.0120043  |                 -0.0276382  |                 -0.0715161  |                  -0.0533958 |
+| 8W       | 2020-04-07              | 2020-06-02            |            93.3731 |                  0.0171281  |                 -0.00584793 |                  0.0173668  |                   0.0415665 |
+| 8W       | 2014-07-22              | 2014-09-16            |            93.3495 |                 -0.0093039  |                 -0.0225528  |                 -0.0462513  |                  -0.0542838 |
 
 ### 11. What happened after the most similar historical trajectories?
 
-- 1W: avg `-0.32%`, median `-0.81%`, win rate `40.00%`.
-- 2W: avg `-0.90%`, median `-1.17%`, win rate `30.00%`.
-- 4W: avg `-1.48%`, median `-1.67%`, win rate `25.00%`.
-- 8W: avg `-0.61%`, median `-2.01%`, win rate `35.00%`.
+- 1W: avg `-0.06%`, median `-0.52%`, win rate `45.00%`.
+- 2W: avg `-0.57%`, median `-0.86%`, win rate `40.00%`.
+- 4W: avg `-1.36%`, median `-1.59%`, win rate `30.00%`.
+- 8W: avg `-0.66%`, median `-2.62%`, win rate `35.00%`.
 
 ### 12. Should this replace MM Percentile in the Dashboard?
 
@@ -86,7 +86,7 @@ Yes, as a research page and monitoring layer. The lifecycle state, velocity, acc
 
 | mm_lifecycle_state   |   count |   avg_forward_return_1w |   median_forward_return_1w |   win_rate_1w |   avg_forward_return_2w |   median_forward_return_2w |   win_rate_2w |   avg_forward_return_4w |   median_forward_return_4w |   win_rate_4w |   avg_forward_return_8w |   median_forward_return_8w |   win_rate_8w |   best_return_8w |   worst_return_8w |
 |:---------------------|--------:|------------------------:|---------------------------:|--------------:|------------------------:|---------------------------:|--------------:|------------------------:|---------------------------:|--------------:|------------------------:|---------------------------:|--------------:|-----------------:|------------------:|
-| MM_RESET             |     210 |             -0.00606088 |                -0.00641665 |      0.361905 |             -0.0115684  |               -0.0115021   |      0.314286 |             -0.0204544  |                -0.0201396  |      0.247619 |              -0.0328011 |                -0.0340011  |      0.142857 |         0.180106 |        -0.141753  |
+| MM_RESET             |     211 |             -0.00607152 |                -0.00643463 |      0.36019  |             -0.0115639  |               -0.0114943   |      0.312796 |             -0.0206107  |                -0.0201924  |      0.246445 |              -0.0332028 |                -0.0342944  |      0.14218  |         0.180106 |        -0.141753  |
 | MM_ACCUMULATION      |     135 |              0.0034119  |                 0.00494877 |      0.674074 |              0.00594031 |                0.0100067   |      0.622222 |              0.00563109 |                 0.0138323  |      0.614815 |               0.0100166 |                 0.0106326  |      0.592593 |         0.142329 |        -0.135196  |
 | MM_EXPANSION         |     160 |              0.00603311 |                 0.00581611 |      0.6375   |              0.0124044  |                0.010872    |      0.66875  |              0.0240605  |                 0.0247439  |      0.6875   |               0.0420188 |                 0.0386433  |      0.80625  |         0.239115 |        -0.116012  |
 | MM_CROWDED_EXPANSION |     106 |              0.00844219 |                 0.00883771 |      0.669811 |              0.0171738  |                0.0184207   |      0.745283 |              0.0368913  |                 0.0345373  |      0.886792 |               0.0611155 |                 0.0616258  |      0.95283  |         0.18041  |        -0.0337237 |
@@ -97,14 +97,14 @@ Yes, as a research page and monitoring layer. The lifecycle state, velocity, acc
 
 | mm_feature         | gold_horizon   |   lag_weeks |   correlation |   rank_correlation |   sample_count | interpretation                                              |   abs_rank_correlation |
 |:-------------------|:---------------|------------:|--------------:|-------------------:|---------------:|:------------------------------------------------------------|-----------------------:|
-| mm_velocity_4w     | 4W             |           0 |      0.48511  |           0.568154 |            839 | same_week_positive_historical_alignment                     |               0.568154 |
-| mm_acceleration_4w | 4W             |          -4 |     -0.434229 |          -0.505214 |            835 | gold_or_later_mm_alignment_4w_negative_historical_alignment |               0.505214 |
-| mm_acceleration_8w | 8W             |          -8 |     -0.426681 |          -0.480409 |            827 | gold_or_later_mm_alignment_8w_negative_historical_alignment |               0.480409 |
-| mm_velocity_8w     | 8W             |           0 |      0.417404 |           0.465647 |            835 | same_week_positive_historical_alignment                     |               0.465647 |
-| mm_velocity_4w     | 2W             |           0 |      0.338498 |           0.420873 |            839 | same_week_positive_historical_alignment                     |               0.420873 |
-| mm_velocity_12w    | 8W             |           0 |      0.358819 |           0.405931 |            831 | same_week_positive_historical_alignment                     |               0.405931 |
-| mm_acceleration_4w | 4W             |           0 |      0.336489 |           0.396655 |            835 | same_week_positive_historical_alignment                     |               0.396655 |
-| mm_velocity_8w     | 4W             |           0 |      0.352228 |           0.395248 |            835 | same_week_positive_historical_alignment                     |               0.395248 |
+| mm_velocity_4w     | 4W             |           0 |      0.485926 |           0.569036 |            840 | same_week_positive_historical_alignment                     |               0.569036 |
+| mm_acceleration_4w | 4W             |          -4 |     -0.433259 |          -0.503755 |            836 | gold_or_later_mm_alignment_4w_negative_historical_alignment |               0.503755 |
+| mm_acceleration_8w | 8W             |          -8 |     -0.428692 |          -0.481933 |            828 | gold_or_later_mm_alignment_8w_negative_historical_alignment |               0.481933 |
+| mm_velocity_8w     | 8W             |           0 |      0.419416 |           0.467196 |            836 | same_week_positive_historical_alignment                     |               0.467196 |
+| mm_velocity_4w     | 2W             |           0 |      0.33879  |           0.421382 |            840 | same_week_positive_historical_alignment                     |               0.421382 |
+| mm_velocity_12w    | 8W             |           0 |      0.359228 |           0.406613 |            832 | same_week_positive_historical_alignment                     |               0.406613 |
+| mm_acceleration_4w | 4W             |           0 |      0.336294 |           0.39672  |            836 | same_week_positive_historical_alignment                     |               0.39672  |
+| mm_velocity_8w     | 4W             |           0 |      0.353749 |           0.396714 |            836 | same_week_positive_historical_alignment                     |               0.396714 |
 
 ## Method Notes
 

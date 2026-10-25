@@ -4,11 +4,11 @@ Historical structure research only. Not a trading signal. Not financial advice.
 
 ## Executive Summary
 
-- Data period: `2009-09-01` to `2026-10-13`.
-- Latest date: `2026-10-13`.
-- Latest MM Long / Short / Net: `124,747` / `17,658` / `107,089`.
-- Latest MM Long / Short / Net percentile: `13.46%` / `16.67%` / `26.92%`.
-- Latest Long / Short / Net velocity 8W: `-32.69%` / `14.10%` / `-35.26%`.
+- Data period: `2009-09-01` to `2026-10-20`.
+- Latest date: `2026-10-20`.
+- Latest MM Long / Short / Net: `120,970` / `16,764` / `104,206`.
+- Latest MM Long / Short / Net percentile: `7.05%` / `14.10%` / `24.36%`.
+- Latest Long / Short / Net velocity 8W: `-40.38%` / `8.97%` / `-41.03%`.
 - Latest structure state: `MM_STRUCTURE_LOW_PARTICIPATION`.
 - Latest contribution state: `LONG_LIQUIDATION`.
 - Structure state note: MM_STRUCTURE_CROWDED_LONG has the largest absolute 8W median following return (4.49%) in this sample.
@@ -26,7 +26,7 @@ MM Long describes long-side exposure, MM Short describes short-side exposure, an
 
 ### 3. When Net rises, is it driven by Long building or Short covering?
 
-Latest 8W changes: Long `-29,848`, Short `4,711`, Net `-34,559`. Latest contribution label is `LONG_LIQUIDATION`.
+Latest 8W changes: Long `-38,849`, Short `1,692`, Net `-40,541`. Latest contribution label is `LONG_LIQUIDATION`.
 
 ### 4. When Net falls, is it driven by Long liquidation or Short building?
 
@@ -34,17 +34,17 @@ The contribution analysis table separates long-side reduction from short-side in
 
 ### 5. Which has more information: Long Velocity, Short Velocity, or Net Velocity?
 
-- Long: mm_long_velocity_4w vs 4W at lag 0W has rank correlation 0.567.
-- Short: mm_short_velocity_4w vs 4W at lag 0W has rank correlation -0.420.
-- Net: mm_net_velocity_4w vs 4W at lag 0W has rank correlation 0.568.
+- Long: mm_long_velocity_4w vs 4W at lag 0W has rank correlation 0.568.
+- Short: mm_short_velocity_4w vs 4W at lag 0W has rank correlation -0.421.
+- Net: mm_net_velocity_4w vs 4W at lag 0W has rank correlation 0.569.
 
 ### 6. Does Long lead Gold?
 
-mm_long_velocity_4w vs 4W at lag 0W has rank correlation 0.567.
+mm_long_velocity_4w vs 4W at lag 0W has rank correlation 0.568.
 
 ### 7. Does Short lead Gold?
 
-mm_short_velocity_4w vs 4W at lag 0W has rank correlation -0.420.
+mm_short_velocity_4w vs 4W at lag 0W has rank correlation -0.421.
 
 ### 8. Is Net mainly a Long or Short outcome?
 
@@ -56,12 +56,12 @@ The current MM Structure State is `MM_STRUCTURE_LOW_PARTICIPATION`. This is a hi
 
 ### 10. What do the current structure fields mean?
 
-- MM Long Percentile: `13.46%`.
-- MM Short Percentile: `16.67%`.
-- MM Net Percentile: `26.92%`.
-- Long Velocity 8W: `-32.69%`.
-- Short Velocity 8W: `14.10%`.
-- Net Velocity 8W: `-35.26%`.
+- MM Long Percentile: `7.05%`.
+- MM Short Percentile: `14.10%`.
+- MM Net Percentile: `24.36%`.
+- Long Velocity 8W: `-40.38%`.
+- Short Velocity 8W: `8.97%`.
+- Net Velocity 8W: `-41.03%`.
 
 ### 11. Should GHPR Dashboard v0.6 add Long / Short / Net structure?
 
@@ -84,7 +84,7 @@ MM structure adds useful decomposition around MM Net. The dashboard should displ
 | MM_STRUCTURE_LONG_LIQUIDATION     |     292 |            -0.00272497  |                -0.00375328 |      0.431507 |            -0.00601736  |               -0.006655    |      0.393836 |             -0.00977727 |                -0.0114109  |      0.342466 |             -0.0146133  |                -0.023045   |      0.291096 |        0.239587  |        -0.141753  |
 | MM_STRUCTURE_SHORT_BUILDING       |      39 |            -0.00367702  |                -0.00146849 |      0.410256 |            -0.00524069  |               -0.00385505  |      0.333333 |             -0.0102687  |                -0.0189264  |      0.282051 |             -0.0211194  |                -0.0255492  |      0.179487 |        0.120818  |        -0.136609  |
 | MM_STRUCTURE_CROWDED_LONG         |     156 |             0.00546397  |                 0.00772644 |      0.615385 |             0.0118098   |                0.0132346   |      0.660256 |              0.0257963  |                 0.0243997  |      0.788462 |              0.0467741  |                 0.044928   |      0.820513 |        0.18041   |        -0.0721955 |
-| MM_STRUCTURE_LOW_PARTICIPATION    |      60 |            -0.000854755 |                 0.00170837 |      0.516667 |            -0.00409232  |               -0.000643848 |      0.483333 |             -0.00421618 |                -0.0101555  |      0.416667 |              0.00846116 |                -0.0112949  |      0.466667 |        0.207895  |        -0.133908  |
+| MM_STRUCTURE_LOW_PARTICIPATION    |      61 |            -0.000976919 |                 0.0016463  |      0.508197 |            -0.00419946  |               -0.000713399 |      0.47541  |             -0.00502285 |                -0.0103673  |      0.409836 |              0.00639519 |                -0.011374   |      0.459016 |        0.207895  |        -0.133908  |
 | MM_STRUCTURE_NEUTRAL              |     106 |             0.00879391  |                 0.00956677 |      0.733333 |             0.0146332   |                0.0173229   |      0.692308 |              0.0237176  |                 0.0292887  |      0.735294 |              0.0370013  |                 0.0292694  |      0.653061 |        0.239115  |        -0.1255    |
 
 ## MM Structure Contribution Analysis
@@ -93,7 +93,7 @@ MM structure adds useful decomposition around MM Net. The dashboard should displ
 |:----------------------------------|--------:|------------------------:|---------------------------:|--------------:|------------------------:|---------------------------:|--------------:|------------------------:|---------------------------:|--------------:|------------------------:|---------------------------:|--------------:|-----------------:|------------------:|
 | LONG_BUILDING                     |     191 |              0.00689527 |                 0.00800128 |      0.628272 |             0.0152881   |                 0.0171047  |      0.675393 |              0.0296555  |                 0.0318246  |      0.801047 |              0.0526927  |                0.0532884   |      0.921466 |         0.207895 |         -0.135196 |
 | SHORT_COVERING                    |      99 |              0.00374932 |                 0.00654504 |      0.686869 |             0.00932083  |                 0.0103795  |      0.737374 |              0.0176909  |                 0.0218626  |      0.686869 |              0.0348306  |                0.0338164   |      0.777778 |         0.142329 |         -0.116224 |
-| LONG_LIQUIDATION                  |     209 |             -0.00354831 |                -0.0033544  |      0.449761 |            -0.0049292   |                -0.00572189 |      0.38756  |             -0.00754415 |                -0.0109978  |      0.358852 |             -0.0110456  |               -0.0244744   |      0.282297 |         0.239587 |         -0.133908 |
+| LONG_LIQUIDATION                  |     210 |             -0.00357097 |                -0.00368632 |      0.447619 |            -0.00495633  |                -0.00580928 |      0.385714 |             -0.00776262 |                -0.0110248  |      0.357143 |             -0.0115528  |               -0.0247344   |      0.280952 |         0.239587 |         -0.133908 |
 | SHORT_BUILDING                    |     118 |             -0.00395939 |                -0.00495307 |      0.432203 |            -0.0100396   |                -0.00944929 |      0.355932 |             -0.0182331  |                -0.0187409  |      0.29661  |             -0.0261855  |               -0.0330494   |      0.220339 |         0.152911 |         -0.141753 |
 | MIXED_LONG_AND_SHORT_UP           |     138 |              0.00670791 |                 0.00585138 |      0.637681 |             0.011307    |                 0.0137941  |      0.615942 |              0.0222625  |                 0.0247547  |      0.695652 |              0.0318643  |                0.0255947   |      0.644928 |         0.239115 |         -0.136609 |
 | MIXED_LONG_AND_SHORT_DOWN         |     131 |              0.00153915 |                 0.00208689 |      0.541985 |            -6.78328e-05 |                 0.00224127 |      0.549618 |             -0.00202867 |                -0.00363299 |      0.480916 |              0.00667488 |               -0.000661677 |      0.48855  |         0.197196 |         -0.119216 |
@@ -103,16 +103,16 @@ MM structure adds useful decomposition around MM Net. The dashboard should displ
 
 | mm_feature           | gold_horizon   |   lag_weeks |   correlation |   rank_correlation |   sample_count | interpretation                          |   abs_rank_correlation |
 |:---------------------|:---------------|------------:|--------------:|-------------------:|---------------:|:----------------------------------------|-----------------------:|
-| mm_net_velocity_4w   | 4W             |           0 |      0.48511  |           0.568154 |            839 | same_week_positive_historical_alignment |               0.568154 |
-| mm_long_velocity_4w  | 4W             |           0 |      0.479823 |           0.567164 |            870 | same_week_positive_historical_alignment |               0.567164 |
-| mm_long_velocity_8w  | 8W             |           0 |      0.423907 |           0.474906 |            866 | same_week_positive_historical_alignment |               0.474906 |
-| mm_net_velocity_8w   | 8W             |           0 |      0.417404 |           0.465647 |            835 | same_week_positive_historical_alignment |               0.465647 |
-| mm_long_velocity_4w  | 2W             |           0 |      0.347436 |           0.429512 |            870 | same_week_positive_historical_alignment |               0.429512 |
-| mm_long_velocity_12w | 8W             |           0 |      0.375174 |           0.420913 |            862 | same_week_positive_historical_alignment |               0.420913 |
-| mm_net_velocity_4w   | 2W             |           0 |      0.338498 |           0.420873 |            839 | same_week_positive_historical_alignment |               0.420873 |
-| mm_short_velocity_4w | 4W             |           0 |     -0.397915 |          -0.420388 |            870 | same_week_negative_historical_alignment |               0.420388 |
-| mm_long_velocity_8w  | 4W             |           0 |      0.373046 |           0.420113 |            866 | same_week_positive_historical_alignment |               0.420113 |
-| mm_net_velocity_12w  | 8W             |           0 |      0.358819 |           0.405931 |            831 | same_week_positive_historical_alignment |               0.405931 |
+| mm_net_velocity_4w   | 4W             |           0 |      0.485926 |           0.569036 |            840 | same_week_positive_historical_alignment |               0.569036 |
+| mm_long_velocity_4w  | 4W             |           0 |      0.480448 |           0.567937 |            871 | same_week_positive_historical_alignment |               0.567937 |
+| mm_long_velocity_8w  | 8W             |           0 |      0.425684 |           0.476271 |            867 | same_week_positive_historical_alignment |               0.476271 |
+| mm_net_velocity_8w   | 8W             |           0 |      0.419416 |           0.467196 |            836 | same_week_positive_historical_alignment |               0.467196 |
+| mm_long_velocity_4w  | 2W             |           0 |      0.347697 |           0.429979 |            871 | same_week_positive_historical_alignment |               0.429979 |
+| mm_long_velocity_12w | 8W             |           0 |      0.375849 |           0.421797 |            863 | same_week_positive_historical_alignment |               0.421797 |
+| mm_long_velocity_8w  | 4W             |           0 |      0.3744   |           0.421424 |            867 | same_week_positive_historical_alignment |               0.421424 |
+| mm_net_velocity_4w   | 2W             |           0 |      0.33879  |           0.421382 |            840 | same_week_positive_historical_alignment |               0.421382 |
+| mm_short_velocity_4w | 4W             |           0 |     -0.398351 |          -0.421278 |            871 | same_week_negative_historical_alignment |               0.421278 |
+| mm_net_velocity_12w  | 8W             |           0 |      0.359228 |           0.406613 |            832 | same_week_positive_historical_alignment |               0.406613 |
 
 ## Method Notes
 

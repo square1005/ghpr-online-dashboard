@@ -12,7 +12,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 |---|---:|---:|---:|---:|---:|
 | 0-10 percentile | 166 | 0.13% | 0.18% | 55.42% | -12.57% |
 | 10-20 percentile | 70 | 0.11% | 0.24% | 57.14% | -4.46% |
-| 20-30 percentile | 83 | 0.44% | 0.46% | 59.04% | -4.46% |
+| 20-30 percentile | 84 | 0.42% | 0.42% | 58.33% | -4.46% |
 | 30-40 percentile | 80 | -0.06% | 0.21% | 56.25% | -12.10% |
 | 40-50 percentile | 97 | -0.31% | -0.27% | 44.33% | -6.47% |
 | 50-60 percentile | 66 | 0.59% | 0.59% | 63.64% | -5.64% |
@@ -28,7 +28,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 | 0-10 percentile | 166 | 0.15% | 0.34% | 52.41% | -12.57% |
 | 10-20 percentile | 70 | 0.73% | 0.58% | 60.00% | -5.35% |
 | 20-30 percentile | 83 | 0.43% | 0.74% | 60.24% | -16.03% |
-| 30-40 percentile | 79 | -0.27% | -0.06% | 49.37% | -12.10% |
+| 30-40 percentile | 80 | -0.28% | -0.08% | 48.75% | -12.10% |
 | 40-50 percentile | 97 | -0.14% | -0.44% | 45.36% | -7.25% |
 | 50-60 percentile | 66 | 0.88% | 0.83% | 60.61% | -6.18% |
 | 60-70 percentile | 65 | 0.91% | 0.35% | 61.54% | -6.35% |
@@ -44,7 +44,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 | 10-20 percentile | 70 | 1.47% | 1.88% | 62.86% | -7.05% |
 | 20-30 percentile | 83 | 0.28% | 0.33% | 50.60% | -16.03% |
 | 30-40 percentile | 78 | -0.08% | -0.26% | 46.15% | -12.10% |
-| 40-50 percentile | 96 | 0.16% | -0.07% | 48.96% | -13.65% |
+| 40-50 percentile | 97 | 0.10% | -0.12% | 48.45% | -13.65% |
 | 50-60 percentile | 66 | 1.66% | 0.85% | 54.55% | -6.90% |
 | 60-70 percentile | 65 | 0.88% | 0.23% | 53.85% | -7.70% |
 | 70-80 percentile | 46 | 0.97% | 0.18% | 50.00% | -6.56% |
@@ -61,7 +61,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 | 30-40 percentile | 78 | 0.81% | -0.60% | 46.15% | -13.83% |
 | 40-50 percentile | 96 | 1.41% | 0.09% | 51.04% | -16.03% |
 | 50-60 percentile | 63 | 2.17% | 2.28% | 61.90% | -13.65% |
-| 60-70 percentile | 64 | 2.25% | 0.89% | 60.94% | -13.65% |
+| 60-70 percentile | 65 | 2.03% | 0.74% | 60.00% | -13.65% |
 | 70-80 percentile | 46 | 1.81% | 1.12% | 56.52% | -12.04% |
 | 80-90 percentile | 59 | 2.00% | 1.67% | 59.32% | -12.04% |
 | 90-100 percentile | 110 | 2.19% | 1.94% | 62.73% | -11.73% |
@@ -81,7 +81,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 | 60-70 percentile | 87 | 0.33% | 0.26% | 57.47% | -5.56% |
 | 70-80 percentile | 63 | 0.07% | 0.08% | 50.79% | -6.35% |
 | 80-90 percentile | 100 | 0.07% | 0.20% | 58.00% | -4.54% |
-| 90-100 percentile | 182 | -0.02% | -0.06% | 49.45% | -12.57% |
+| 90-100 percentile | 183 | -0.02% | -0.09% | 49.18% | -12.57% |
 
 ### Forward 2W
 
@@ -96,7 +96,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 | 60-70 percentile | 87 | 0.58% | 0.11% | 54.02% | -5.96% |
 | 70-80 percentile | 63 | 0.32% | 0.26% | 55.56% | -6.35% |
 | 80-90 percentile | 100 | 0.20% | -0.11% | 47.00% | -6.31% |
-| 90-100 percentile | 181 | -0.14% | 0.06% | 50.83% | -16.03% |
+| 90-100 percentile | 182 | -0.15% | 0.03% | 50.55% | -16.03% |
 
 ### Forward 4W
 
@@ -110,7 +110,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 | 50-60 percentile | 67 | 1.51% | 0.15% | 58.21% | -7.05% |
 | 60-70 percentile | 87 | 0.84% | 0.78% | 56.32% | -7.74% |
 | 70-80 percentile | 63 | 0.43% | 0.62% | 53.97% | -7.70% |
-| 80-90 percentile | 98 | 0.80% | 0.30% | 53.06% | -7.72% |
+| 80-90 percentile | 99 | 0.74% | 0.22% | 52.53% | -7.72% |
 | 90-100 percentile | 181 | -0.23% | -0.15% | 49.17% | -16.03% |
 
 ### Forward 8W
@@ -124,7 +124,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 | 40-50 percentile | 69 | 1.81% | 0.81% | 55.07% | -11.61% |
 | 50-60 percentile | 67 | 2.78% | 2.16% | 58.21% | -10.16% |
 | 60-70 percentile | 87 | 2.02% | 2.61% | 56.32% | -16.03% |
-| 70-80 percentile | 60 | 0.54% | -0.47% | 45.00% | -11.02% |
+| 70-80 percentile | 61 | 0.34% | -0.51% | 44.26% | -11.76% |
 | 80-90 percentile | 97 | 1.58% | 1.06% | 58.76% | -10.41% |
 | 90-100 percentile | 181 | -0.20% | -0.08% | 49.17% | -16.03% |
 
@@ -136,7 +136,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 |---|---:|---:|---:|---:|---:|
 | 0-10 percentile | 151 | 0.20% | 0.32% | 55.63% | -6.35% |
 | 10-20 percentile | 79 | 0.12% | -0.18% | 48.10% | -8.09% |
-| 20-30 percentile | 75 | 0.21% | 0.38% | 56.00% | -5.22% |
+| 20-30 percentile | 76 | 0.20% | 0.30% | 55.26% | -5.22% |
 | 30-40 percentile | 70 | -0.03% | 0.21% | 55.71% | -12.57% |
 | 40-50 percentile | 58 | 0.23% | 0.36% | 56.90% | -5.03% |
 | 50-60 percentile | 93 | -0.13% | -0.02% | 49.46% | -12.10% |
@@ -151,7 +151,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 |---|---:|---:|---:|---:|---:|
 | 0-10 percentile | 151 | 0.34% | 0.18% | 51.66% | -8.09% |
 | 10-20 percentile | 79 | 0.12% | 0.02% | 50.63% | -8.09% |
-| 20-30 percentile | 74 | 0.88% | 0.70% | 55.41% | -7.26% |
+| 20-30 percentile | 75 | 0.85% | 0.62% | 54.67% | -7.26% |
 | 30-40 percentile | 70 | -0.14% | -0.09% | 48.57% | -12.57% |
 | 40-50 percentile | 58 | 0.16% | -0.05% | 48.28% | -12.57% |
 | 50-60 percentile | 93 | 0.15% | 0.36% | 56.99% | -16.03% |
@@ -165,7 +165,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 | percentile_bucket | count | avg_forward_return | median_forward_return | win_rate | max_drawdown_after_signal |
 |---|---:|---:|---:|---:|---:|
 | 0-10 percentile | 151 | 0.59% | 0.46% | 54.30% | -8.09% |
-| 10-20 percentile | 78 | 0.61% | 0.26% | 52.56% | -8.31% |
+| 10-20 percentile | 79 | 0.53% | 0.24% | 51.90% | -8.31% |
 | 20-30 percentile | 73 | 1.45% | 0.92% | 54.79% | -8.92% |
 | 30-40 percentile | 70 | -0.08% | -0.73% | 47.14% | -13.93% |
 | 40-50 percentile | 58 | 0.68% | 0.05% | 50.00% | -12.57% |
@@ -179,7 +179,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 
 | percentile_bucket | count | avg_forward_return | median_forward_return | win_rate | max_drawdown_after_signal |
 |---|---:|---:|---:|---:|---:|
-| 0-10 percentile | 150 | 1.51% | 1.31% | 56.00% | -11.30% |
+| 0-10 percentile | 151 | 1.42% | 1.23% | 55.63% | -11.76% |
 | 10-20 percentile | 75 | 1.37% | 0.40% | 50.67% | -12.04% |
 | 20-30 percentile | 73 | 2.96% | 1.53% | 56.16% | -10.97% |
 | 30-40 percentile | 70 | 0.71% | 0.19% | 50.00% | -16.03% |
@@ -197,7 +197,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 | percentile_bucket | count | avg_forward_return | median_forward_return | win_rate | max_drawdown_after_signal |
 |---|---:|---:|---:|---:|---:|
 | 0-10 percentile | 159 | 0.00% | 0.06% | 50.94% | -12.57% |
-| 10-20 percentile | 76 | 0.64% | 0.70% | 64.47% | -4.46% |
+| 10-20 percentile | 77 | 0.62% | 0.65% | 63.64% | -4.46% |
 | 20-30 percentile | 76 | -0.21% | 0.18% | 55.26% | -8.64% |
 | 30-40 percentile | 90 | 0.27% | 0.21% | 53.33% | -4.54% |
 | 40-50 percentile | 75 | 0.25% | 0.22% | 56.00% | -3.50% |
@@ -212,7 +212,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 | percentile_bucket | count | avg_forward_return | median_forward_return | win_rate | max_drawdown_after_signal |
 |---|---:|---:|---:|---:|---:|
 | 0-10 percentile | 159 | -0.04% | 0.19% | 50.94% | -16.03% |
-| 10-20 percentile | 75 | 1.02% | 0.93% | 61.33% | -6.47% |
+| 10-20 percentile | 76 | 0.99% | 0.86% | 60.53% | -6.47% |
 | 20-30 percentile | 76 | 0.27% | 0.25% | 52.63% | -10.62% |
 | 30-40 percentile | 90 | 0.22% | 0.07% | 52.22% | -6.18% |
 | 40-50 percentile | 75 | 0.16% | 0.02% | 50.67% | -9.65% |
@@ -228,7 +228,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 |---|---:|---:|---:|---:|---:|
 | 0-10 percentile | 159 | 0.04% | 0.08% | 50.94% | -16.03% |
 | 10-20 percentile | 74 | 1.25% | 1.15% | 56.76% | -13.10% |
-| 20-30 percentile | 75 | 1.29% | 1.18% | 60.00% | -10.62% |
+| 20-30 percentile | 76 | 1.20% | 1.07% | 59.21% | -10.62% |
 | 30-40 percentile | 90 | 0.08% | 0.58% | 55.56% | -13.93% |
 | 40-50 percentile | 75 | 0.38% | -0.61% | 41.33% | -11.61% |
 | 50-60 percentile | 54 | 1.16% | 0.43% | 53.70% | -13.65% |
@@ -243,7 +243,7 @@ Forward returns are based on `gold_close`. `max_drawdown_after_signal` is the wo
 |---|---:|---:|---:|---:|---:|
 | 0-10 percentile | 159 | 0.32% | -0.19% | 48.43% | -16.03% |
 | 10-20 percentile | 71 | 2.40% | 2.29% | 66.20% | -13.66% |
-| 20-30 percentile | 74 | 2.98% | 0.89% | 56.76% | -14.14% |
+| 20-30 percentile | 75 | 2.78% | 0.72% | 56.00% | -14.14% |
 | 30-40 percentile | 90 | 1.26% | 0.33% | 53.33% | -14.18% |
 | 40-50 percentile | 75 | 1.14% | 0.29% | 52.00% | -13.65% |
 | 50-60 percentile | 54 | 1.89% | 1.85% | 62.96% | -13.65% |

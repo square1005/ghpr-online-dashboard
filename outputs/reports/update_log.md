@@ -2,11 +2,11 @@
 
 - Status: `success`
 - Update mode: `full`
-- Started UTC: `2026-10-18T23:26:37.218212+00:00`
-- Finished UTC: `2026-10-18T23:28:06.491617+00:00`
-- Latest dataset date before update: `2026-10-06`
-- Latest dataset date after update: `2026-10-13`
-- Latest CFTC available date: `2026-10-13`
+- Started UTC: `2026-10-25T00:00:03.894203+00:00`
+- Finished UTC: `2026-10-25T00:01:49.009268+00:00`
+- Latest dataset date before update: `2026-10-13`
+- Latest dataset date after update: `2026-10-20`
+- Latest CFTC available date: `2026-10-20`
 - Data is current: `true`
 - Stale reason: `N/A`
 - Runtime note: `Cloud runtime file writes may be ephemeral; commit refreshed outputs to GitHub for durable deployment data.`
@@ -18,13 +18,13 @@
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/build_master_dataset.py`
 - Exit code: `0`
-- Elapsed seconds: `17.03`
+- Elapsed seconds: `20.97`
 
 #### stdout
 
 ```text
-Built 894 rows
-Output: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\data\processed\ghpr_master_weekly.csv
+Built 895 rows
+Output: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\data\processed\ghpr_master_weekly.csv
 ```
 
 #### stderr
@@ -37,16 +37,16 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/factor_analysis.py`
 - Exit code: `0`
-- Elapsed seconds: `16.95`
+- Elapsed seconds: `19.79`
 
 #### stdout
 
 ```text
 Built 160 factor bucket rows
-CSV: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\single_factor_decile_analysis.csv
-Markdown: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\single_factor_decile_analysis.md
-Train/Test CSV: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\single_factor_train_test_analysis.csv
-Regime CSV: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\single_factor_regime_analysis.csv
+CSV: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\single_factor_decile_analysis.csv
+Markdown: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\single_factor_decile_analysis.md
+Train/Test CSV: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\single_factor_train_test_analysis.csv
+Regime CSV: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\single_factor_regime_analysis.csv
 ```
 
 #### stderr
@@ -59,36 +59,36 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/plot_engine.py`
 - Exit code: `0`
-- Elapsed seconds: `4.75`
+- Elapsed seconds: `11.56`
 
 #### stdout
 
 ```text
 Created 6 charts
-D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\charts\gold_price_vs_mm_net_percentile.png
-D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\charts\gold_price_vs_producer_net_percentile.png
-D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\charts\gold_price_vs_total_oi_percentile.png
-D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\charts\forward_return_by_mm_percentile_bucket.png
-D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\charts\forward_return_by_producer_percentile_bucket.png
-D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\charts\forward_return_by_oi_percentile_bucket.png
+D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\charts\gold_price_vs_mm_net_percentile.png
+D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\charts\gold_price_vs_producer_net_percentile.png
+D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\charts\gold_price_vs_total_oi_percentile.png
+D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\charts\forward_return_by_mm_percentile_bucket.png
+D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\charts\forward_return_by_producer_percentile_bucket.png
+D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\charts\forward_return_by_oi_percentile_bucket.png
 ```
 
 #### stderr
 
 ```text
-N/A
+Matplotlib is building the font cache; this may take a moment.
 ```
 
 ### Generate factor research report
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/report_engine.py`
 - Exit code: `0`
-- Elapsed seconds: `9.44`
+- Elapsed seconds: `10.77`
 
 #### stdout
 
 ```text
-Report: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\ghpr_factor_report.md
+Report: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\ghpr_factor_report.md
 ```
 
 #### stderr
@@ -101,13 +101,13 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/historical_similarity_engine.py`
 - Exit code: `0`
-- Elapsed seconds: `2.93`
+- Elapsed seconds: `2.92`
 
 #### stdout
 
 ```text
-Wrote D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\hse_current_similarity.csv
-Wrote D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\hse_current_similarity_report.md
+Wrote D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\hse_current_similarity.csv
+Wrote D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\hse_current_similarity_report.md
 ```
 
 #### stderr
@@ -120,14 +120,14 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_lifecycle_research.py`
 - Exit code: `0`
-- Elapsed seconds: `11.05`
+- Elapsed seconds: `12.42`
 
 #### stdout
 
 ```text
-Wrote MM lifecycle dataset: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\data\processed\mm_lifecycle_dataset.csv
-Wrote MM lifecycle summary: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\mm_lifecycle_summary.md
-Rows: 894
+Wrote MM lifecycle dataset: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\data\processed\mm_lifecycle_dataset.csv
+Wrote MM lifecycle summary: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\mm_lifecycle_summary.md
+Rows: 895
 Scope: historical statistics / research reference only
 ```
 
@@ -141,14 +141,14 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_structure_lifecycle_research.py`
 - Exit code: `0`
-- Elapsed seconds: `10.50`
+- Elapsed seconds: `9.46`
 
 #### stdout
 
 ```text
-Wrote MM structure lifecycle dataset: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\data\processed\mm_structure_lifecycle_dataset.csv
-Wrote MM structure lifecycle summary: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\mm_structure_lifecycle_summary.md
-Rows: 894
+Wrote MM structure lifecycle dataset: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\data\processed\mm_structure_lifecycle_dataset.csv
+Wrote MM structure lifecycle summary: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\mm_structure_lifecycle_summary.md
+Rows: 895
 Scope: historical structure research only
 ```
 
@@ -162,14 +162,14 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_velocity_window_discovery.py`
 - Exit code: `0`
-- Elapsed seconds: `9.23`
+- Elapsed seconds: `9.50`
 
 #### stdout
 
 ```text
-Wrote velocity window dataset: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\data\processed\mm_velocity_window_dataset.csv
-Wrote velocity window summary: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\mm_velocity_window_summary.md
-Rows: 894
+Wrote velocity window dataset: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\data\processed\mm_velocity_window_dataset.csv
+Wrote velocity window summary: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\mm_velocity_window_summary.md
+Rows: 895
 Scope: historical structure research only
 ```
 
@@ -183,15 +183,15 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_velocity_reading_layer.py`
 - Exit code: `0`
-- Elapsed seconds: `1.34`
+- Elapsed seconds: `1.69`
 
 #### stdout
 
 ```text
-Wrote velocity reading layer dataset: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\data\processed\mm_velocity_reading_layer.csv
-Wrote velocity reading layer report: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\mm_velocity_reading_layer.md
-Rows: 894
-Latest date: 2026-10-13
+Wrote velocity reading layer dataset: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\data\processed\mm_velocity_reading_layer.csv
+Wrote velocity reading layer report: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\mm_velocity_reading_layer.md
+Rows: 895
+Latest date: 2026-10-20
 Scope: historical structure research only
 ```
 
@@ -205,14 +205,14 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/mm_weekly_change_layer.py`
 - Exit code: `0`
-- Elapsed seconds: `1.38`
+- Elapsed seconds: `1.56`
 
 #### stdout
 
 ```text
-Wrote weekly change dataset: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\data\processed\mm_weekly_change_dataset.csv
-Wrote weekly change summary: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\mm_weekly_change_summary.md
-Latest date: 2026-10-13
+Wrote weekly change dataset: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\data\processed\mm_weekly_change_dataset.csv
+Wrote weekly change summary: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\mm_weekly_change_summary.md
+Latest date: 2026-10-20
 Scope: Historical COT Weekly Change Research only. Not a trading signal.
 ```
 
@@ -226,13 +226,13 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/export_hub_summary.py`
 - Exit code: `0`
-- Elapsed seconds: `1.58`
+- Elapsed seconds: `1.60`
 
 #### stdout
 
 ```text
-Wrote hub summary: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\ghpr_summary_for_hub.json
-Summary date: 2026-10-13
+Wrote hub summary: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\ghpr_summary_for_hub.json
+Summary date: 2026-10-20
 Scope: historical statistics / research reference only
 ```
 
@@ -246,15 +246,15 @@ N/A
 
 - Command: `C:\Users\Administrator\AppData\Local\Programs\Python\Python314\python.exe src/data_freshness_diagnostics.py --strict`
 - Exit code: `0`
-- Elapsed seconds: `2.02`
+- Elapsed seconds: `1.59`
 
 #### stdout
 
 ```text
-Wrote diagnostics: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\data_freshness_diagnostics.json
-Wrote diagnostics: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261018T232634Z-0689676a\stage\outputs\reports\data_freshness_diagnostics.md
+Wrote diagnostics: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\data_freshness_diagnostics.json
+Wrote diagnostics: D:\Codex\GHPR_ReadOnly_Diagnosis_20261004\implementation\runtime\runs\20261025T000000Z-7a62815f\stage\outputs\reports\data_freshness_diagnostics.md
 Overall freshness status: OK
-Expected latest date: 2026-10-13
+Expected latest date: 2026-10-20
 ```
 
 #### stderr

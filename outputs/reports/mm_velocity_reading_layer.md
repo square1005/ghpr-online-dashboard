@@ -26,26 +26,26 @@ Net 8W is the current swing baseline. Net 26W is the research candidate because 
 
 | Field | Value |
 |---|---|
-| date | `2026-10-27` |
-| gold_close | `4,074.60` |
-| long_baseline_8w | `-32.69 pct points` |
-| long_candidate_26w | `-8.33 pct points` |
+| date | `2026-11-03` |
+| gold_close | `3,940.40` |
+| long_baseline_8w | `-28.21 pct points` |
+| long_candidate_26w | `-11.54 pct points` |
 | long_alignment_status | `SAME_DIRECTION_NEGATIVE` |
-| short_baseline_8w | `12.18 pct points` |
-| short_candidate_2w | `-1.28 pct points` |
-| short_candidate_4w | `10.90 pct points` |
-| short_candidate_fast_avg | `4.81 pct points` |
+| short_baseline_8w | `19.23 pct points` |
+| short_candidate_2w | `5.77 pct points` |
+| short_candidate_4w | `8.33 pct points` |
+| short_candidate_fast_avg | `7.05 pct points` |
 | short_alignment_status | `SAME_DIRECTION_POSITIVE` |
-| net_baseline_8w | `-33.97 pct points` |
-| net_candidate_26w | `3.85 pct points` |
-| net_alignment_status | `BASELINE_NEGATIVE_CANDIDATE_POSITIVE` |
-| overall_velocity_reading | `MIXED_STRUCTURE` |
+| net_baseline_8w | `-33.33 pct points` |
+| net_candidate_26w | `-5.13 pct points` |
+| net_alignment_status | `SAME_DIRECTION_NEGATIVE` |
+| overall_velocity_reading | `MEDIUM_TERM_STRUCTURE_WEAKENING` |
 
 ## 7. Overall Reading Distribution
 
 | Reading | Count |
 |---|---:|
-| MEDIUM_TERM_STRUCTURE_WEAKENING | 393 |
+| MEDIUM_TERM_STRUCTURE_WEAKENING | 394 |
 | MEDIUM_TERM_PARTICIPATION_BUILDING | 333 |
 | MIXED_STRUCTURE | 111 |
 | SHORT_TERM_RECOVERY_MEDIUM_TERM_UNCONFIRMED | 53 |
@@ -55,8 +55,8 @@ Net 8W is the current swing baseline. Net 26W is the research candidate because 
 
 - Long alignment: `SAME_DIRECTION_NEGATIVE`.
 - Short alignment: `SAME_DIRECTION_POSITIVE`.
-- Net alignment: `BASELINE_NEGATIVE_CANDIDATE_POSITIVE`.
-- Overall reading: `MIXED_STRUCTURE`.
+- Net alignment: `SAME_DIRECTION_NEGATIVE`.
+- Overall reading: `MEDIUM_TERM_STRUCTURE_WEAKENING`.
 
 ## 9. Should GHPR Replace 8W Now?
 

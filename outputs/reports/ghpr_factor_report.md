@@ -2,18 +2,18 @@
 
 ## 1. 資料期間
 
-- 資料期間：2009-09-01 至 2026-10-27
+- 資料期間：2009-09-01 至 2026-11-03
 
 ## 2. 資料筆數
 
-- Master weekly rows: 896
+- Master weekly rows: 897
 - Single-factor result rows: 160
 
 ## 3. 缺值狀況
 
 | column | missing_count | missing_pct |
 |---|---:|---:|
-| gold_anomaly_reason | 829 | 92.52% |
+| gold_anomaly_reason | 830 | 92.53% |
 | gold_close_percentile_156w | 51 | 5.69% |
 | swap_net_zscore_156w | 51 | 5.69% |
 | oi_percentile_156w | 51 | 5.69% |
@@ -65,22 +65,22 @@
 
 | factor | horizon | rank_corr | high_low_spread | best_bucket | best_avg | worst_bucket | worst_avg | assessment |
 |---|---:|---:|---:|---|---:|---|---:|---|
-| Managed Money Net Percentile | 1W | 0.127 | 0.20% | 50-60 percentile | 0.59% | 40-50 percentile | -0.31% | 無：暫無穩定單因子預測力 |
+| Managed Money Net Percentile | 1W | 0.176 | 0.20% | 50-60 percentile | 0.59% | 40-50 percentile | -0.31% | 無：暫無穩定單因子預測力 |
 | Managed Money Net Percentile | 2W | 0.188 | 0.49% | 60-70 percentile | 0.91% | 30-40 percentile | -0.28% | 弱：有局部 bucket 現象，但方向不夠穩定 |
-| Managed Money Net Percentile | 4W | 0.309 | 0.88% | 50-60 percentile | 1.66% | 30-40 percentile | -0.11% | 中：有可研究方向，但仍需樣本外驗證 |
-| Managed Money Net Percentile | 8W | 0.794 | 1.14% | 90-100 percentile | 2.19% | 20-30 percentile | -0.21% | 強：bucket 報酬具明顯單調性與高低分位差 |
-| Producer / Merchant Net Percentile | 1W | -0.188 | 0.05% | 30-40 percentile | 0.49% | 0-10 percentile | -0.08% | 無：暫無穩定單因子預測力 |
-| Producer / Merchant Net Percentile | 2W | -0.248 | -0.21% | 30-40 percentile | 1.30% | 90-100 percentile | -0.16% | 無：暫無穩定單因子預測力 |
-| Producer / Merchant Net Percentile | 4W | -0.273 | -0.48% | 30-40 percentile | 2.06% | 90-100 percentile | -0.23% | 弱：有局部 bucket 現象，但方向不夠穩定 |
+| Managed Money Net Percentile | 4W | 0.309 | 0.88% | 50-60 percentile | 1.66% | 30-40 percentile | -0.18% | 中：有可研究方向，但仍需樣本外驗證 |
+| Managed Money Net Percentile | 8W | 0.830 | 1.14% | 90-100 percentile | 2.19% | 20-30 percentile | -0.21% | 強：bucket 報酬具明顯單調性與高低分位差 |
+| Producer / Merchant Net Percentile | 1W | -0.188 | 0.04% | 30-40 percentile | 0.49% | 0-10 percentile | -0.08% | 無：暫無穩定單因子預測力 |
+| Producer / Merchant Net Percentile | 2W | -0.248 | -0.23% | 30-40 percentile | 1.30% | 90-100 percentile | -0.18% | 無：暫無穩定單因子預測力 |
+| Producer / Merchant Net Percentile | 4W | -0.273 | -0.51% | 30-40 percentile | 2.06% | 90-100 percentile | -0.26% | 弱：有局部 bucket 現象，但方向不夠穩定 |
 | Producer / Merchant Net Percentile | 8W | -0.309 | -1.10% | 20-30 percentile | 2.85% | 90-100 percentile | -0.20% | 中：有可研究方向，但仍需樣本外驗證 |
-| Swap Net Percentile | 1W | 0.164 | 0.13% | 60-70 percentile | 0.48% | 50-60 percentile | -0.13% | 無：暫無穩定單因子預測力 |
-| Swap Net Percentile | 2W | 0.127 | 0.26% | 20-30 percentile | 0.81% | 70-80 percentile | -0.18% | 無：暫無穩定單因子預測力 |
-| Swap Net Percentile | 4W | 0.273 | 0.53% | 20-30 percentile | 1.39% | 30-40 percentile | -0.08% | 弱：有局部 bucket 現象，但方向不夠穩定 |
-| Swap Net Percentile | 8W | -0.188 | 1.51% | 20-30 percentile | 2.96% | 60-70 percentile | -0.17% | 弱：有局部 bucket 現象，但方向不夠穩定 |
-| Total Open Interest Percentile | 1W | 0.042 | 0.15% | 10-20 percentile | 0.59% | 60-70 percentile | -0.22% | 無：暫無穩定單因子預測力 |
-| Total Open Interest Percentile | 2W | 0.200 | 0.20% | 10-20 percentile | 0.95% | 0-10 percentile | -0.04% | 無：暫無穩定單因子預測力 |
-| Total Open Interest Percentile | 4W | -0.006 | 0.66% | 20-30 percentile | 1.20% | 0-10 percentile | 0.04% | 弱：有局部 bucket 現象，但方向不夠穩定 |
-| Total Open Interest Percentile | 8W | -0.103 | 1.35% | 20-30 percentile | 2.78% | 0-10 percentile | 0.32% | 弱：有局部 bucket 現象，但方向不夠穩定 |
+| Swap Net Percentile | 1W | 0.091 | 0.13% | 60-70 percentile | 0.48% | 50-60 percentile | -0.13% | 無：暫無穩定單因子預測力 |
+| Swap Net Percentile | 2W | 0.176 | 0.26% | 20-30 percentile | 0.81% | 30-40 percentile | -0.21% | 無：暫無穩定單因子預測力 |
+| Swap Net Percentile | 4W | 0.273 | 0.53% | 20-30 percentile | 1.30% | 30-40 percentile | -0.08% | 弱：有局部 bucket 現象，但方向不夠穩定 |
+| Swap Net Percentile | 8W | -0.103 | 1.51% | 20-30 percentile | 2.96% | 60-70 percentile | -0.17% | 弱：有局部 bucket 現象，但方向不夠穩定 |
+| Total Open Interest Percentile | 1W | 0.042 | 0.15% | 10-20 percentile | 0.54% | 60-70 percentile | -0.22% | 無：暫無穩定單因子預測力 |
+| Total Open Interest Percentile | 2W | 0.200 | 0.20% | 10-20 percentile | 0.87% | 0-10 percentile | -0.04% | 無：暫無穩定單因子預測力 |
+| Total Open Interest Percentile | 4W | 0.042 | 0.66% | 20-30 percentile | 1.20% | 0-10 percentile | 0.04% | 弱：有局部 bucket 現象，但方向不夠穩定 |
+| Total Open Interest Percentile | 8W | -0.030 | 1.35% | 20-30 percentile | 2.78% | 0-10 percentile | 0.32% | 弱：有局部 bucket 現象，但方向不夠穩定 |
 
 ## 6. 樣本外測試：Train 2009-2018 / Test 2019-2026
 
@@ -90,17 +90,17 @@
 | Managed Money Net Percentile | 2W | -0.297 | 0.479 | 0.07% | 0.36% | 10-20 percentile | 60-70 percentile | weak |
 | Managed Money Net Percentile | 4W | -0.139 | 0.503 | 0.07% | 0.99% | 10-20 percentile | 80-90 percentile | weak |
 | Managed Money Net Percentile | 8W | -0.103 | 0.818 | -0.67% | 1.88% | 0-10 percentile | 80-90 percentile | weak |
-| Producer / Merchant Net Percentile | 1W | 0.176 | -0.721 | 0.27% | -0.44% | 50-60 percentile | 10-20 percentile | weak |
-| Producer / Merchant Net Percentile | 2W | 0.164 | -0.879 | 0.28% | -1.38% | 50-60 percentile | 30-40 percentile | weak |
-| Producer / Merchant Net Percentile | 4W | 0.430 | -0.806 | 0.59% | -3.15% | 50-60 percentile | 10-20 percentile | weak |
+| Producer / Merchant Net Percentile | 1W | 0.176 | -0.721 | 0.27% | -0.47% | 50-60 percentile | 10-20 percentile | weak |
+| Producer / Merchant Net Percentile | 2W | 0.164 | -0.879 | 0.28% | -1.43% | 50-60 percentile | 30-40 percentile | weak |
+| Producer / Merchant Net Percentile | 4W | 0.430 | -0.806 | 0.59% | -3.21% | 50-60 percentile | 10-20 percentile | weak |
 | Producer / Merchant Net Percentile | 8W | 0.333 | -0.842 | -0.22% | -4.52% | 50-60 percentile | 10-20 percentile | weak |
-| Swap Net Percentile | 1W | 0.697 | -0.200 | 0.43% | -0.01% | 40-50 percentile | 60-70 percentile | weak |
-| Swap Net Percentile | 2W | 0.733 | 0.006 | 0.99% | -0.14% | 90-100 percentile | 20-30 percentile | weak |
-| Swap Net Percentile | 4W | 0.879 | -0.321 | 1.82% | -0.27% | 90-100 percentile | 20-30 percentile | weak |
+| Swap Net Percentile | 1W | 0.697 | -0.188 | 0.43% | -0.01% | 40-50 percentile | 60-70 percentile | weak |
+| Swap Net Percentile | 2W | 0.733 | 0.018 | 0.99% | -0.14% | 90-100 percentile | 20-30 percentile | weak |
+| Swap Net Percentile | 4W | 0.879 | -0.248 | 1.82% | -0.27% | 90-100 percentile | 80-90 percentile | weak |
 | Swap Net Percentile | 8W | 0.758 | -0.164 | 3.53% | 0.06% | 90-100 percentile | 20-30 percentile | weak |
 | Total Open Interest Percentile | 1W | -0.152 | 0.152 | -0.14% | 0.51% | 50-60 percentile | 70-80 percentile | weak |
-| Total Open Interest Percentile | 2W | -0.212 | 0.273 | -0.16% | 0.66% | 50-60 percentile | 80-90 percentile | weak |
-| Total Open Interest Percentile | 4W | -0.224 | 0.382 | 0.14% | 1.42% | 60-70 percentile | 70-80 percentile | weak |
+| Total Open Interest Percentile | 2W | -0.212 | 0.345 | -0.16% | 0.66% | 50-60 percentile | 80-90 percentile | weak |
+| Total Open Interest Percentile | 4W | -0.224 | 0.394 | 0.14% | 1.42% | 60-70 percentile | 70-80 percentile | weak |
 | Total Open Interest Percentile | 8W | 0.164 | 0.079 | 0.87% | 2.19% | 20-30 percentile | 70-80 percentile | pass |
 
 ## 7. 牛市 / 熊市 / 震盪 Regime 切分
@@ -108,19 +108,19 @@
 | regime | factor | horizon | rank_corr | high_low_spread | best_bucket | best_avg | assessment |
 |---|---|---:|---:|---:|---|---:|---|
 | bear | Managed Money Net Percentile | 1W | -0.833 | NA | 0-10 percentile | 1.82% | 無：暫無穩定單因子預測力 |
-| bear | Managed Money Net Percentile | 2W | -0.833 | NA | 0-10 percentile | 3.57% | 無：暫無穩定單因子預測力 |
+| bear | Managed Money Net Percentile | 2W | -0.762 | NA | 0-10 percentile | 3.57% | 無：暫無穩定單因子預測力 |
 | bear | Managed Money Net Percentile | 4W | -0.714 | NA | 10-20 percentile | 9.97% | 無：暫無穩定單因子預測力 |
 | bear | Managed Money Net Percentile | 8W | -0.905 | NA | 0-10 percentile | 12.83% | 無：暫無穩定單因子預測力 |
-| bear | Total Open Interest Percentile | 1W | -0.139 | -1.38% | 10-20 percentile | 4.58% | 無：暫無穩定單因子預測力 |
+| bear | Total Open Interest Percentile | 1W | -0.139 | -1.38% | 10-20 percentile | 4.37% | 無：暫無穩定單因子預測力 |
 | bear | Total Open Interest Percentile | 2W | -0.248 | -4.71% | 70-80 percentile | 5.26% | 無：暫無穩定單因子預測力 |
 | bear | Total Open Interest Percentile | 4W | -0.224 | -8.64% | 80-90 percentile | 10.82% | 無：暫無穩定單因子預測力 |
-| bear | Total Open Interest Percentile | 8W | -0.648 | -11.23% | 20-30 percentile | 10.62% | 強：bucket 報酬具明顯單調性與高低分位差 |
-| bear | Producer / Merchant Net Percentile | 1W | 0.567 | NA | 90-100 percentile | 1.92% | 無：暫無穩定單因子預測力 |
-| bear | Producer / Merchant Net Percentile | 2W | 0.567 | NA | 90-100 percentile | 3.69% | 無：暫無穩定單因子預測力 |
+| bear | Total Open Interest Percentile | 8W | -0.636 | -10.97% | 20-30 percentile | 10.62% | 強：bucket 報酬具明顯單調性與高低分位差 |
+| bear | Producer / Merchant Net Percentile | 1W | 0.567 | NA | 90-100 percentile | 1.86% | 無：暫無穩定單因子預測力 |
+| bear | Producer / Merchant Net Percentile | 2W | 0.567 | NA | 90-100 percentile | 3.59% | 無：暫無穩定單因子預測力 |
 | bear | Producer / Merchant Net Percentile | 4W | 0.633 | NA | 80-90 percentile | 12.81% | 無：暫無穩定單因子預測力 |
 | bear | Producer / Merchant Net Percentile | 8W | 0.583 | NA | 80-90 percentile | 19.10% | 無：暫無穩定單因子預測力 |
 | bear | Swap Net Percentile | 1W | 0.770 | 4.40% | 90-100 percentile | 2.60% | 強：bucket 報酬具明顯單調性與高低分位差 |
-| bear | Swap Net Percentile | 2W | 0.733 | 9.55% | 80-90 percentile | 5.76% | 強：bucket 報酬具明顯單調性與高低分位差 |
+| bear | Swap Net Percentile | 2W | 0.770 | 9.55% | 80-90 percentile | 5.76% | 強：bucket 報酬具明顯單調性與高低分位差 |
 | bear | Swap Net Percentile | 4W | 0.891 | 17.45% | 90-100 percentile | 10.79% | 強：bucket 報酬具明顯單調性與高低分位差 |
 | bear | Swap Net Percentile | 8W | 0.927 | 31.65% | 90-100 percentile | 24.04% | 強：bucket 報酬具明顯單調性與高低分位差 |
 | bull | Managed Money Net Percentile | 1W | 0.394 | 0.04% | 60-70 percentile | 0.99% | 無：暫無穩定單因子預測力 |
@@ -164,36 +164,36 @@
 |---|---:|---|---:|---:|---:|---:|
 | Managed Money Net Percentile | 1W | 0-10 percentile | 166 | 0.13% | 0.18% | 55.42% |
 | Managed Money Net Percentile | 1W | 10-20 percentile | 70 | 0.11% | 0.24% | 57.14% |
-| Managed Money Net Percentile | 1W | 20-30 percentile | 85 | 0.40% | 0.38% | 57.65% |
+| Managed Money Net Percentile | 1W | 20-30 percentile | 86 | 0.36% | 0.37% | 56.98% |
 | Managed Money Net Percentile | 1W | 50-60 percentile | 66 | 0.59% | 0.59% | 63.64% |
 | Managed Money Net Percentile | 1W | 70-80 percentile | 46 | 0.46% | 0.72% | 60.87% |
 | Managed Money Net Percentile | 2W | 10-20 percentile | 70 | 0.73% | 0.58% | 60.00% |
-| Managed Money Net Percentile | 2W | 20-30 percentile | 84 | 0.39% | 0.68% | 59.52% |
+| Managed Money Net Percentile | 2W | 20-30 percentile | 85 | 0.33% | 0.62% | 58.82% |
 | Managed Money Net Percentile | 2W | 50-60 percentile | 66 | 0.88% | 0.83% | 60.61% |
 | Managed Money Net Percentile | 2W | 60-70 percentile | 65 | 0.91% | 0.35% | 61.54% |
 | Managed Money Net Percentile | 4W | 0-10 percentile | 166 | 0.31% | 0.36% | 56.02% |
 | Managed Money Net Percentile | 4W | 10-20 percentile | 70 | 1.47% | 1.88% | 62.86% |
 | Managed Money Net Percentile | 4W | 90-100 percentile | 110 | 1.19% | 1.04% | 63.64% |
-| Managed Money Net Percentile | 8W | 50-60 percentile | 64 | 2.02% | 2.20% | 60.94% |
+| Managed Money Net Percentile | 8W | 50-60 percentile | 65 | 1.82% | 2.13% | 60.00% |
 | Managed Money Net Percentile | 8W | 60-70 percentile | 65 | 2.03% | 0.74% | 60.00% |
 | Managed Money Net Percentile | 8W | 70-80 percentile | 46 | 1.81% | 1.12% | 56.52% |
 | Managed Money Net Percentile | 8W | 80-90 percentile | 59 | 2.00% | 1.67% | 59.32% |
 | Managed Money Net Percentile | 8W | 90-100 percentile | 110 | 2.19% | 1.94% | 62.73% |
-| Total Open Interest Percentile | 1W | 10-20 percentile | 78 | 0.59% | 0.64% | 62.82% |
+| Total Open Interest Percentile | 1W | 10-20 percentile | 79 | 0.54% | 0.62% | 62.03% |
 | Total Open Interest Percentile | 1W | 40-50 percentile | 75 | 0.25% | 0.22% | 56.00% |
 | Total Open Interest Percentile | 1W | 50-60 percentile | 54 | 0.41% | 0.42% | 61.11% |
 | Total Open Interest Percentile | 1W | 80-90 percentile | 62 | 0.32% | 0.62% | 58.06% |
 | Total Open Interest Percentile | 1W | 90-100 percentile | 98 | 0.15% | 0.25% | 56.12% |
-| Total Open Interest Percentile | 2W | 10-20 percentile | 77 | 0.95% | 0.80% | 59.74% |
+| Total Open Interest Percentile | 2W | 10-20 percentile | 78 | 0.87% | 0.66% | 58.97% |
 | Total Open Interest Percentile | 2W | 50-60 percentile | 54 | 0.64% | 0.31% | 57.41% |
 | Total Open Interest Percentile | 2W | 70-80 percentile | 73 | 0.44% | 0.11% | 56.16% |
 | Total Open Interest Percentile | 2W | 80-90 percentile | 62 | 0.74% | 0.54% | 58.06% |
-| Total Open Interest Percentile | 4W | 10-20 percentile | 75 | 1.20% | 1.11% | 56.00% |
+| Total Open Interest Percentile | 4W | 10-20 percentile | 76 | 1.11% | 1.06% | 55.26% |
 | Total Open Interest Percentile | 4W | 20-30 percentile | 76 | 1.20% | 1.07% | 59.21% |
 | Total Open Interest Percentile | 4W | 30-40 percentile | 90 | 0.08% | 0.58% | 55.56% |
 | Total Open Interest Percentile | 4W | 70-80 percentile | 73 | 0.97% | 0.56% | 56.16% |
 | Total Open Interest Percentile | 4W | 90-100 percentile | 98 | 0.70% | 0.56% | 62.24% |
-| Total Open Interest Percentile | 8W | 10-20 percentile | 72 | 2.27% | 2.29% | 65.28% |
+| Total Open Interest Percentile | 8W | 10-20 percentile | 73 | 2.08% | 2.28% | 64.38% |
 | Total Open Interest Percentile | 8W | 20-30 percentile | 75 | 2.78% | 0.72% | 56.00% |
 | Total Open Interest Percentile | 8W | 50-60 percentile | 54 | 1.89% | 1.85% | 62.96% |
 | Total Open Interest Percentile | 8W | 70-80 percentile | 73 | 2.21% | 1.38% | 60.27% |
@@ -225,7 +225,7 @@
 | Producer / Merchant Net Percentile | 8W | 80-90 percentile | 97 | 1.58% | 1.06% | 58.76% |
 | Swap Net Percentile | 1W | 0-10 percentile | 151 | 0.20% | 0.32% | 55.63% |
 | Swap Net Percentile | 1W | 20-30 percentile | 76 | 0.20% | 0.30% | 55.26% |
-| Swap Net Percentile | 1W | 40-50 percentile | 58 | 0.23% | 0.36% | 56.90% |
+| Swap Net Percentile | 1W | 40-50 percentile | 59 | 0.17% | 0.35% | 55.93% |
 | Swap Net Percentile | 1W | 60-70 percentile | 79 | 0.48% | 0.30% | 59.49% |
 | Swap Net Percentile | 1W | 70-80 percentile | 57 | 0.14% | 0.41% | 59.65% |
 | Swap Net Percentile | 1W | 90-100 percentile | 113 | 0.33% | 0.25% | 60.18% |
@@ -246,6 +246,7 @@
 | factor | horizon | bucket | count | avg_forward_return | median_forward_return | win_rate |
 |---|---:|---|---:|---:|---:|---:|
 | Managed Money Net Percentile | 1W | 40-50 percentile | 97 | -0.31% | -0.27% | 44.33% |
+| Managed Money Net Percentile | 4W | 30-40 percentile | 80 | -0.18% | -0.37% | 45.00% |
 
 ## 10. 目前沒有參考價值的因子
 

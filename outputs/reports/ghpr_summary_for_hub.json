@@ -39,7 +39,7 @@
     "gold_price_source": "COMEX GC futures proxy via Yahoo Finance GC=F",
     "scope": "historical statistics / research reference only"
   },
-  "last_update_time": "2026-11-08T00:01:25.461390+00:00",
+  "last_update_time": "2026-11-15T00:01:44.218511+00:00",
   "dashboard_url": "https://square1005.github.io/ghpr-online-dashboard/",
   "mm_lifecycle_state": "MM_RESET",
   "mm_velocity_8w": -0.333333,

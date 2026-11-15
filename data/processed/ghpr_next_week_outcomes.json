@@ -5,7 +5,7 @@
   "scope": {
     "cot_start": "2009-09-01",
     "cot_end": "2026-11-03",
-    "as_of": "2026-11-08T00:00:02.948345+00:00",
+    "as_of": "2026-11-15T00:00:03.615311+00:00",
     "scope_months": null,
     "scope_mode": "ALL_MASTER",
     "coverage_scope": "ALL_MASTER",
@@ -136972,7 +136972,7 @@
       "observed_sessions": 5,
       "expected_sessions": 5,
       "week_state": "ENDED",
-      "archive_status": "CURRENT_QUERY",
+      "archive_status": "CURRENT_DAILY_WITH_ARCHIVED_HOURLY",
       "observed_session_dates": [
         "2026-07-06",
         "2026-07-07",
@@ -137108,7 +137108,6 @@
         }
       ],
       "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Monday",
       "low_date": "2026-07-08",
       "low_weekday": "Wednesday",
       "low_dates": [
@@ -137138,7 +137137,13 @@
         }
       ],
       "low_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Monday",
       "low_weekday_taipei": "Wednesday",
+      "hourly_archive_reference": {
+        "provenance_id": "fdde346afd7f33853ad722ad70e4133afc28ddeccf1a2e595e89531af3f381a2",
+        "source_snapshot_sha256": "fdde346afd7f33853ad722ad70e4133afc28ddeccf1a2e595e89531af3f381a2",
+        "source_snapshot_as_of": "2026-11-08T00:00:02.948345+00:00"
+      },
       "time_precision": "hour_bucket",
       "extreme_order": "HIGH_THEN_LOW"
     },
@@ -137175,8 +137180,8 @@
       ],
       "missing_session_dates": [],
       "unexpected_session_dates": [],
-      "hourly_coverage_status": "COMPLETE_OBSERVED_HOURLY",
-      "observed_hourly_bars": 115,
+      "hourly_coverage_status": "PARTIAL",
+      "observed_hourly_bars": 57,
       "expected_hourly_bars": 115,
       "holiday_affected": false,
       "calendar_note": "Weekday daily-bar labels; normal COMEX 18:00–17:00 America/New_York sessions.",
@@ -137269,30 +137274,16 @@
         "2026-07-14"
       ],
       "high_daily_tie_count": 1,
-      "high_time_utc": "2026-07-14T12:00:00+00:00",
-      "high_time_taipei": "2026-07-14T20:00:00+08:00",
-      "high_time_range_taipei": {
-        "start": "2026-07-14T20:00:00+08:00",
-        "end": "2026-07-14T21:00:00+08:00"
-      },
-      "high_time_range_utc": {
-        "start": "2026-07-14T12:00:00+00:00",
-        "end": "2026-07-14T13:00:00+00:00"
-      },
-      "high_time_precision": "hour_bucket",
-      "high_time_reason": "MATCHED_FIRST_OBSERVED_HOUR_BUCKET",
-      "high_hour_bucket_tie_count": 1,
-      "high_observed_hour_buckets": [
-        {
-          "start_utc": "2026-07-14T12:00:00+00:00",
-          "end_utc": "2026-07-14T13:00:00+00:00",
-          "start_taipei": "2026-07-14T20:00:00+08:00",
-          "end_taipei": "2026-07-14T21:00:00+08:00",
-          "session_date": "2026-07-14"
-        }
-      ],
-      "high_first_hour_bucket_verified": true,
-      "high_weekday_taipei": "Tuesday",
+      "high_time_utc": null,
+      "high_time_taipei": null,
+      "high_time_range_taipei": null,
+      "high_time_range_utc": null,
+      "high_time_precision": "day",
+      "high_time_reason": "DAILY_HOURLY_EXTREME_MISMATCH",
+      "high_hour_bucket_tie_count": 0,
+      "high_observed_hour_buckets": [],
+      "high_first_hour_bucket_verified": false,
+      "high_hourly_comparison_price": 4089.10009765625,
       "low_date": "2026-07-17",
       "low_weekday": "Friday",
       "low_dates": [
@@ -137310,7 +137301,7 @@
         "end": "2026-07-17T14:00:00+00:00"
       },
       "low_time_precision": "hour_bucket",
-      "low_time_reason": "MATCHED_FIRST_OBSERVED_HOUR_BUCKET",
+      "low_time_reason": "MATCHED_OBSERVED_BUCKET_INCOMPLETE_HOURLY_COVERAGE",
       "low_hour_bucket_tie_count": 1,
       "low_observed_hour_buckets": [
         {
@@ -137321,9 +137312,9 @@
           "session_date": "2026-07-17"
         }
       ],
-      "low_first_hour_bucket_verified": true,
+      "low_first_hour_bucket_verified": false,
       "low_weekday_taipei": "Friday",
-      "time_precision": "hour_bucket",
+      "time_precision": "mixed",
       "extreme_order": "HIGH_THEN_LOW"
     },
     {
@@ -140211,20 +140202,26 @@
       "cot_date": "2026-11-03",
       "week_start": "2026-11-09",
       "week_end": "2026-11-13",
-      "open": null,
-      "high": null,
-      "low": null,
-      "close": null,
-      "change": null,
-      "change_pct": null,
-      "range": null,
-      "range_pct": null,
-      "coverage_status": "PENDING",
-      "observed_sessions": 0,
+      "open": 4074.300048828125,
+      "high": 4157.7001953125,
+      "low": 3856.699951171875,
+      "close": 3886.300048828125,
+      "change": -188.0,
+      "change_pct": -0.04614289515915104,
+      "range": 301.000244140625,
+      "range_pct": 0.0738777803630836,
+      "coverage_status": "COMPLETE_DAILY",
+      "observed_sessions": 5,
       "expected_sessions": 5,
-      "week_state": "PENDING",
+      "week_state": "ENDED",
       "archive_status": "CURRENT_QUERY",
-      "observed_session_dates": [],
+      "observed_session_dates": [
+        "2026-11-09",
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12",
+        "2026-11-13"
+      ],
       "expected_session_dates": [
         "2026-11-09",
         "2026-11-10",
@@ -140234,8 +140231,8 @@
       ],
       "missing_session_dates": [],
       "unexpected_session_dates": [],
-      "hourly_coverage_status": "PENDING",
-      "observed_hourly_bars": 0,
+      "hourly_coverage_status": "COMPLETE_OBSERVED_HOURLY",
+      "observed_hourly_bars": 115,
       "expected_hourly_bars": 115,
       "holiday_affected": false,
       "calendar_note": "Weekday daily-bar labels; normal COMEX 18:00–17:00 America/New_York sessions.",
@@ -140253,9 +140250,45 @@
       "window_end_utc": "2026-11-13T22:00:00+00:00",
       "week_start_at": "2026-11-08T23:00:00+00:00",
       "week_end_at": "2026-11-13T22:00:00+00:00",
-      "bars": [],
-      "daily_coverage_category": "PENDING",
-      "daily_coverage_note": "目標週尚未開始，行情保留空值。",
+      "bars": [
+        {
+          "date": "2026-11-09",
+          "open": 4074.300048828125,
+          "high": 4157.7001953125,
+          "low": 4062.5,
+          "close": 4114.5
+        },
+        {
+          "date": "2026-11-10",
+          "open": 4149.0,
+          "high": 4156.2001953125,
+          "low": 4020.800048828125,
+          "close": 4030.199951171875
+        },
+        {
+          "date": "2026-11-11",
+          "open": 4043.699951171875,
+          "high": 4074.699951171875,
+          "low": 3989.60009765625,
+          "close": 4000.5
+        },
+        {
+          "date": "2026-11-12",
+          "open": 3994.0,
+          "high": 4005.89990234375,
+          "low": 3856.699951171875,
+          "close": 3885.300048828125
+        },
+        {
+          "date": "2026-11-13",
+          "open": 3883.300048828125,
+          "high": 3927.199951171875,
+          "low": 3871.10009765625,
+          "close": 3886.300048828125
+        }
+      ],
+      "daily_coverage_category": "COMPLETE_EXPECTED_LABELS",
+      "daily_coverage_note": "本週五個預期日 K 標籤均存在；小時行情完整度另行核對。",
       "quarantined_ohlc_dates": [],
       "source_null_dates": [],
       "confirmed_source_gap_dates": [],
@@ -140286,44 +140319,78 @@
       "revision_publication_dates": [],
       "revision_release_at_utc": null,
       "research_availability_note": "Observation-next-calendar-week outcome only. Actual CFTC publication time is unverified; do not assume this row was available before the outcome week.",
-      "high_date": null,
-      "high_weekday": null,
-      "high_dates": [],
-      "high_daily_tie_count": 0,
-      "high_time_utc": null,
-      "high_time_taipei": null,
-      "high_time_range_taipei": null,
-      "high_time_range_utc": null,
-      "high_time_precision": "unavailable",
-      "high_time_reason": "NO_DAILY_BARS",
-      "high_hour_bucket_tie_count": 0,
-      "high_observed_hour_buckets": [],
-      "high_first_hour_bucket_verified": false,
-      "low_date": null,
-      "low_weekday": null,
-      "low_dates": [],
-      "low_daily_tie_count": 0,
-      "low_time_utc": null,
-      "low_time_taipei": null,
-      "low_time_range_taipei": null,
-      "low_time_range_utc": null,
-      "low_time_precision": "unavailable",
-      "low_time_reason": "NO_DAILY_BARS",
-      "low_hour_bucket_tie_count": 0,
-      "low_observed_hour_buckets": [],
-      "low_first_hour_bucket_verified": false,
-      "time_precision": "unavailable",
-      "extreme_order": "UNKNOWN"
+      "high_date": "2026-11-09",
+      "high_weekday": "Monday",
+      "high_dates": [
+        "2026-11-09"
+      ],
+      "high_daily_tie_count": 1,
+      "high_time_utc": "2026-11-09T20:00:00+00:00",
+      "high_time_taipei": "2026-11-10T04:00:00+08:00",
+      "high_time_range_taipei": {
+        "start": "2026-11-10T04:00:00+08:00",
+        "end": "2026-11-10T05:00:00+08:00"
+      },
+      "high_time_range_utc": {
+        "start": "2026-11-09T20:00:00+00:00",
+        "end": "2026-11-09T21:00:00+00:00"
+      },
+      "high_time_precision": "hour_bucket",
+      "high_time_reason": "MATCHED_FIRST_OBSERVED_HOUR_BUCKET",
+      "high_hour_bucket_tie_count": 1,
+      "high_observed_hour_buckets": [
+        {
+          "start_utc": "2026-11-09T20:00:00+00:00",
+          "end_utc": "2026-11-09T21:00:00+00:00",
+          "start_taipei": "2026-11-10T04:00:00+08:00",
+          "end_taipei": "2026-11-10T05:00:00+08:00",
+          "session_date": "2026-11-09"
+        }
+      ],
+      "high_first_hour_bucket_verified": true,
+      "high_weekday_taipei": "Tuesday",
+      "low_date": "2026-11-12",
+      "low_weekday": "Thursday",
+      "low_dates": [
+        "2026-11-12"
+      ],
+      "low_daily_tie_count": 1,
+      "low_time_utc": "2026-11-12T15:00:00+00:00",
+      "low_time_taipei": "2026-11-12T23:00:00+08:00",
+      "low_time_range_taipei": {
+        "start": "2026-11-12T23:00:00+08:00",
+        "end": "2026-11-13T00:00:00+08:00"
+      },
+      "low_time_range_utc": {
+        "start": "2026-11-12T15:00:00+00:00",
+        "end": "2026-11-12T16:00:00+00:00"
+      },
+      "low_time_precision": "hour_bucket",
+      "low_time_reason": "MATCHED_FIRST_OBSERVED_HOUR_BUCKET",
+      "low_hour_bucket_tie_count": 1,
+      "low_observed_hour_buckets": [
+        {
+          "start_utc": "2026-11-12T15:00:00+00:00",
+          "end_utc": "2026-11-12T16:00:00+00:00",
+          "start_taipei": "2026-11-12T23:00:00+08:00",
+          "end_taipei": "2026-11-13T00:00:00+08:00",
+          "session_date": "2026-11-12"
+        }
+      ],
+      "low_first_hour_bucket_verified": true,
+      "low_weekday_taipei": "Thursday",
+      "time_precision": "hour_bucket",
+      "extreme_order": "HIGH_THEN_LOW"
     }
   ],
   "coverage_summary": {
     "rows": 897,
-    "COMPLETE_DAILY": 797,
+    "COMPLETE_DAILY": 798,
     "PARTIAL": 99,
-    "PENDING": 1,
+    "PENDING": 0,
     "MISSING": 0,
     "hour_bucket_highs": 96,
-    "hour_bucket_lows": 80
+    "hour_bucket_lows": 81
   },
   "provenance": {
     "master": {
@@ -140332,11 +140399,11 @@
     },
     "daily": {
       "file": "gold_daily_ohlc.csv",
-      "sha256": "543013c1f0c9fedb9d763ced89ee7de79f825a72c3b8cd6ecfa6613ced89feb0"
+      "sha256": "23f0f6e3ca7e6a7f244b32aaa35b8e91b21d727e3deb0684bf1b517d3ea94ade"
     },
     "hourly": {
       "file": "gc_f_1h_normalized.csv",
-      "sha256": "fc5435c73dfb48ee45cebefc013f58f976d210dacc4f243f4d71f941c1ef8409"
+      "sha256": "7903009bba744bcb4359af94035b6abac195b0e20310b4f66144b263bd197d61"
     },
     "calendar": {
       "file": "source_calendar.json",
@@ -140345,7 +140412,7 @@
     "price_coverage": {
       "schema_version": 2,
       "normalization_version": "ghpr-prices-v2",
-      "normalized_at_utc": "2026-11-08T00:01:28.874639+00:00",
+      "normalized_at_utc": "2026-11-15T00:01:48.717880+00:00",
       "symbol": "GC=F",
       "source": "Yahoo Finance chart",
       "notes": [
@@ -140356,37 +140423,30 @@
         "No interpolation or fill or other instruments are used."
       ],
       "1h": {
-        "raw_rows": 2551,
-        "normalized_rows": 2041,
-        "excluded_rows": 510,
+        "raw_rows": 2491,
+        "normalized_rows": 1983,
+        "excluded_rows": 508,
         "exclusion_counts": {
-          "missing_ohlc_chart_slot": 505,
-          "outside_cme_regular_session": 5
+          "missing_ohlc_chart_slot": 502,
+          "outside_cme_regular_session": 6
         },
-        "first": "2026-07-05T22:00:00+00:00",
-        "last": "2026-11-06T21:00:00+00:00",
+        "first": "2026-07-15T10:00:00+00:00",
+        "last": "2026-11-13T21:00:00+00:00",
         "normalized_file": "gc_f_1h_normalized.csv",
         "normalized_json_file": "gc_f_1h_normalized.json",
-        "normalized_sha256": "fc5435c73dfb48ee45cebefc013f58f976d210dacc4f243f4d71f941c1ef8409",
-        "raw_sha256": "801d8944f15254673ee8041b7ff004fdb6a1688e1e7447a3981d304dc9660fc0",
-        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1783209600&period2=1794096000&interval=1h&events=history",
-        "fetched_at_utc": "2026-11-08T00:01:28.518120+00:00",
-        "requested_start_utc": "2026-07-05T00:00:00+00:00",
-        "requested_end_exclusive_utc": "2026-11-08T00:00:00+00:00",
+        "normalized_sha256": "7903009bba744bcb4359af94035b6abac195b0e20310b4f66144b263bd197d61",
+        "raw_sha256": "5c633d2dcefa15376bb6c4f373ab9c7ebe1adee0d42f8d04387aeaf94424a32e",
+        "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1783814400&period2=1794700800&interval=1h&events=history",
+        "fetched_at_utc": "2026-11-15T00:01:47.568986+00:00",
+        "requested_start_utc": "2026-07-12T00:00:00+00:00",
+        "requested_end_exclusive_utc": "2026-11-15T00:00:00+00:00",
         "exchange": "COMEX",
         "exchange_timezone": "America/New_York",
         "currency": "USD",
         "instrument_type": "FUTURE",
         "ohlc_bounds_issues": 0,
         "per_provisional_session_counts": {
-          "2026-07-06": 23,
-          "2026-07-07": 23,
-          "2026-07-08": 23,
-          "2026-07-09": 23,
-          "2026-07-10": 23,
-          "2026-07-13": 23,
-          "2026-07-14": 23,
-          "2026-07-15": 23,
+          "2026-07-15": 11,
           "2026-07-16": 23,
           "2026-07-17": 23,
           "2026-07-20": 23,
@@ -140467,7 +140527,12 @@
           "2026-11-03": 23,
           "2026-11-04": 23,
           "2026-11-05": 23,
-          "2026-11-06": 23
+          "2026-11-06": 23,
+          "2026-11-09": 23,
+          "2026-11-10": 23,
+          "2026-11-11": 23,
+          "2026-11-12": 23,
+          "2026-11-13": 23
         }
       }
     },
@@ -142878,7 +142943,7 @@
     ]
   },
   "source_window_start": null,
-  "hourly_source_window_start": "2026-07-05T00:00:00+00:00",
+  "hourly_source_window_start": "2026-07-12T00:00:00+00:00",
   "archived_provenance": {
     "82da48a32254615ab1a4ede507c9f5846ab2d0cfb2e4bac9e1f554aa27c49187": {
       "master": {
@@ -144094,18 +144159,169 @@
         "file": "cot_release_evidence.json",
         "sha256": "a73b6093bf7bbc744321326e86c48ebb823ba17dba7e799c75070d5d3ca13b2e"
       }
+    },
+    "fdde346afd7f33853ad722ad70e4133afc28ddeccf1a2e595e89531af3f381a2": {
+      "master": {
+        "file": "ghpr_master_weekly.csv",
+        "sha256": "8c90171de31f34227b792b28ddf3dd9fa57e941bfb014ff8729cfd4ec3096923"
+      },
+      "daily": {
+        "file": "gold_daily_ohlc.csv",
+        "sha256": "543013c1f0c9fedb9d763ced89ee7de79f825a72c3b8cd6ecfa6613ced89feb0"
+      },
+      "hourly": {
+        "file": "gc_f_1h_normalized.csv",
+        "sha256": "fc5435c73dfb48ee45cebefc013f58f976d210dacc4f243f4d71f941c1ef8409"
+      },
+      "calendar": {
+        "file": "source_calendar.json",
+        "sha256": "0d7783d774c4c40aefcb48f949c750bb92f36fea577c3c43828c7c4fd0c3cbed"
+      },
+      "price_coverage": {
+        "schema_version": 2,
+        "normalization_version": "ghpr-prices-v2",
+        "normalized_at_utc": "2026-11-08T00:01:28.874639+00:00",
+        "symbol": "GC=F",
+        "source": "Yahoo Finance chart",
+        "notes": [
+          "No COT outcome table is produced by this script.",
+          "Daily OHLC dates are labels, not intraday extreme timestamps.",
+          "Hourly timestamps denote one-hour buckets, not exact extreme times.",
+          "Hourly regular-session filtering does not establish holiday-specific coverage completeness.",
+          "No interpolation or fill or other instruments are used."
+        ],
+        "1h": {
+          "raw_rows": 2551,
+          "normalized_rows": 2041,
+          "excluded_rows": 510,
+          "exclusion_counts": {
+            "missing_ohlc_chart_slot": 505,
+            "outside_cme_regular_session": 5
+          },
+          "first": "2026-07-05T22:00:00+00:00",
+          "last": "2026-11-06T21:00:00+00:00",
+          "normalized_file": "gc_f_1h_normalized.csv",
+          "normalized_json_file": "gc_f_1h_normalized.json",
+          "normalized_sha256": "fc5435c73dfb48ee45cebefc013f58f976d210dacc4f243f4d71f941c1ef8409",
+          "raw_sha256": "801d8944f15254673ee8041b7ff004fdb6a1688e1e7447a3981d304dc9660fc0",
+          "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1783209600&period2=1794096000&interval=1h&events=history",
+          "fetched_at_utc": "2026-11-08T00:01:28.518120+00:00",
+          "requested_start_utc": "2026-07-05T00:00:00+00:00",
+          "requested_end_exclusive_utc": "2026-11-08T00:00:00+00:00",
+          "exchange": "COMEX",
+          "exchange_timezone": "America/New_York",
+          "currency": "USD",
+          "instrument_type": "FUTURE",
+          "ohlc_bounds_issues": 0,
+          "per_provisional_session_counts": {
+            "2026-07-06": 23,
+            "2026-07-07": 23,
+            "2026-07-08": 23,
+            "2026-07-09": 23,
+            "2026-07-10": 23,
+            "2026-07-13": 23,
+            "2026-07-14": 23,
+            "2026-07-15": 23,
+            "2026-07-16": 23,
+            "2026-07-17": 23,
+            "2026-07-20": 23,
+            "2026-07-21": 23,
+            "2026-07-22": 23,
+            "2026-07-23": 23,
+            "2026-07-24": 23,
+            "2026-07-27": 23,
+            "2026-07-28": 23,
+            "2026-07-29": 23,
+            "2026-07-30": 23,
+            "2026-07-31": 23,
+            "2026-08-03": 23,
+            "2026-08-04": 23,
+            "2026-08-05": 23,
+            "2026-08-06": 23,
+            "2026-08-07": 23,
+            "2026-08-10": 23,
+            "2026-08-11": 23,
+            "2026-08-12": 23,
+            "2026-08-13": 23,
+            "2026-08-14": 23,
+            "2026-08-17": 23,
+            "2026-08-18": 23,
+            "2026-08-19": 23,
+            "2026-08-20": 23,
+            "2026-08-21": 23,
+            "2026-08-24": 23,
+            "2026-08-25": 23,
+            "2026-08-26": 23,
+            "2026-08-27": 23,
+            "2026-08-28": 23,
+            "2026-08-31": 23,
+            "2026-09-01": 23,
+            "2026-09-02": 23,
+            "2026-09-03": 23,
+            "2026-09-04": 23,
+            "2026-09-08": 17,
+            "2026-09-09": 23,
+            "2026-09-10": 23,
+            "2026-09-11": 23,
+            "2026-09-14": 23,
+            "2026-09-15": 23,
+            "2026-09-16": 23,
+            "2026-09-17": 23,
+            "2026-09-18": 23,
+            "2026-09-21": 23,
+            "2026-09-22": 23,
+            "2026-09-23": 23,
+            "2026-09-24": 23,
+            "2026-09-25": 23,
+            "2026-09-28": 23,
+            "2026-09-29": 23,
+            "2026-09-30": 23,
+            "2026-10-01": 23,
+            "2026-10-02": 23,
+            "2026-10-05": 23,
+            "2026-10-06": 23,
+            "2026-10-07": 23,
+            "2026-10-08": 23,
+            "2026-10-09": 23,
+            "2026-10-12": 23,
+            "2026-10-13": 23,
+            "2026-10-14": 23,
+            "2026-10-15": 23,
+            "2026-10-16": 23,
+            "2026-10-19": 23,
+            "2026-10-20": 23,
+            "2026-10-21": 23,
+            "2026-10-22": 23,
+            "2026-10-23": 23,
+            "2026-10-26": 23,
+            "2026-10-27": 23,
+            "2026-10-28": 23,
+            "2026-10-29": 23,
+            "2026-10-30": 23,
+            "2026-11-02": 23,
+            "2026-11-03": 23,
+            "2026-11-04": 23,
+            "2026-11-05": 23,
+            "2026-11-06": 23
+          }
+        }
+      },
+      "cot_release_calendar": {
+        "file": "cot_release_evidence.json",
+        "sha256": "a73b6093bf7bbc744321326e86c48ebb823ba17dba7e799c75070d5d3ca13b2e"
+      }
     }
   },
   "retained_history_rows": [],
   "archive_summary": {
     "preserved_complete_rows": 0,
-    "daily_recomputed_hourly_archived_rows": 91,
+    "daily_recomputed_hourly_archived_rows": 92,
     "outside_active_scope_rows": 0,
     "rule": "Full-history D1 is recalculated. Outside the H1 query window, prior hourly evidence is retained only when daily prices and coverage agree; PARTIAL stays PARTIAL. Current-window gaps are never masked."
   },
   "input_audit": {
-    "daily_accepted": 4306,
-    "hourly_accepted": 2041,
+    "daily_accepted": 4311,
+    "hourly_accepted": 1983,
     "daily_rejections": [],
     "hourly_rejections": []
   }

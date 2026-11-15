@@ -1,8 +1,8 @@
 # GHPR Data Freshness Diagnostics
 
-- Generated UTC: `2026-11-08T00:01:28.101500+00:00`
+- Generated UTC: `2026-11-15T00:01:47.148361+00:00`
 - Expected latest date: `2026-11-03`
-- Overall freshness status: `OK`
+- Overall freshness status: `AWAITING_RELEASE`
 - Date meaning: Expected/latest dates are dataset report dates, not dashboard refresh timestamps.
 - Scope: Historical statistics / research reference only.
 

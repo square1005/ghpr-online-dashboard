@@ -1,13 +1,13 @@
 {
-  "generated_at_utc": "2026-11-08T00:01:28.101500+00:00",
+  "generated_at_utc": "2026-11-15T00:01:47.148361+00:00",
   "expected_latest_date": "2026-11-03",
-  "overall_status": "OK",
+  "overall_status": "AWAITING_RELEASE",
   "source_check": {
     "sources": {
       "cftc": {
         "url": "https://www.cftc.gov/dea/newcot/f_disagg.txt",
         "observation_date": "2026-11-03",
-        "fetched_at_utc": "2026-11-08T00:00:07.381428+00:00",
+        "fetched_at_utc": "2026-11-15T00:00:08.369720+00:00",
         "sha256": "108219403cad3e7a15bc068f2bf85993fa36042b1525983b34f4ff9c94587b88",
         "response_sha256": "b44c98d12e25f1374e4176cecd3743e8f530f83cb21a05dd4815e55f04600169",
         "response_last_modified": "Fri, 06 Nov 2026 20:27:46 GMT",
@@ -18,19 +18,19 @@
       },
       "schema_version": 1,
       "gold": {
-        "url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1782950400&period2=1794096007&interval=1d",
+        "url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1783555200&period2=1794700808&interval=1d",
         "symbol": "GC=F",
         "instrument": "COMEX gold futures proxy",
-        "observation_date": "2026-11-06",
-        "fetched_at_utc": "2026-11-08T00:00:08.181896+00:00",
-        "sha256": "bcb20ee60f1213918a30999faa25d5af4eddc7b9707e724a166296f2333f2452",
-        "response_sha256": "788c127763816614cc64f9bd695b49e43531efe548f50b7298b56b186e8afe5f",
-        "ohlc_sha256": "543013c1f0c9fedb9d763ced89ee7de79f825a72c3b8cd6ecfa6613ced89feb0",
+        "observation_date": "2026-11-13",
+        "fetched_at_utc": "2026-11-15T00:00:09.719219+00:00",
+        "sha256": "732da89fb14fb887cd8b4f378766ab1005b3b9880fe7e637463991a3a0a98b80",
+        "response_sha256": "e4bd6eacfd1616c5135407932209319205f7ba259466b4759ccf4004976380fe",
+        "ohlc_sha256": "23f0f6e3ca7e6a7f244b32aaa35b8e91b21d727e3deb0684bf1b517d3ea94ade",
         "dataset_mode": "incremental_merge",
         "previous_snapshot": {
-          "sha256": "22facfc1e04ed0ecacb6163e91e177afca12a26af946361f593c4e634ddbc243",
-          "ohlc_sha256": "2f3deea875273520d98c8ba716104f83343d1266895ddd40aea1e342ca4f29ac",
-          "metadata_sha256": "2f8f1cb3391adf718a4bb643cefa959fceaef8c418a80ac227ba9eda20590024"
+          "sha256": "bcb20ee60f1213918a30999faa25d5af4eddc7b9707e724a166296f2333f2452",
+          "ohlc_sha256": "543013c1f0c9fedb9d763ced89ee7de79f825a72c3b8cd6ecfa6613ced89feb0",
+          "metadata_sha256": "70c10b971b672008fa6eb0aa3307240ef6f8f739abc5dbfab33190d387786590"
         },
         "capture_ledger": [
           {
@@ -73,12 +73,19 @@
             "requested_start_utc": "2026-07-02T00:00:00+00:00",
             "requested_end_utc_exclusive": "2026-11-08T00:00:07+00:00",
             "fetched_at_utc": "2026-11-08T00:00:07.512052+00:00"
+          },
+          {
+            "url": "https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?period1=1783555200&period2=1794700808&interval=1d",
+            "sha256": "e4bd6eacfd1616c5135407932209319205f7ba259466b4759ccf4004976380fe",
+            "requested_start_utc": "2026-07-09T00:00:00+00:00",
+            "requested_end_utc_exclusive": "2026-11-15T00:00:08+00:00",
+            "fetched_at_utc": "2026-11-15T00:00:08.512250+00:00"
           }
         ],
         "response_scope": "latest capture only; merged series is identified by sha256 and ohlc_sha256",
         "raw_retention": "Latest raw response only in this snapshot; capture ledger retains prior hashes and URLs, not prior raw bytes.",
         "refresh_overlap_days": 120,
-        "request_start_date": "2026-07-02",
+        "request_start_date": "2026-07-09",
         "close_quarantined_records": [],
         "coverage_validation": "Known cached dates in the requested overlap must recur; recent invalid bars fail. Absent never-before-seen sessions are not proven present by the four-day freshness limit; downstream week coverage remains explicit.",
         "bar_interval": "1d",
@@ -201,8 +208,8 @@
     },
     "errors": [],
     "latest_cftc_available_date": "2026-11-03",
-    "normal_schedule_observation_date": "2026-11-03",
-    "release_state": "available",
+    "normal_schedule_observation_date": "2026-11-10",
+    "release_state": "awaiting_scheduled_release",
     "schedule_note": "Normal Friday 15:30 America/New_York schedule; holiday or delayed releases may differ. Actual publication time is not inferred."
   },
   "stale_components": [],
